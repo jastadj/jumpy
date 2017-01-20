@@ -1,10 +1,13 @@
 #include "jumpy.hpp"
+#include "player.hpp"
+#include "spritesheet.hpp"
 
 Jumpy *Jumpy::m_instance = NULL;
 
 Jumpy::Jumpy()
 {
-
+    // init pointers
+    m_player = NULL;
 }
 
 Jumpy::~Jumpy()
@@ -18,7 +21,7 @@ void Jumpy::start()
     init();
 
     // init player
-    m_player = new Player(this);
+    initPlayer();
 
     // start main loop
     mainLoop();
@@ -44,10 +47,40 @@ bool Jumpy::initScreen()
 
 bool Jumpy::initResources()
 {
-    // init player texture
-    m_playerTXT = new sf::Texture;
-    m_playerTXT->loadFromFile(".\\Data\\Art\\jumpyman.png");
+    // create player spritesheet
+    SpriteSheet *newsheet = new SpriteSheet(".\\Data\\Art\\jumpyman.png", 1, 1);
+    m_spritesheets.push_back(newsheet);
 }
+
+
+
+
+void Jumpy::initPlayer()
+{
+    if(m_player != NULL) delete m_player;
+
+    m_player = new Player;
+
+
+}
+
+
+
+
+SpriteSheet *Jumpy::getSpriteSheet(int index)
+{
+    if( index < 0 || index >= int(m_spritesheets.size()))
+    {
+        std::cout << "Error getting spritesheet, index out of range!\n";
+        return NULL;
+    }
+
+    return m_spritesheets[index];
+}
+
+
+
+
 
 int Jumpy::mainLoop()
 {

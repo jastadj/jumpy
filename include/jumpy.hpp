@@ -2,9 +2,17 @@
 #define CLASS_JUMPY
 
 #include <SFML\Graphics.hpp>
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
-#include "player.hpp"
-#include "level.hpp"
+
+//#include "player.hpp"
+//#include "level.hpp"
+
+
+class Player;
+class SpriteSheet;
 
 class Jumpy
 {
@@ -19,13 +27,14 @@ private:
     sf::RenderWindow *m_screen;
 
     // resources
-    sf::Texture *m_playerTXT;
+    std::vector<SpriteSheet*> m_spritesheets;
 
 
     // init
     bool init();
     bool initScreen();
     bool initResources();
+    void initPlayer();
 
     // player
     Player *m_player;
@@ -46,6 +55,8 @@ public:
     }
 
     void start();
+
+    SpriteSheet *getSpriteSheet(int index);
 
 };
 #endif // CLASS_JUMPY

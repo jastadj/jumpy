@@ -1,18 +1,37 @@
 #ifndef CLASS_GAMEOBJ
 #define CLASS_GAMEOBJ
 
-#include "jumpy.hpp"
+
+#include <SFML\Graphics.hpp>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "spritesheet.hpp"
+
+// forward declarations
+class Jumpy;
+
+enum GAMEOBJTYPES{OBJ_PLAYER};
 
 class GameObj
 {
-private:
-
-    Jumpy *m_jumpy;
 
 protected:
+    Jumpy *m_jumpy;
+
+    std::vector<sf::Sprite*> m_sprites;
+
+    int m_current_sprite = 0;
 
 public:
-    GameObj(Jumpy *jumpy);
-    ~GameObj();
+    GameObj();
+    virtual ~GameObj();
+    virtual int getType()=0;
+
+    void addSprite(sf::Sprite *tsprite);
+    virtual void draw(sf::RenderWindow *tscreen);
+
 };
 #endif // CLASS_GAMEOBJ

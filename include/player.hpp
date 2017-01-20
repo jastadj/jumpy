@@ -3,16 +3,14 @@
 
 #include "gameobj.hpp"
 
-class Player : public GameObj
+class Player: public GameObj
 {
 private:
 
-    // main callback
-    Jumpy *m_jumpy;
-
 public:
-    Player(Jumpy *jumpy);
+    Player();
     ~Player();
+    int getType() { return OBJ_PLAYER;}
 };
 
 #endif // CLASS_PLAYER

@@ -2,9 +2,9 @@
 
 #include "jumpy.hpp"
 
-Player::Player(Jumpy *jumpy)
+Player::Player()
 {
-    m_jumpy = jumpy;
+    addSprite( m_jumpy->getSpriteSheet(0)->createSprite(0) );
 }
 
 Player::~Player()
