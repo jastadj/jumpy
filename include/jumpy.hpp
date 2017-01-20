@@ -3,6 +3,9 @@
 
 #include <SFML\Graphics.hpp>
 
+#include "player.hpp"
+#include "level.hpp"
+
 class Jumpy
 {
 private:
@@ -15,12 +18,21 @@ private:
     // render screen
     sf::RenderWindow *m_screen;
 
+    // resources
+    sf::Texture *m_playerTXT;
+
+
     // init
     bool init();
     bool initScreen();
+    bool initResources();
+
+    // player
+    Player *m_player;
 
     // main loop logic
     int mainLoop();
+    void drawScreen();
 
 public:
     static Jumpy *getInstance()
@@ -33,6 +45,7 @@ public:
         return m_instance;
     }
 
+    void start();
 
 };
 #endif // CLASS_JUMPY
