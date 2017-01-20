@@ -6,6 +6,8 @@ GameObj::GameObj()
 {
     // get main callback reference
     m_jumpy = Jumpy::getInstance();
+
+    m_current_sprite = 0;
 }
 
 GameObj::~GameObj()
@@ -32,4 +34,16 @@ void GameObj::addSprite(sf::Sprite *tsprite)
 void GameObj::draw(sf::RenderWindow *tscreen)
 {
     tscreen->draw( *m_sprites[m_current_sprite] );
+}
+
+void GameObj::update()
+{
+    // apply acceleration to velocity
+    m_velocity += m_acceleration;
+
+    // apply velocity to position
+    m_position += m_velocity;
+
+    // set current sprites to obj position
+    m_sprites[m_current_sprite]->setPosition(m_position);
 }

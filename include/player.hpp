@@ -11,6 +11,10 @@ public:
     Player();
     ~Player();
     int getType() { return OBJ_PLAYER;}
+
+    bool m_jumping;
+
+    void update();
 };
 
 #endif // CLASS_PLAYER

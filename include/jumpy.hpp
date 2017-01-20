@@ -13,6 +13,8 @@
 
 class Player;
 class SpriteSheet;
+class Level;
+class Tile;
 
 class Jumpy
 {
@@ -34,14 +36,21 @@ private:
     bool init();
     bool initScreen();
     bool initResources();
+    bool initTiles();
     void initPlayer();
+    void initLevel();
 
     // player
     Player *m_player;
 
+    // levels
+    std::vector<Tile*> m_tiles;
+    Level *m_current_level;
+
     // main loop logic
     int mainLoop();
     void drawScreen();
+    void drawLevel(Level *tlevel);
 
 public:
     static Jumpy *getInstance()
@@ -57,6 +66,7 @@ public:
     void start();
 
     SpriteSheet *getSpriteSheet(int index);
+    Level *getCurrentLevel() { return m_current_level;}
 
 };
 #endif // CLASS_JUMPY
