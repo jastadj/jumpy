@@ -4,11 +4,16 @@
 #include <vector>
 #include <SFML\Graphics.hpp>
 
+// forward declarations
+class Tile;
+
 class Level
 {
 private:
 
-    std::vector< std::vector<int> > m_map;
+    std::vector< std::vector<int> > m_mapdata;
+
+    std::vector< std::vector<Tile*> > m_tiles;
 
 public:
     Level(int width = 10, int height = 10);
@@ -23,6 +28,8 @@ public:
     bool setTile(int x, int y, int tileid);
 
     bool isColliding(sf::FloatRect trect);
+
+    void generate();
 
 };
 #endif // CLASS_LEVEL

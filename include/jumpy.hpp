@@ -27,6 +27,9 @@ private:
 
     // render screen
     sf::RenderWindow *m_screen;
+    float m_zoom;
+    int m_screen_width;
+    int m_screen_height;
 
     // resources
     std::vector<SpriteSheet*> m_spritesheets;
@@ -66,6 +69,8 @@ public:
     void start();
 
     SpriteSheet *getSpriteSheet(int index);
+    std::vector<Tile*> *getTiles() { return &m_tiles;}
+
     Level *getCurrentLevel() { return m_current_level;}
 
 };

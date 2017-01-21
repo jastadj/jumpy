@@ -65,7 +65,7 @@ void Player::update()
 
     // get bounding box of sprite
     sf::FloatRect srect = m_sprites[m_current_sprite]->getGlobalBounds();
-    // update bounding box position current position
+    // update bounding box position current working position
     srect.left = m_position.x;
     srect.top = m_position.y;
 
@@ -96,6 +96,7 @@ void Player::update()
 
             srect.top = horizrect.top;
             m_velocity.y = 0;
+            m_acceleration.y = 0;
         }
 
         // if intersecting horizontally
@@ -111,6 +112,7 @@ void Player::update()
 
             srect.left = vertrect.left;
             m_velocity.x = 0;
+            m_acceleration.x = 0;
         }
 
     }

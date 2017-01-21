@@ -12,6 +12,9 @@ class SpriteSheet
 private:
 
     sf::Texture m_texture;
+    sf::Image m_image;
+
+    int m_scale;
 
     std::vector<sf::IntRect> m_clips;
 
@@ -20,5 +23,7 @@ public:
     ~SpriteSheet();
 
     sf::Sprite *createSprite(int index);
+
+    void setScale(int tscale);
 };
 #endif // CLASS_SPRITESHEET

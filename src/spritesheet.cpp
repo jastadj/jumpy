@@ -5,8 +5,13 @@ SpriteSheet::SpriteSheet(std::string filename, int tiles_x, int tiles_y)
     int tile_width;
     int tile_height;
 
-    // load texture
-    m_texture.loadFromFile(filename);
+    m_scale = 1;
+
+    // load image
+    m_image.loadFromFile(filename);
+
+    // create texture from image
+    m_texture.loadFromImage(m_image);
 
     // calculate tile dimensions
     tile_width = m_texture.getSize().x / tiles_x;
@@ -27,6 +32,13 @@ SpriteSheet::~SpriteSheet()
 
 }
 
+void SpriteSheet::setScale(int tscale)
+{
+    if(tscale < 0) return;
+
+    m_scale = tscale;
+}
+
 sf::Sprite *SpriteSheet::createSprite(int index)
 {
     if(index < 0 || index >= int(m_clips.size()) )
@@ -35,5 +47,11 @@ sf::Sprite *SpriteSheet::createSprite(int index)
         return NULL;
     }
 
-    return new sf::Sprite(m_texture, m_clips[index]);
+    // create sprite
+    sf::Sprite *newsprite = new sf::Sprite(m_texture, m_clips[index]);
+
+    // scale sprite if scale is not 1
+    if(m_scale != 1) newsprite->setScale( m_scale, m_scale);
+
+    return newsprite;
 }

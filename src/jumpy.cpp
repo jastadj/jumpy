@@ -13,6 +13,11 @@ Jumpy::Jumpy()
     // init pointers
     m_player = NULL;
     m_current_level = NULL;
+
+    // screen settings
+    m_screen_width = 800;
+    m_screen_height = 600;
+    m_zoom = 2;
 }
 
 Jumpy::~Jumpy()
@@ -60,11 +65,11 @@ bool Jumpy::init()
 
 bool Jumpy::initScreen()
 {
-    m_screen = new sf::RenderWindow( sf::VideoMode(640,480,32), "Jumpy");
+    m_screen = new sf::RenderWindow( sf::VideoMode(m_screen_width,m_screen_height,32), "Jumpy");
     if(!m_screen) return false;
 
     // enable v-sync?
-    //m_screen->setVerticalSyncEnabled(true);
+    m_screen->setVerticalSyncEnabled(true);
 
     // enable fps limit in sfml?
     m_screen->setFramerateLimit(60);
@@ -144,6 +149,9 @@ void Jumpy::initLevel()
         m_current_level->setTile(0, i, 1);
         m_current_level->setTile(m_current_level->getWidth()-1, i, 1);
     }
+
+    // generate map
+    m_current_level->generate();
 }
 
 
@@ -176,10 +184,12 @@ int Jumpy::mainLoop()
     sf::Font font;
     font.loadFromFile(".\\Data\\font.ttf");
     sf::Text debugtext("test", font, 12);
-    debugtext.setColor( sf::Color::Red);
+    debugtext.setFillColor( sf::Color::Red);
 
     // camera view
-    sf::View camera( sf::FloatRect(0,0,640,480));
+    //sf::View camera( sf::FloatRect(0,0,m_screen_width/m_zoom,m_screen_height/m_zoom));
+    sf::View camera( sf::FloatRect(0,0,m_screen_width,m_screen_height));
+    camera.zoom(1/m_zoom);
 
     while (!quit)
     {
@@ -284,7 +294,10 @@ int Jumpy::mainLoop()
         // draw
         drawScreen();
 
+        // change view back to default for ui
+        m_screen->setView( m_screen->getDefaultView());
         // draw debug test
+
         std::stringstream debugss;
         sf::Vector2f pvel = m_player->getVelocity();
         sf::Vector2f paccel = m_player->getAcceleration();
