@@ -63,6 +63,12 @@ bool Jumpy::initScreen()
     m_screen = new sf::RenderWindow( sf::VideoMode(640,480,32), "Jumpy");
     if(!m_screen) return false;
 
+    // enable v-sync?
+    //m_screen->setVerticalSyncEnabled(true);
+
+    // enable fps limit in sfml?
+    m_screen->setFramerateLimit(60);
+
     return true;
 }
 
@@ -114,6 +120,7 @@ void Jumpy::initPlayer()
     if(m_player != NULL) delete m_player;
 
     m_player = new Player;
+    m_player->setPosition( sf::Vector2f(100,100));
 
 }
 
@@ -121,10 +128,22 @@ void Jumpy::initLevel()
 {
     if(m_current_level != NULL) delete m_current_level;
 
-    m_current_level = new Level(10,10);
+    m_current_level = new Level(15,20);
+
+    std::cout << "map height = " << m_current_level->getHeight() << std::endl;
+    std::cout << "map width = " << m_current_level->getWidth() << std::endl;
 
     // testing
-    for(int i = 0; i < 10; i++) m_current_level->setTile(i, 9, 1);
+    for(int i = 0; i < m_current_level->getWidth(); i++)
+    {
+        m_current_level->setTile(i, m_current_level->getHeight()-1, 1);
+        m_current_level->setTile(i, 0, 1);
+    }
+    for(int i = 0; i < m_current_level->getHeight(); i++)
+    {
+        m_current_level->setTile(0, i, 1);
+        m_current_level->setTile(m_current_level->getWidth()-1, i, 1);
+    }
 }
 
 
@@ -147,6 +166,7 @@ int Jumpy::mainLoop()
 {
     bool quit = false;
 
+    // fps stuff
     sf::Clock frameclock;
     sf::Clock framedelayclock;
     int framecount = 0;
@@ -158,15 +178,28 @@ int Jumpy::mainLoop()
     sf::Text debugtext("test", font, 12);
     debugtext.setColor( sf::Color::Red);
 
+    // camera view
+    sf::View camera( sf::FloatRect(0,0,640,480));
+
     while (!quit)
     {
         // lock loop to 60 fps
-        sf::sleep( sf::milliseconds(1000/60) );
+        //sf::sleep( sf::milliseconds(1000/60) );
 
         m_screen->clear();
 
         // event que
         sf::Event event;
+
+
+
+
+        // update
+        m_player->update();
+
+
+        camera.setCenter(m_player->getPosition());
+        m_screen->setView(camera);
 
         // process event que
 
@@ -192,20 +225,27 @@ int Jumpy::mainLoop()
         }
         */
 
+        // handle key states
+        // command move to the left
         if( sf::Keyboard::isKeyPressed( sf::Keyboard::A))
         {
-            sf::Vector2f pvel = m_player->getVelocity();
-            m_player->setVelocity( sf::Vector2f(-5.f, pvel.y) );
+            sf::Vector2f paccel = m_player->getAcceleration();
+            m_player->setAcceleration( sf::Vector2f(-5.f, paccel.y) );
+            m_player->commandingMove(true);
         }
+        // command move to the right
         else if( sf::Keyboard::isKeyPressed( sf::Keyboard::D))
         {
-            sf::Vector2f pvel = m_player->getVelocity();
-            m_player->setVelocity( sf::Vector2f(5, pvel.y) );
+            sf::Vector2f paccel = m_player->getAcceleration();
+            m_player->setAcceleration( sf::Vector2f(5, paccel.y) );
+            m_player->commandingMove(true);
         }
+        // else player is not being commanded
         else
         {
-            sf::Vector2f pvel = m_player->getVelocity();
-            m_player->setVelocity( sf::Vector2f(0, pvel.y) );
+            sf::Vector2f paccel = m_player->getAcceleration();
+            m_player->setAcceleration( sf::Vector2f(0, paccel.y) );
+            m_player->commandingMove(false);
         }
 
         if( sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
@@ -214,7 +254,7 @@ int Jumpy::mainLoop()
             {
                 m_player->m_jumping = true;
                 sf::Vector2f paccel = m_player->getAcceleration();
-                paccel.y = -1;
+                paccel.y = -5;
                 m_player->setAcceleration( paccel);
             }
         }
@@ -223,6 +263,7 @@ int Jumpy::mainLoop()
             m_player->m_jumping = false;
         }
 
+        // process events (mouse clicks, key presses, etc)
         while(m_screen->pollEvent(event))
         {
             // if 'x' on window was closed
@@ -238,23 +279,24 @@ int Jumpy::mainLoop()
 
 
 
-        // update
-        m_player->update();
+
 
         // draw
         drawScreen();
 
         // draw debug test
         std::stringstream debugss;
-        debugss << "FPS: " << fps;
+        sf::Vector2f pvel = m_player->getVelocity();
+        sf::Vector2f paccel = m_player->getAcceleration();
+        debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << "," << paccel.y;
         debugtext.setString( debugss.str() );
         m_screen->draw(debugtext);
 
         // display
         m_screen->display();
 
+        // fps calc
         framecount++;
-
         if(frameclock.getElapsedTime().asMilliseconds() >= 1000)
         {
             fps = framecount;
@@ -278,10 +320,18 @@ void Jumpy::drawScreen()
 
 void Jumpy::drawLevel(Level *tlevel)
 {
+    // draw each tile in map
     for(int i = 0; i < m_current_level->getHeight(); i++)
     {
         for(int n = 0; n < m_current_level->getWidth(); n++)
         {
+            // get tile at x/y position
+            int ttile = m_current_level->getTile(n, i);
+
+            // if tile is 0, do nothing, tile 0 is hardcoded as blank
+            if( ttile == 0) continue;
+
+            // else, draw tile index
             m_tiles[ m_current_level->getTile(n, i) ]->draw(m_screen, n*32, i*32);
         }
     }

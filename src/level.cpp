@@ -1,4 +1,5 @@
 #include "level.hpp"
+#include <math.h>
 
 Level::Level(int height, int width)
 {
@@ -55,4 +56,20 @@ bool Level::setTile(int x, int y, int tileid)
     m_map[y][x] = tileid;
 
     return true;
+}
+
+bool Level::isColliding(sf::FloatRect trect)
+{
+    // check if rectangle is colliding with a map tile
+    for( int i = floor(trect.top)/32; i <= ceil(trect.top + trect.height)/32; i++)
+    {
+        for(int n = floor(trect.left)/32; n <= ceil(trect.left + trect.width)/32; n++)
+        {
+            // rect is colliding with tile
+            if( getTile(n,i) != 0) return true;
+        }
+    }
+
+    // no collisions found
+    return false;
 }

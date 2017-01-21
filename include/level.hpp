@@ -2,6 +2,7 @@
 #define CLASS_LEVEL
 
 #include <vector>
+#include <SFML\Graphics.hpp>
 
 class Level
 {
@@ -20,6 +21,8 @@ public:
 
     int getTile(int x, int y);
     bool setTile(int x, int y, int tileid);
+
+    bool isColliding(sf::FloatRect trect);
 
 };
 #endif // CLASS_LEVEL

@@ -8,6 +8,11 @@ GameObj::GameObj()
     m_jumpy = Jumpy::getInstance();
 
     m_current_sprite = 0;
+
+    m_commanding_move = false;
+
+    // default terminal velocity
+    m_velocity_max = 5.f;
 }
 
 GameObj::~GameObj()

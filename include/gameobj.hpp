@@ -23,12 +23,17 @@ class GameObj
 protected:
     Jumpy *m_jumpy;
 
+    // list of sprite frames
     std::vector<sf::Sprite*> m_sprites;
 
+    // current sprite frame being used
     int m_current_sprite;
 
+    // physics
+    bool m_commanding_move;
     sf::Vector2f m_position;
     sf::Vector2f m_velocity;
+    float m_velocity_max;
     sf::Vector2f m_acceleration;
 
 public:
@@ -39,6 +44,9 @@ public:
     void addSprite(sf::Sprite *tsprite);
     virtual void draw(sf::RenderWindow *tscreen);
     virtual void update();
+
+    bool isCommandingMove() { return m_commanding_move;}
+    void commandingMove(bool iscommanding) { m_commanding_move = iscommanding;}
 
     sf::Vector2f getPosition() { return m_position;}
     void setPosition(sf::Vector2f tpos) { m_position = tpos;}
