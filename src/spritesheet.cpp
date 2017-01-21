@@ -13,6 +13,13 @@ SpriteSheet::SpriteSheet(std::string filename, int tiles_x, int tiles_y)
     // create texture from image
     m_texture.loadFromImage(m_image);
 
+    // create flipped image
+    m_image.flipHorizontally();
+    m_texture_flipped.loadFromImage(m_image);
+
+    // flip image back
+    m_image.flipHorizontally();
+
     // calculate tile dimensions
     tile_width = m_texture.getSize().x / tiles_x;
     tile_height = m_texture.getSize().y / tiles_y;
@@ -24,12 +31,23 @@ SpriteSheet::SpriteSheet(std::string filename, int tiles_x, int tiles_y)
         {
             m_clips.push_back( sf::IntRect( n*tile_width, i*tile_height, tile_width, tile_height) );
         }
+
+        // add flipped clips
+        for(int n = tiles_x-1; n >= 0; n--)
+        {
+            m_clips_flipped.push_back( m_clips[n] );
+        }
     }
 }
 
 SpriteSheet::~SpriteSheet()
 {
 
+}
+
+int SpriteSheet::getCount()
+{
+    return int(m_clips.size());
 }
 
 void SpriteSheet::setScale(int tscale)
@@ -39,7 +57,7 @@ void SpriteSheet::setScale(int tscale)
     m_scale = tscale;
 }
 
-sf::Sprite *SpriteSheet::createSprite(int index)
+sf::Sprite *SpriteSheet::createSprite(int index, bool flipped)
 {
     if(index < 0 || index >= int(m_clips.size()) )
     {
@@ -48,7 +66,10 @@ sf::Sprite *SpriteSheet::createSprite(int index)
     }
 
     // create sprite
-    sf::Sprite *newsprite = new sf::Sprite(m_texture, m_clips[index]);
+    sf::Sprite *newsprite;
+    if(flipped)
+        newsprite = new sf::Sprite(m_texture_flipped, m_clips_flipped[index]);
+    else newsprite = new sf::Sprite(m_texture, m_clips[index]);
 
     // scale sprite if scale is not 1
     if(m_scale != 1) newsprite->setScale( m_scale, m_scale);

@@ -80,7 +80,7 @@ bool Jumpy::initScreen()
 bool Jumpy::initResources()
 {
     // create player spritesheet
-    SpriteSheet *newsheet = new SpriteSheet(".\\Data\\Art\\jumpyman.png", 1, 1);
+    SpriteSheet *newsheet = new SpriteSheet(".\\Data\\Art\\jumpyman.png", 9, 1);
     m_spritesheets.push_back(newsheet);
 
     // create a tile spritesheet
@@ -236,42 +236,9 @@ int Jumpy::mainLoop()
         */
 
         // handle key states
-        // command move to the left
-        if( sf::Keyboard::isKeyPressed( sf::Keyboard::A))
-        {
-            sf::Vector2f paccel = m_player->getAcceleration();
-            m_player->setAcceleration( sf::Vector2f(-5.f, paccel.y) );
-            m_player->commandingMove(true);
-        }
-        // command move to the right
-        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::D))
-        {
-            sf::Vector2f paccel = m_player->getAcceleration();
-            m_player->setAcceleration( sf::Vector2f(5, paccel.y) );
-            m_player->commandingMove(true);
-        }
-        // else player is not being commanded
-        else
-        {
-            sf::Vector2f paccel = m_player->getAcceleration();
-            m_player->setAcceleration( sf::Vector2f(0, paccel.y) );
-            m_player->commandingMove(false);
-        }
-
-        if( sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-        {
-            if(!m_player->m_jumping)
-            {
-                m_player->m_jumping = true;
-                sf::Vector2f paccel = m_player->getAcceleration();
-                paccel.y = -5;
-                m_player->setAcceleration( paccel);
-            }
-        }
-        else if(m_player->m_jumping)
-        {
-            m_player->m_jumping = false;
-        }
+        if( sf::Keyboard::isKeyPressed( sf::Keyboard::A)) m_player->doMove(MOVE_LEFT);
+        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::D)) m_player->doMove(MOVE_RIGHT);
+        else m_player->doMove(MOVE_NONE);
 
         // process events (mouse clicks, key presses, etc)
         while(m_screen->pollEvent(event))
@@ -284,6 +251,23 @@ int Jumpy::mainLoop()
             {
                 // quit if escape pressed
                 if(event.key.code == sf::Keyboard::Escape) quit = true;
+
+                else if(event.key.code == sf::Keyboard::E)
+                {
+                    m_player->setCurrentFrame( m_player->getCurrentFrame()+1);
+                }
+                else if(event.key.code == sf::Keyboard::Space)
+                {
+                    if(!m_player->m_jumping)
+                    {
+                        m_player->m_jumping = true;
+                        sf::Vector2f paccel = m_player->getAcceleration();
+                        paccel.y = -5;
+                        m_player->setAcceleration( paccel);
+                    }
+                }
+
+
             }
         }
 

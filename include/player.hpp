@@ -14,6 +14,7 @@ public:
 
     bool m_jumping;
 
+    void doMove(int movedir);
     void update();
 };
 
