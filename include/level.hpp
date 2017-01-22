@@ -50,6 +50,7 @@ public:
     bool addObject( GameObj *tobj);
     bool deleteObject( GameObj *tobj);
     void addMeth(int x, int y, int val);
+    void addMethHead(int x, int y);
 
     sf::Sprite *getSkyBox() { return &m_skybox;}
 

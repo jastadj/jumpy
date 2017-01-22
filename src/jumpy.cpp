@@ -107,6 +107,10 @@ bool Jumpy::initResources()
     newsheet = new SpriteSheet(".\\Data\\Art\\meth.png", 1, 1);
     m_spritesheets.push_back(newsheet);
 
+    // create methhead spritesheet - 4
+    newsheet = new SpriteSheet(".\\Data\\Art\\methhead.png", 9, 1);
+    m_spritesheets.push_back(newsheet);
+
     // check sprite sheets are valid
     for(int i = 0; i < int(m_spritesheets.size()); i++)
     {
@@ -186,6 +190,7 @@ void Jumpy::initLevel()
     }
 
     m_current_level->addMeth(400,280, 500);
+    m_current_level->addMethHead(350,200);
 
 
     // test bg tile

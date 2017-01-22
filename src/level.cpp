@@ -4,6 +4,7 @@
 #include "jumpy.hpp"
 #include "tile.hpp"
 #include "meth.hpp"
+#include "methhead.hpp"
 
 Level::Level(int width, int height)
 {
@@ -353,6 +354,23 @@ bool Level::addObject(GameObj *tobj)
     m_objects.push_back(tobj);
 }
 
+void Level::addMeth(int x, int y, int val)
+{
+    Meth *newmeth = new Meth(val);
+    newmeth->setPosition( sf::Vector2f(x,y));
+    newmeth->update();
+
+    addObject(newmeth);
+}
+
+void Level::addMethHead(int x, int y)
+{
+    MethHead *newmethhead = new MethHead();
+    newmethhead->setPosition( sf::Vector2f(x, y));
+
+    addObject(newmethhead);
+}
+
 bool Level::deleteObject( GameObj *tobj)
 {
     if(tobj == NULL)
@@ -375,14 +393,7 @@ bool Level::deleteObject( GameObj *tobj)
     return false;
 }
 
-void Level::addMeth(int x, int y, int val)
-{
-    Meth *newmeth = new Meth(val);
-    newmeth->setPosition( sf::Vector2f(x,y));
-    newmeth->update();
 
-    addObject(newmeth);
-}
 
 void Level::drawObjects(sf::RenderTarget *tscreen)
 {

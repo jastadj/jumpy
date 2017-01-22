@@ -20,5 +20,7 @@ public:
     void setJumping(bool njumping) { m_jumping = njumping;}
 
     void addCollision(GameObj *tobj);
+
+    //virtual void update()=0;
 };
 #endif // CLASS_ACTOR
