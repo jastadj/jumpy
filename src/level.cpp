@@ -36,6 +36,53 @@ Level::Level(int height, int width)
     }
 
     fillMap(0);
+
+    // create skybox texture
+    std::vector<Tile*> *bgtiles = m_jumpy->getTilesBG();
+    Tile *bgtile1 = new Tile( *(*bgtiles)[1]);
+    Tile *bgtile2 = new Tile( *(*bgtiles)[2]);
+    Tile *bgtile3 = new Tile( *(*bgtiles)[3]);
+    int swidth = m_jumpy->getScreenWidth();
+    int sheight = m_jumpy->getScreenHeight();
+    m_skybox_rtxt.create(swidth, sheight);
+    m_skybox_rtxt.display();
+    /*
+    for(int i = 0; i < (sheight/32)-5; i++)
+    {
+        for(int n = 0; n < (swidth/32)-5; n++)
+        {
+            bgtile1->setPosition( sf::Vector2f(n*32, i*32));
+            bgtile1->update();
+            bgtile1->draw(&m_skybox_rtxt);
+        }
+    }
+    */
+    for(int i = 0; i < 5; i++)
+    {
+        for(int n = 0; n < 13; n++)
+        {
+            bgtile1->setPosition( sf::Vector2f(n*32, i*32));
+            bgtile1->update();
+            bgtile1->draw(&m_skybox_rtxt);
+        }
+    }
+    for(int n = 0; n < 13; n++)
+    {
+        bgtile2->setPosition( sf::Vector2f(n*32, 5*32));
+        bgtile2->update();
+        bgtile2->draw(&m_skybox_rtxt);
+    }
+    for(int n = 0; n < 13; n++)
+    {
+        bgtile3->setPosition( sf::Vector2f(n*32, 6*32));
+        bgtile3->update();
+        bgtile3->draw(&m_skybox_rtxt);
+    }
+    m_skybox_rtxt.display();
+    m_skybox = sf::Sprite( m_skybox_rtxt.getTexture());
+    delete bgtile1;
+    delete bgtile2;
+    delete bgtile3;
 }
 
 Level::~Level()
@@ -202,6 +249,10 @@ bool Level::isColliding(sf::FloatRect trect)
             if( getTile(n,i) != 0) return true;
         }
     }
+
+    // check if outside of map bounds
+    if(trect.left < 0) return true;
+    else if(trect.left + trect.width >= getWidth()*32) return true;
 
     // no collisions found
     return false;

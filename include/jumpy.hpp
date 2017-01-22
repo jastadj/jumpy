@@ -74,6 +74,9 @@ public:
 
     void start();
 
+    int getScreenWidth() { return m_screen_width;}
+    int getScreenHeight() { return m_screen_height;}
+
     SpriteSheet *getSpriteSheet(int index);
     std::vector<Tile*> *getTiles() { return &m_tiles;}
     std::vector<Tile*> *getTilesBG() { return &m_tiles_bg;}

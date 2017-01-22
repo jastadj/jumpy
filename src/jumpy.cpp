@@ -164,8 +164,8 @@ void Jumpy::initLevel()
     }
     for(int i = 0; i < m_current_level->getHeight(); i++)
     {
-        m_current_level->setTile(0, i, 1);
-        m_current_level->setTile(m_current_level->getWidth()-1, i, 1);
+        //m_current_level->setTile(0, i, 1);
+        //m_current_level->setTile(m_current_level->getWidth()-1, i, 1);
     }
 
     m_current_level->setTileBG(5, 13, 5);
@@ -210,12 +210,21 @@ int Jumpy::mainLoop()
     sf::View camera( sf::FloatRect(0,0,m_screen_width,m_screen_height));
     camera.zoom(1/m_zoom);
 
+    // skybox camera
+    sf::View camera_sky = m_screen->getDefaultView();
+    camera_sky.setCenter(sf::Vector2f( (m_screen_width/m_zoom)/2, (m_screen_height/m_zoom)/2 ));
+    camera_sky.zoom(1/m_zoom);
+
     while (!quit)
     {
         // lock loop to 60 fps
         //sf::sleep( sf::milliseconds(1000/60) );
 
         m_screen->clear();
+
+        // draw skybox
+        m_screen->setView(camera_sky);
+        drawSkyBox();
 
         //std::cout << "w:" << (m_screen_width/m_zoom)/32 << " h:" << (m_screen_height/m_zoom)/32 << std::endl;
         //camera.setCenter(sf::Vector2f( (m_screen_width/m_zoom)/32, (m_screen_height/m_zoom)/32 ) );
@@ -224,8 +233,7 @@ int Jumpy::mainLoop()
         // event que
         sf::Event event;
 
-        // draw skybox
-        drawSkyBox();
+
 
         // update
         m_player->update();
@@ -363,5 +371,5 @@ void Jumpy::drawLevel(Level *tlevel)
 
 void Jumpy::drawSkyBox()
 {
-
+    m_screen->draw( *m_current_level->getSkyBox());
 }

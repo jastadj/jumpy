@@ -18,6 +18,7 @@ private:
     std::vector< std::vector<int> > m_mapdata_bg;
 
     sf::RenderTexture m_skybox_rtxt;
+    sf::Sprite m_skybox;
 
     std::vector< std::vector<Tile*> > m_tiles;
     std::vector< std::vector<Tile*> > m_tiles_bg;
@@ -43,5 +44,6 @@ public:
     void drawTileBG(int x, int y, sf::RenderTarget *tscreen);
     //void generate();
 
+    sf::Sprite *getSkyBox() { return &m_skybox;}
 };
 #endif // CLASS_LEVEL
