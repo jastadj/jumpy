@@ -7,6 +7,7 @@
 // forward declarations
 class Jumpy;
 class Tile;
+class GameObj;
 
 class Level
 {
@@ -23,6 +24,7 @@ private:
     std::vector< std::vector<Tile*> > m_tiles;
     std::vector< std::vector<Tile*> > m_tiles_bg;
 
+    std::vector< GameObj*> m_objects;
 public:
     Level(int width = 10, int height = 10);
     ~Level();
@@ -38,12 +40,20 @@ public:
     bool setTile(int x, int y, int tileid);
     bool setTileBG(int x, int y, int tileid);
 
-    bool isColliding(sf::FloatRect trect);
+    bool isCollidingWithMap(sf::FloatRect trect);
+    void getObjectCollisions(sf::FloatRect trect, GameObj *source);
 
     void drawTile(int x, int y, sf::RenderTarget *tscreen);
     void drawTileBG(int x, int y, sf::RenderTarget *tscreen);
     //void generate();
 
+    bool addObject( GameObj *tobj);
+    bool deleteObject( GameObj *tobj);
+    void addMeth(int x, int y, int val);
+
     sf::Sprite *getSkyBox() { return &m_skybox;}
+
+    void drawObjects(sf::RenderTarget *tscreen);
+    void update();
 };
 #endif // CLASS_LEVEL

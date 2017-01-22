@@ -10,6 +10,8 @@ Tile::Tile(SpriteSheet *tsheet, int spriteindex)
 
     // create sprite for tile from sprite sheet/index
     addSprite( m_tile_sprite_sheet->createSprite(m_tile_sprite_index) );
+
+    m_bounding_boxes.push_back( m_sprites[0]->getLocalBounds());
 }
 
 // copy constructor

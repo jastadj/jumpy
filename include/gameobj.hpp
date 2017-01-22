@@ -16,7 +16,7 @@
 // forward declarations
 class Jumpy;
 
-enum GAMEOBJTYPES{OBJ_PLAYER, OBJ_TILE};
+enum GAMEOBJTYPES{OBJ_PLAYER, OBJ_TILE, OBJ_METH};
 
 enum MOVETYPE{MOVE_NONE, MOVE_RIGHT, MOVE_LEFT};
 
@@ -25,6 +25,8 @@ class GameObj
 
 protected:
     Jumpy *m_jumpy;
+
+    std::string m_name;
 
     // list of sprite frames
     std::vector<sf::Sprite*> m_sprites;
@@ -36,6 +38,7 @@ protected:
 
     // bounding box
     std::vector<sf::FloatRect> m_bounding_boxes;
+    std::vector<GameObj*> m_collisions;
 
     // physics
     bool m_commanding_move;
@@ -49,12 +52,16 @@ public:
     virtual ~GameObj();
     virtual int getType()=0;
 
+    std::string getName() { return m_name;}
+    void setName(std::string nname) { m_name = nname;}
+
     void addSprite(sf::Sprite *tsprite);
     virtual void draw(sf::RenderTarget *tscreen);
     virtual void update();
 
     void setCurrentFrame(int tframe);
     int getCurrentFrame() { return m_current_sprite;}
+    sf::FloatRect getBoundingBox();
 
     bool isCommandingMove() { return m_commanding_move;}
     void commandingMove(bool iscommanding) { m_commanding_move = iscommanding;}
@@ -68,5 +75,9 @@ public:
 
     sf::Vector2f getAcceleration() { return m_acceleration;}
     void setAcceleration( sf::Vector2f taccel) { m_acceleration = taccel;}
+
+    virtual void addCollision(GameObj *tobj)=0;
+    void clearCollisions();
+    int getCollisionCount() { return int(m_collisions.size());}
 };
 #endif // CLASS_GAMEOBJ

@@ -26,3 +26,15 @@ int rollDice(int num, int sides, int modifier)
     return total + modifier;
 
 }
+
+void drawFloatRect(sf::FloatRect trect, sf::RenderTarget *tscreen)
+{
+    sf::RectangleShape rbox(sf::Vector2f( trect.width-2, trect.height-2));
+    rbox.setOutlineThickness(1);
+    rbox.setFillColor(sf::Color::Transparent);
+    rbox.setOutlineColor(sf::Color::Green);
+    rbox.setPosition(trect.left+1, trect.top+1);
+
+    tscreen->draw(rbox);
+
+}

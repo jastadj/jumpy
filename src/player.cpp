@@ -2,10 +2,13 @@
 
 #include "jumpy.hpp"
 #include "level.hpp"
+#include "meth.hpp"
 
 Player::Player()
 {
     SpriteSheet *ssheet = m_jumpy->getSpriteSheet(0);
+
+    setName("Player");
 
     if(ssheet)
     {
@@ -18,7 +21,10 @@ Player::Player()
             addSprite( ssheet->createSprite(i, true) );
     }
 
+    // initial variables
     m_jumping = false;
+    m_max_meth = 1000;
+    m_current_meth = 0;
 
     // bounding box
     m_bounding_boxes.push_back(sf::FloatRect(10 ,2, 12, 30) );
@@ -50,6 +56,26 @@ void Player::doMove(int movedir)
         break;
     }
 
+}
+
+void Player::addMeth(int val)
+{
+    m_current_meth += val;
+
+    std::cout << "Added " << val << " meth to player.\n";
+}
+
+void Player::addCollision(GameObj *tobj)
+{
+    if(tobj == NULL)
+    {
+        std::cout << "Error adding collision to player, obj is null!\n";
+        return;
+    }
+
+    std::cout << "Colliding with object:" << tobj->getName() << std::endl;
+
+    m_collisions.push_back(tobj);
 }
 
 void Player::update()
@@ -110,7 +136,7 @@ void Player::update()
 
     // check if player is colliding with map
     Level *currentlevel = m_jumpy->getCurrentLevel();
-    if( currentlevel->isColliding(srect) )
+    if( currentlevel->isCollidingWithMap(srect) )
     {
         sf::FloatRect vertrect = srect;
         sf::FloatRect horizrect = srect;
@@ -123,9 +149,9 @@ void Player::update()
         floor(srect.left);
 
         // if intersecting vertically
-        if( currentlevel->isColliding(vertrect))
+        if( currentlevel->isCollidingWithMap(vertrect))
         {
-            while( currentlevel->isColliding(vertrect))
+            while( currentlevel->isCollidingWithMap(vertrect))
             {
                 // if intersecting below
                 if( startpos.y + m_bounding_boxes[0].top < vertrect.top)
@@ -144,9 +170,9 @@ void Player::update()
         }
 
         // if intersecting horizontally
-        if( currentlevel->isColliding(horizrect))
+        if( currentlevel->isCollidingWithMap(horizrect))
         {
-            while( currentlevel->isColliding(horizrect))
+            while( currentlevel->isCollidingWithMap(horizrect))
             {
                 // if intersecting left
                 if( startpos.x + m_bounding_boxes[0].left > horizrect.left) horizrect.left++;
@@ -164,11 +190,29 @@ void Player::update()
     // adjust position to valid bounding box position
     m_position = sf::Vector2f(srect.left - m_bounding_boxes[0].left, srect.top - m_bounding_boxes[0].top);
 
-    if( currentlevel->isColliding(srect) )
+    if( currentlevel->isCollidingWithMap(srect) )
     {
-        std::cout <<"STILL COLLIDING\n";
+        std::cout <<"STILL COLLIDING WITH MAP!!\n";
     }
 
+
+    // get object collisions
+    currentlevel->getObjectCollisions(srect, this);
+
+    // if there are collisions to handle
+    for(int i = 0; i < int(m_collisions.size()); i++)
+    {
+        if(m_collisions[i]->getType() == OBJ_METH)
+        {
+            Meth *methobj;
+            methobj = dynamic_cast<Meth*>(m_collisions[i]);
+
+            addMeth( methobj->getMethValue());
+
+            currentlevel->deleteObject( m_collisions[i]);
+        }
+    }
+    clearCollisions();
 
 
     // update animation

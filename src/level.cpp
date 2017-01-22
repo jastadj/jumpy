@@ -3,8 +3,9 @@
 
 #include "jumpy.hpp"
 #include "tile.hpp"
+#include "meth.hpp"
 
-Level::Level(int height, int width)
+Level::Level(int width, int height)
 {
     m_jumpy = Jumpy::getInstance();
 
@@ -87,6 +88,7 @@ Level::Level(int height, int width)
 
 Level::~Level()
 {
+    // delete tiles
     for(int i = 0; i < getHeight(); i++)
     {
         for(int n = 0; n < getWidth(); n++)
@@ -100,6 +102,12 @@ Level::~Level()
     m_tiles.clear();
     m_tiles_bg.clear();
 
+    // delete objects
+    for(int i = 0; i < int(m_objects.size()); i++)
+    {
+        delete m_objects[i];
+    }
+    m_objects.clear();
 }
 
 int Level::getWidth()
@@ -238,8 +246,35 @@ void Level::generate()
 }
 */
 
-bool Level::isColliding(sf::FloatRect trect)
+bool Level::isCollidingWithMap(sf::FloatRect trect)
 {
+    /*
+    sf::IntRect nearby_tiles( (int(trect.left)-32)/32, (int(trect.top)-32)/32, (ceil(trect.left+trect.width)+32)/32, (ceil(trect.top+trect.height)+32)/32 );
+
+    int topx = nearby_tiles.left;
+    int topy = nearby_tiles.top;
+    int botx = nearby_tiles.left + nearby_tiles.width;
+    int boty = nearby_tiles.top + nearby_tiles.height;
+
+    // check if rectangle is colliding with a map tile
+    for( int i = nearby_tiles.top; i <= (nearby_tiles.top+nearby_tiles.height); i++)
+    {
+        for(int n = nearby_tiles.left; n <= (nearby_tiles.left + nearby_tiles.width); n++)
+        {
+            if( n < 0 || i < 0 || n >= getWidth() || i >= getHeight()) continue;
+            // rect is colliding with tile
+            if( getTile(n,i) != 0)
+            {
+                std::cout << "colliding with tile " << n << "," << i << std::endl;
+                return true;
+            }
+        }
+    }
+
+    // no collisions found
+    return false;
+    */
+
     // check if rectangle is colliding with a map tile
     for( int i = floor(trect.top)/32; i <= ceil(trect.top + trect.height)/32; i++)
     {
@@ -256,6 +291,17 @@ bool Level::isColliding(sf::FloatRect trect)
 
     // no collisions found
     return false;
+}
+
+void Level::getObjectCollisions(sf::FloatRect trect, GameObj *source)
+{
+    for(int i= 0; i < int(m_objects.size()); i++)
+    {
+        if(m_objects[i]->getBoundingBox().intersects( source->getBoundingBox()) )
+        {
+            source->addCollision(m_objects[i]);
+        }
+    }
 }
 
 void Level::drawTile(int x, int y, sf::RenderTarget *tscreen)
@@ -298,4 +344,59 @@ void Level::drawTileBG(int x, int y, sf::RenderTarget *tscreen)
 
     m_tiles_bg[y][x]->draw(tscreen);
 
+}
+
+bool Level::addObject(GameObj *tobj)
+{
+    if(tobj == NULL) return false;
+
+    m_objects.push_back(tobj);
+}
+
+bool Level::deleteObject( GameObj *tobj)
+{
+    if(tobj == NULL)
+    {
+        std::cout << "Error deleting obj from level, obj is null!\n";
+        return false;
+    }
+
+    for(int i = 0; i < int(m_objects.size()); i++)
+    {
+        if( m_objects[i] == tobj)
+        {
+            delete m_objects[i];
+            m_objects.erase(m_objects.begin()+i);
+            return true;
+        }
+    }
+
+    std::cout << "Error deleting obj from level, obj not found!\n";
+    return false;
+}
+
+void Level::addMeth(int x, int y, int val)
+{
+    Meth *newmeth = new Meth(val);
+    newmeth->setPosition( sf::Vector2f(x,y));
+    newmeth->update();
+
+    addObject(newmeth);
+}
+
+void Level::drawObjects(sf::RenderTarget *tscreen)
+{
+    for(int i = 0; i < int(m_objects.size()); i++)
+    {
+        m_objects[i]->draw(tscreen);
+    }
+}
+
+void Level::update()
+{
+    // update all level objects
+    for(int i = 0; i < int(m_objects.size()); i++)
+    {
+        m_objects[i]->update();
+    }
 }

@@ -6,6 +6,8 @@
 
 #include <sstream>
 
+#include "tools.hpp"
+
 Jumpy *Jumpy::m_instance = NULL;
 
 Jumpy::Jumpy()
@@ -18,6 +20,9 @@ Jumpy::Jumpy()
     m_screen_width = 800;
     m_screen_height = 600;
     m_zoom = 2;
+
+    // debug
+    m_dbg_showboundingboxes = false;
 }
 
 Jumpy::~Jumpy()
@@ -82,16 +87,20 @@ bool Jumpy::initScreen()
 
 bool Jumpy::initResources()
 {
-    // create player spritesheet
+    // create player spritesheet - 0
     SpriteSheet *newsheet = new SpriteSheet(".\\Data\\Art\\jumpyman.png", 9, 1);
     m_spritesheets.push_back(newsheet);
 
-    // create a tile spritesheet
+    // create a tile spritesheet - 1
     newsheet = new SpriteSheet(".\\Data\\Art\\tiles001.png", 2, 2);
     m_spritesheets.push_back(newsheet);
 
-    // create tile background spritesheet
+    // create tile background spritesheet - 2
     newsheet = new SpriteSheet(".\\Data\\Art\\tiles001bg.png", 4, 4);
+    m_spritesheets.push_back(newsheet);
+
+    // create meth spritesheet - 3
+    newsheet = new SpriteSheet(".\\Data\\Art\\meth.png", 1, 1);
     m_spritesheets.push_back(newsheet);
 
     // check sprite sheets are valid
@@ -151,24 +160,25 @@ void Jumpy::initLevel()
 {
     if(m_current_level != NULL) delete m_current_level;
 
-    m_current_level = new Level(15,20);
+    m_current_level = new Level(25,15);
 
     std::cout << "map height = " << m_current_level->getHeight() << std::endl;
     std::cout << "map width = " << m_current_level->getWidth() << std::endl;
 
     // testing
-    for(int i = 0; i < m_current_level->getWidth(); i++)
+    for(int i = m_current_level->getHeight()-5; i < m_current_level->getHeight(); i++)
     {
-        m_current_level->setTile(i, m_current_level->getHeight()-1, 1);
-        m_current_level->setTile(i, 0, 1);
-    }
-    for(int i = 0; i < m_current_level->getHeight(); i++)
-    {
-        //m_current_level->setTile(0, i, 1);
-        //m_current_level->setTile(m_current_level->getWidth()-1, i, 1);
+        for(int n = 0; n < m_current_level->getWidth(); n++)
+        {
+            m_current_level->setTile(n, i, 1);
+        }
     }
 
-    m_current_level->setTileBG(5, 13, 5);
+    m_current_level->addMeth(400,280, 500);
+
+
+    // test bg tile
+    m_current_level->setTileBG(5, 9, 5);
 
     // generate map
     //m_current_level->generate();
@@ -238,6 +248,8 @@ int Jumpy::mainLoop()
         // update
         m_player->update();
 
+        m_current_level->update();
+
         camera.setCenter(m_player->getPosition());
         m_screen->setView(camera);
 
@@ -296,6 +308,10 @@ int Jumpy::mainLoop()
                         m_player->setAcceleration( paccel);
                     }
                 }
+                else if(event.key.code == sf::Keyboard::F1)
+                {
+                    m_dbg_showboundingboxes = !m_dbg_showboundingboxes;
+                }
 
 
             }
@@ -308,6 +324,9 @@ int Jumpy::mainLoop()
         // draw
         drawScreen();
 
+        // debug
+        //drawFloatRect(m_player->getBoundingBox(), m_screen);
+
         // change view back to default for ui
         m_screen->setView( m_screen->getDefaultView());
         // draw debug test
@@ -316,7 +335,7 @@ int Jumpy::mainLoop()
         sf::Vector2f pvel = m_player->getVelocity();
         sf::Vector2f paccel = m_player->getAcceleration();
         sf::Vector2f ppos = m_player->getPosition();
-        debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << "," << paccel.y << " pos:" << ppos.x << "," << ppos.y;
+        debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << "," << paccel.y << " pos:" << ppos.x << "," << ppos.y << " colcnt:" << m_player->getCollisionCount();
         debugtext.setString( debugss.str() );
         m_screen->draw(debugtext);
 
@@ -367,6 +386,8 @@ void Jumpy::drawLevel(Level *tlevel)
             m_current_level->drawTile(n,i, m_screen);
         }
     }
+
+    m_current_level->drawObjects(m_screen);
 }
 
 void Jumpy::drawSkyBox()

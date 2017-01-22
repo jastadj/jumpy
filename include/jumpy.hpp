@@ -83,5 +83,9 @@ public:
 
     Level *getCurrentLevel() { return m_current_level;}
 
+    // debug
+    bool m_dbg_showboundingboxes;
+
+
 };
 #endif // CLASS_JUMPY

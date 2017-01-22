@@ -7,10 +7,13 @@ GameObj::GameObj()
     // get main callback reference
     m_jumpy = Jumpy::getInstance();
 
+    setName("unnamed");
+
     m_current_sprite = 0;
 
     m_commanding_move = false;
     m_facing_right = true;
+
 
     // default terminal velocity
     m_velocity_max = 5.f;
@@ -27,6 +30,9 @@ GameObj::~GameObj()
         delete m_sprites[i];
     }
     m_sprites.clear();
+
+    // clear collision list
+    clearCollisions();
 }
 
 void GameObj::addSprite(sf::Sprite *tsprite)
@@ -43,6 +49,12 @@ void GameObj::addSprite(sf::Sprite *tsprite)
 void GameObj::draw(sf::RenderTarget *tscreen)
 {
     tscreen->draw( *m_sprites[m_current_sprite] );
+
+    // if debug on to draw bounding boxes
+    if(m_jumpy->m_dbg_showboundingboxes)
+    {
+        drawFloatRect(getBoundingBox(), tscreen);
+    }
 }
 
 void GameObj::doMove(int movedir)
@@ -56,6 +68,19 @@ void GameObj::setCurrentFrame(int tframe)
     else if(tframe < 0) tframe = int(m_sprites.size())-1;
 
     m_current_sprite = tframe;
+}
+
+
+sf::FloatRect GameObj::getBoundingBox()
+{
+    // currently only getting index 0, may add more to support each frame
+    return sf::FloatRect(m_position.x + m_bounding_boxes[0].left, m_position.y + m_bounding_boxes[0].top,
+                         m_bounding_boxes[0].width, m_bounding_boxes[0].height);
+}
+
+void GameObj::clearCollisions()
+{
+    m_collisions.clear();
 }
 
 void GameObj::update()

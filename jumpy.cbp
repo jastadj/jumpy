@@ -44,6 +44,7 @@
 		<Unit filename="include/gameobj.hpp" />
 		<Unit filename="include/jumpy.hpp" />
 		<Unit filename="include/level.hpp" />
+		<Unit filename="include/meth.hpp" />
 		<Unit filename="include/player.hpp" />
 		<Unit filename="include/spritesheet.hpp" />
 		<Unit filename="include/tile.hpp" />
@@ -52,6 +53,10 @@
 		<Unit filename="src/jumpy.cpp" />
 		<Unit filename="src/level.cpp" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/meth.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="src/player.cpp" />
 		<Unit filename="src/spritesheet.cpp" />
 		<Unit filename="src/tile.cpp" />

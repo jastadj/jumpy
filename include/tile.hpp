@@ -18,6 +18,8 @@ public:
     ~Tile();
     int getType() { return OBJ_TILE;}
 
+    void addCollision(GameObj *tobj) {};
+
     void draw(sf::RenderTarget *tscreen);
     void update();
 

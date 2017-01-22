@@ -7,6 +7,9 @@ class Player: public GameObj
 {
 private:
 
+    int m_current_meth;
+    int m_max_meth;
+
 public:
     Player();
     ~Player();
@@ -14,7 +17,14 @@ public:
 
     bool m_jumping;
 
+    void addMeth(int val);
+    int getMeth() { return m_current_meth;}
+    int getMaxMeth() { return m_max_meth;}
+
     void doMove(int movedir);
+
+    void addCollision(GameObj *tobj);
+
     void update();
 };
 
