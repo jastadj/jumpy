@@ -1,9 +1,9 @@
 #ifndef CLASS_PLAYER
 #define CLASS_PLAYER
 
-#include "gameobj.hpp"
+#include "actor.hpp"
 
-class Player: public GameObj
+class Player: public Actor
 {
 private:
 
@@ -15,15 +15,13 @@ public:
     ~Player();
     int getType() { return OBJ_PLAYER;}
 
-    bool m_jumping;
-
     void addMeth(int val);
     int getMeth() const { return m_current_meth;}
     int getMaxMeth() const { return m_max_meth;}
 
-    void doMove(int movedir);
+    //void doMove(int movedir);
 
-    void addCollision(GameObj *tobj);
+    //void addCollision(GameObj *tobj);
 
     void update();
 };

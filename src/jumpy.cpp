@@ -233,13 +233,13 @@ int Jumpy::mainLoop()
     debugtext.setFillColor( sf::Color::Red);
 
     // camera
-    sf::View camera( sf::FloatRect(0,0,m_screen_width,m_screen_height));
-    camera.zoom(1/m_zoom);
+    m_camera = sf::View( sf::FloatRect(0,0,m_screen_width,m_screen_height));
+    m_camera.zoom(1/m_zoom);
 
     // skybox camera
-    sf::View camera_sky = m_screen->getDefaultView();
-    camera_sky.setCenter(sf::Vector2f( (m_screen_width/m_zoom)/2, (m_screen_height/m_zoom)/2 ));
-    camera_sky.zoom(1/m_zoom);
+    m_skycamera = m_screen->getDefaultView();
+    m_skycamera.setCenter(sf::Vector2f( (m_screen_width/m_zoom)/2, (m_screen_height/m_zoom)/2 ));
+    m_skycamera.zoom(1/m_zoom);
 
     while (!quit)
     {
@@ -249,16 +249,15 @@ int Jumpy::mainLoop()
         m_screen->clear();
 
         // draw skybox
-        m_screen->setView(camera_sky);
+        m_screen->setView(m_skycamera);
         drawSkyBox();
 
         //std::cout << "w:" << (m_screen_width/m_zoom)/32 << " h:" << (m_screen_height/m_zoom)/32 << std::endl;
         //camera.setCenter(sf::Vector2f( (m_screen_width/m_zoom)/32, (m_screen_height/m_zoom)/32 ) );
-        m_screen->setView(camera);
+        //m_screen->setView(m_camera);
 
         // event que
         sf::Event event;
-
 
 
         // update
@@ -266,8 +265,8 @@ int Jumpy::mainLoop()
 
         m_current_level->update();
 
-        camera.setCenter(m_player->getPosition());
-        m_screen->setView(camera);
+        m_camera.setCenter(m_player->getPosition());
+        m_screen->setView(m_camera);
 
         // process event que
 
@@ -316,9 +315,9 @@ int Jumpy::mainLoop()
                 }
                 else if(event.key.code == sf::Keyboard::Space)
                 {
-                    if(!m_player->m_jumping)
+                    if(!m_player->jumping())
                     {
-                        m_player->m_jumping = true;
+                        m_player->setJumping(true);
                         sf::Vector2f paccel = m_player->getAcceleration();
                         paccel.y = -5;
                         m_player->setAcceleration( paccel);
@@ -386,6 +385,8 @@ void Jumpy::drawScreen()
 
 void Jumpy::drawLevel(Level *tlevel)
 {
+
+
     // draw each tile in map
     for(int i = 0; i < m_current_level->getHeight(); i++)
     {

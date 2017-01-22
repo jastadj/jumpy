@@ -33,6 +33,8 @@ private:
     float m_zoom;
     int m_screen_width;
     int m_screen_height;
+    sf::View m_camera;
+    sf::View m_skycamera;
 
     // resources
     std::vector<SpriteSheet*> m_spritesheets;

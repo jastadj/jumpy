@@ -35,6 +35,7 @@ Player::~Player()
 
 }
 
+/*
 void Player::doMove(int movedir)
 {
 
@@ -57,6 +58,7 @@ void Player::doMove(int movedir)
     }
 
 }
+*/
 
 void Player::addMeth(int val)
 {
@@ -65,6 +67,7 @@ void Player::addMeth(int val)
     std::cout << "Added " << val << " meth to player.\n";
 }
 
+/*
 void Player::addCollision(GameObj *tobj)
 {
     if(tobj == NULL)
@@ -73,10 +76,11 @@ void Player::addCollision(GameObj *tobj)
         return;
     }
 
-    std::cout << "Colliding with object:" << tobj->getName() << std::endl;
+    //std::cout << "Colliding with object:" << tobj->getName() << std::endl;
 
     m_collisions.push_back(tobj);
 }
+*/
 
 void Player::update()
 {
