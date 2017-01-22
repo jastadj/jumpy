@@ -42,6 +42,7 @@ public:
 
     bool isCollidingWithMap(sf::FloatRect trect);
     void getObjectCollisions(sf::FloatRect trect, GameObj *source);
+    std::vector<GameObj*> getObjectCollisionsWithLine(sf::Vector2f p1, sf::Vector2f p2);
 
     void drawTile(int x, int y, sf::RenderTarget *tscreen);
     void drawTileBG(int x, int y, sf::RenderTarget *tscreen);

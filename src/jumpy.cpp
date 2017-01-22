@@ -200,7 +200,7 @@ void Jumpy::initLevel()
         }
     }
 
-    m_current_level->addMeth(400,280, 500);
+    m_current_level->addMeth(400,288, 500);
     m_current_level->addMethHead(350,200);
 
 

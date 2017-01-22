@@ -6,6 +6,14 @@
 #include "meth.hpp"
 #include "methhead.hpp"
 
+#include "tools.hpp"
+
+struct sortable
+{
+    GameObj *gobj;
+    float dist;
+};
+
 Level::Level(int width, int height)
 {
     m_jumpy = Jumpy::getInstance();
@@ -303,6 +311,62 @@ void Level::getObjectCollisions(sf::FloatRect trect, GameObj *source)
             source->addCollision(m_objects[i]);
         }
     }
+}
+
+std::vector<GameObj*> Level::getObjectCollisionsWithLine(sf::Vector2f p1, sf::Vector2f p2)
+{
+
+    std::vector<sortable> objs_intersected;
+    std::vector<sortable> objs_sorted;
+    std::vector<GameObj*> objs;
+
+    // get objects that are intersected by line
+    for(int i = 0; i < int(m_objects.size()); i++)
+    {
+        if( lineIntersectsRect(p1, p2, m_objects[i]->getBoundingBox()) )
+        {
+            std::cout << "found los intersect with " << m_objects[i]->getName() << std::endl;
+
+            sortable newsortable;
+            newsortable.gobj = m_objects[i];
+            newsortable.dist = getDistance(p1, m_objects[i]->getPosition());
+
+            objs_intersected.push_back( newsortable );
+
+        }
+    }
+
+    // sort intersected objects by distance to player
+    for(int i = 0; i < int(objs_intersected.size()); i++)
+    {
+        if( objs_sorted.empty()) objs_sorted.push_back(objs_intersected[i]);
+        else
+        {
+            bool didsort = false;
+
+            for(int n = 0; n < int(objs_sorted.size()); n++)
+            {
+                if(objs_intersected[i].dist <= objs_sorted[n].dist)
+                {
+                    objs_sorted.insert(objs_sorted.begin() + n, objs_intersected[i]);
+                    didsort = true;
+                    break;
+                }
+            }
+
+            if(!didsort) objs_sorted.push_back( objs_intersected[i]);
+        }
+
+    }
+
+    // create new list of game objects from sorted list
+    for(int i = 0; i < int(objs_sorted.size()); i++)
+    {
+        //std::cout << " LOS HIT : " << objs_sorted[i].gobj->getName() << " at dist:" << objs_sorted[i].dist << std::endl;
+        objs.push_back( objs_sorted[i].gobj);
+    }
+
+    return objs;
 }
 
 void Level::drawTile(int x, int y, sf::RenderTarget *tscreen)

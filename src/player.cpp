@@ -87,13 +87,49 @@ void Player::addCollision(GameObj *tobj)
 
 void Player::shoot()
 {
+    Level *currentlevel = m_jumpy->getCurrentLevel();
+
     if(m_shooting_clock.getElapsedTime().asMilliseconds() > m_shoot_time)
     {
+        std::vector<GameObj*> hitobjs;
+
         m_shooting = true;
         m_shooting_clock.restart();
 
         m_jumpy->playSound(0);
+
+
+        sf::Vector2f p1;
+        sf::Vector2f p2;
+
+        sf::FloatRect pbb = getBoundingBox();
+
+        if(m_facing_right)
+        {
+            p1.x = pbb.left + pbb.width;
+            p1.y = pbb.top + pbb.height/2;
+            p2.x = p1.x + 400;
+            p2.y = p1.y;
+        }
+        else
+        {
+            p1.x = pbb.left;
+            p1.y = pbb.top + pbb.height/2;
+            p2.x = p1.x - 400;
+            p2.y = p1.y;
+        }
+
+        hitobjs = currentlevel->getObjectCollisionsWithLine(p1, p2);
+
+        for(int i = 0; i < int(hitobjs.size()); i++)
+        {
+            std::cout << "sorted collision : " << hitobjs[i]->getName() << std::endl;
+        }
+
+
     }
+
+
 }
 
 void Player::update()
