@@ -40,7 +40,7 @@ void GameObj::addSprite(sf::Sprite *tsprite)
     m_sprites.push_back(tsprite);
 }
 
-void GameObj::draw(sf::RenderWindow *tscreen)
+void GameObj::draw(sf::RenderTarget *tscreen)
 {
     tscreen->draw( *m_sprites[m_current_sprite] );
 }

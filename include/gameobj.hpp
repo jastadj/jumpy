@@ -7,9 +7,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <time.h>
+#include <math.h>
 
 #include "spritesheet.hpp"
-
 #include "tools.hpp"
 
 // forward declarations
@@ -49,7 +50,7 @@ public:
     virtual int getType()=0;
 
     void addSprite(sf::Sprite *tsprite);
-    virtual void draw(sf::RenderWindow *tscreen);
+    virtual void draw(sf::RenderTarget *tscreen);
     virtual void update();
 
     void setCurrentFrame(int tframe);

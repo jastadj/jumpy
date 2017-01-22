@@ -5,7 +5,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-
+#include <time.h>
+#include <math.h>
 
 //#include "player.hpp"
 //#include "level.hpp"
@@ -46,13 +47,18 @@ private:
     // player
     Player *m_player;
 
+    //
+    time_t m_seed;
+
     // levels
     std::vector<Tile*> m_tiles;
+    std::vector<Tile*> m_tiles_bg;
     Level *m_current_level;
 
     // main loop logic
     int mainLoop();
     void drawScreen();
+    void drawSkyBox();
     void drawLevel(Level *tlevel);
 
 public:
@@ -70,6 +76,7 @@ public:
 
     SpriteSheet *getSpriteSheet(int index);
     std::vector<Tile*> *getTiles() { return &m_tiles;}
+    std::vector<Tile*> *getTilesBG() { return &m_tiles_bg;}
 
     Level *getCurrentLevel() { return m_current_level;}
 

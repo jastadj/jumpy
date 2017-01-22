@@ -60,6 +60,9 @@ bool Jumpy::init()
         std::cout << "Error initializing tiles!\n";
     }
 
+    // init random seed
+    srand( time(NULL));
+
     return true;
 }
 
@@ -87,6 +90,10 @@ bool Jumpy::initResources()
     newsheet = new SpriteSheet(".\\Data\\Art\\tiles001.png", 2, 2);
     m_spritesheets.push_back(newsheet);
 
+    // create tile background spritesheet
+    newsheet = new SpriteSheet(".\\Data\\Art\\tiles001bg.png", 4, 4);
+    m_spritesheets.push_back(newsheet);
+
     // check sprite sheets are valid
     for(int i = 0; i < int(m_spritesheets.size()); i++)
     {
@@ -103,20 +110,31 @@ bool Jumpy::initResources()
 bool Jumpy::initTiles()
 {
     // create tiles
-    m_tiles.push_back(new Tile(m_spritesheets[1], 0));
-    m_tiles.push_back(new Tile(m_spritesheets[1], 1));
-    m_tiles.push_back(new Tile(m_spritesheets[1], 2));
-    m_tiles.push_back(new Tile(m_spritesheets[1], 3));
+    for(int i = 0; i < m_spritesheets[1]->getCount(); i++)
+    {
+        m_tiles.push_back(new Tile(m_spritesheets[1], i));
+    }
 
+    // create background tiles
+    for(int i = 0; i < m_spritesheets[2]->getCount(); i++)
+    {
+        m_tiles_bg.push_back(new Tile(m_spritesheets[2], i));
+    }
+
+
+    // check for validity
     for(int i = 0; i < int(m_tiles.size()); i++)
     {
         if( m_tiles[i] == NULL) return false;
     }
 
+    for(int i = 0; i < int(m_tiles_bg.size()); i++)
+    {
+        if( m_tiles_bg[i] == NULL) return false;
+    }
+
     return true;
 }
-
-
 
 
 
@@ -150,8 +168,10 @@ void Jumpy::initLevel()
         m_current_level->setTile(m_current_level->getWidth()-1, i, 1);
     }
 
+    m_current_level->setTileBG(5, 13, 5);
+
     // generate map
-    m_current_level->generate();
+    //m_current_level->generate();
 }
 
 
@@ -186,8 +206,7 @@ int Jumpy::mainLoop()
     sf::Text debugtext("test", font, 12);
     debugtext.setFillColor( sf::Color::Red);
 
-    // camera view
-    //sf::View camera( sf::FloatRect(0,0,m_screen_width/m_zoom,m_screen_height/m_zoom));
+    // camera
     sf::View camera( sf::FloatRect(0,0,m_screen_width,m_screen_height));
     camera.zoom(1/m_zoom);
 
@@ -198,15 +217,18 @@ int Jumpy::mainLoop()
 
         m_screen->clear();
 
+        //std::cout << "w:" << (m_screen_width/m_zoom)/32 << " h:" << (m_screen_height/m_zoom)/32 << std::endl;
+        //camera.setCenter(sf::Vector2f( (m_screen_width/m_zoom)/32, (m_screen_height/m_zoom)/32 ) );
+        m_screen->setView(camera);
+
         // event que
         sf::Event event;
 
-
-
+        // draw skybox
+        drawSkyBox();
 
         // update
         m_player->update();
-
 
         camera.setCenter(m_player->getPosition());
         m_screen->setView(camera);
@@ -285,7 +307,8 @@ int Jumpy::mainLoop()
         std::stringstream debugss;
         sf::Vector2f pvel = m_player->getVelocity();
         sf::Vector2f paccel = m_player->getAcceleration();
-        debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << "," << paccel.y;
+        sf::Vector2f ppos = m_player->getPosition();
+        debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << "," << paccel.y << " pos:" << ppos.x << "," << ppos.y;
         debugtext.setString( debugss.str() );
         m_screen->draw(debugtext);
 
@@ -322,6 +345,7 @@ void Jumpy::drawLevel(Level *tlevel)
     {
         for(int n = 0; n < m_current_level->getWidth(); n++)
         {
+            /*
             // get tile at x/y position
             int ttile = m_current_level->getTile(n, i);
 
@@ -330,6 +354,14 @@ void Jumpy::drawLevel(Level *tlevel)
 
             // else, draw tile index
             m_tiles[ m_current_level->getTile(n, i) ]->draw(m_screen, n*32, i*32);
+            */
+            m_current_level->drawTileBG(n, i, m_screen);
+            m_current_level->drawTile(n,i, m_screen);
         }
     }
+}
+
+void Jumpy::drawSkyBox()
+{
+
 }

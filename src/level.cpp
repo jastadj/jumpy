@@ -2,21 +2,56 @@
 #include <math.h>
 
 #include "jumpy.hpp"
+#include "tile.hpp"
 
 Level::Level(int height, int width)
 {
+    m_jumpy = Jumpy::getInstance();
+
     if(height < 0) height = 1;
     if(width < 0) width = 1;
 
     // size array map
     m_mapdata.resize(height);
-    for(int i = 0; i < height; i++) m_mapdata[i].resize(width);
+    m_mapdata_bg.resize(height);
+    m_tiles.resize(height);
+    m_tiles_bg.resize(height);
+    for(int i = 0; i < height; i++)
+    {
+        m_mapdata[i].resize(width);
+        m_mapdata_bg[i].resize(width);
+        m_tiles[i].resize(width);
+        m_tiles_bg[i].resize(width);
+    }
+
+    // null out tiles
+    for(int i = 0; i < height; i++)
+    {
+        for(int n = 0; n < width; n++)
+        {
+            //std::cout << "x:" << n << " , y:" << i << std::endl;
+            m_tiles[i][n] = NULL;
+            m_tiles_bg[i][n] = NULL;
+        }
+    }
 
     fillMap(0);
 }
 
 Level::~Level()
 {
+    for(int i = 0; i < getHeight(); i++)
+    {
+        for(int n = 0; n < getWidth(); n++)
+        {
+            delete m_tiles[i][n];
+            delete m_tiles_bg[i][n];
+        }
+        m_tiles[i].clear();
+        m_tiles_bg[i].clear();
+    }
+    m_tiles.clear();
+    m_tiles_bg.clear();
 
 }
 
@@ -39,10 +74,25 @@ void Level::fillMap(int tileid)
     {
         for(int n = 0; n < width; n++)
         {
-            m_mapdata[i][n] = tileid;
+            setTile(n,i, tileid);
         }
     }
 }
+
+void Level::fillMapBG(int tileid)
+{
+    int width = getWidth();
+    int height = getHeight();
+
+    for(int i = 0; i < height; i++)
+    {
+        for(int n = 0; n < width; n++)
+        {
+            setTileBG(n,i, tileid);
+        }
+    }
+}
+
 
 
 
@@ -53,15 +103,77 @@ int Level::getTile(int x, int y)
     return m_mapdata[y][x];
 }
 
+int Level::getTileBG(int x, int y)
+{
+    if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return 0;
+
+    return m_mapdata_bg[y][x];
+}
+
 bool Level::setTile(int x, int y, int tileid)
 {
+
     if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return false;
 
+    if( m_mapdata[y][x] == tileid) return true;
+
+    if( m_tiles[y][x])
+    {
+        delete m_tiles[y][x];
+    }
+
     m_mapdata[y][x] = tileid;
+
+    // if tile is blank
+    if( tileid == 0)
+    {
+        // if there was an existing tile there before, delete it
+        if(m_tiles[y][x]) delete m_tiles[y][x];
+        m_tiles[y][x] = NULL;
+    }
+    else
+    {
+        m_tiles[y][x] = new Tile( *(*m_jumpy->getTiles())[tileid] );
+        m_tiles[y][x]->setPosition( sf::Vector2f(x*32, y*32) );
+        m_tiles[y][x]->update();
+    }
+
 
     return true;
 }
 
+bool Level::setTileBG(int x, int y, int tileid)
+{
+    if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return false;
+
+    if( m_mapdata_bg[y][x] == tileid) return true;
+
+    if( m_tiles_bg[y][x])
+    {
+        delete m_tiles_bg[y][x];
+    }
+
+    m_mapdata_bg[y][x] = tileid;
+
+    // if tile is blank
+    if( tileid == 0)
+    {
+        // if there was an existing tile there before, delete it
+        if(m_tiles_bg[y][x]) delete m_tiles_bg[y][x];
+        m_tiles_bg[y][x] = NULL;
+    }
+    else
+    {
+        m_tiles_bg[y][x] = new Tile( *(*m_jumpy->getTilesBG())[tileid] );
+        m_tiles_bg[y][x]->setPosition( sf::Vector2f(x*32, y*32) );
+        m_tiles_bg[y][x]->update();
+    }
+
+
+    return true;
+}
+
+/*
 void Level::generate()
 {
     Jumpy *jumpy;
@@ -77,6 +189,7 @@ void Level::generate()
         }
     }
 }
+*/
 
 bool Level::isColliding(sf::FloatRect trect)
 {
@@ -92,4 +205,46 @@ bool Level::isColliding(sf::FloatRect trect)
 
     // no collisions found
     return false;
+}
+
+void Level::drawTile(int x, int y, sf::RenderTarget *tscreen)
+{
+    if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+    {
+        std::cout << "Error in Tile::drawTile, x,y out of bounds\n";
+        return;
+    }
+
+    if(tscreen == NULL)
+    {
+        std::cout << "Error in Tile::drawTile, tscreen = NULL!\n";
+        return;
+    }
+
+    // ignore blanks
+    if(m_tiles[y][x] == NULL) return;
+
+    m_tiles[y][x]->draw(tscreen);
+
+}
+
+void Level::drawTileBG(int x, int y, sf::RenderTarget *tscreen)
+{
+    if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+    {
+        std::cout << "Error in Tile::drawTile, x,y out of bounds\n";
+        return;
+    }
+
+    if(tscreen == NULL)
+    {
+        std::cout << "Error in Tile::drawTile, tscreen = NULL!\n";
+        return;
+    }
+
+    // ignore blanks
+    if(m_tiles_bg[y][x] == NULL) return;
+
+    m_tiles_bg[y][x]->draw(tscreen);
+
 }
