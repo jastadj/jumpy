@@ -49,6 +49,7 @@
 		<Unit filename="include/jumpy.hpp" />
 		<Unit filename="include/level.hpp" />
 		<Unit filename="include/meth.hpp" />
+		<Unit filename="include/methhead.hpp" />
 		<Unit filename="include/methui.hpp" />
 		<Unit filename="include/player.hpp" />
 		<Unit filename="include/spritesheet.hpp" />
@@ -60,6 +61,7 @@
 		<Unit filename="src/level.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/meth.cpp" />
+		<Unit filename="src/methhead.cpp" />
 		<Unit filename="src/methui.cpp" />
 		<Unit filename="src/player.cpp" />
 		<Unit filename="src/spritesheet.cpp" />

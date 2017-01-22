@@ -10,6 +10,10 @@ private:
     int m_current_meth;
     int m_max_meth;
 
+    bool m_shooting;
+    int m_shooting_timeout;
+    int m_shoot_time;
+    sf::Clock m_shooting_clock;
 public:
     Player();
     ~Player();
@@ -22,6 +26,8 @@ public:
     //void doMove(int movedir);
 
     //void addCollision(GameObj *tobj);
+
+    void shoot();
 
     void update();
 };

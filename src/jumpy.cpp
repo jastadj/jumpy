@@ -92,7 +92,7 @@ bool Jumpy::initScreen()
 bool Jumpy::initResources()
 {
     // create player spritesheet - 0
-    SpriteSheet *newsheet = new SpriteSheet(".\\Data\\Art\\jumpyman.png", 9, 1);
+    SpriteSheet *newsheet = new SpriteSheet(".\\Data\\Art\\jumpyman.png", 27, 1);
     m_spritesheets.push_back(newsheet);
 
     // create a tile spritesheet - 1
@@ -334,6 +334,13 @@ int Jumpy::mainLoop()
                 }
 
 
+            } // end key pressed
+            else if( event.type == sf::Event::MouseButtonPressed)
+            {
+                if(event.mouseButton.button == sf::Mouse::Left)
+                {
+                    m_player->shoot();
+                }
             }
         }
 

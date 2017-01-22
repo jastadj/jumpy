@@ -56,6 +56,7 @@ public:
     void setName(std::string nname) { m_name = nname;}
 
     void addSprite(sf::Sprite *tsprite);
+    int spriteCount() { return int(m_sprites.size());}
     virtual void draw(sf::RenderTarget *tscreen);
     virtual void update();
 

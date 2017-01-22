@@ -23,6 +23,9 @@ Player::Player()
 
     // initial variables
     m_jumping = false;
+    m_shooting = false;
+    m_shooting_timeout = 1500;
+    m_shoot_time = 200;
     m_max_meth = 1000;
     m_current_meth = 0;
 
@@ -82,9 +85,20 @@ void Player::addCollision(GameObj *tobj)
 }
 */
 
+void Player::shoot()
+{
+    if(m_shooting_clock.getElapsedTime().asMilliseconds() > m_shoot_time)
+    {
+        m_shooting = true;
+        m_shooting_clock.restart();
+    }
+}
+
 void Player::update()
 {
     sf::FloatRect srect;
+    // sprite count divided by two (left and right animations)
+    static int spritecount = spriteCount()/2;
 
     // capture original position
     sf::Vector2f startpos = m_position;
@@ -219,6 +233,10 @@ void Player::update()
     clearCollisions();
 
 
+    // update shooting timeout (holster weapon if haven't fired for some time
+    if(m_shooting_clock.getElapsedTime().asMilliseconds() >= m_shooting_timeout)
+        m_shooting = false;
+
     // update animation
     if(m_commanding_move && !m_jumping)
     {
@@ -234,23 +252,69 @@ void Player::update()
 
         aframe++;
 
-        if( !m_facing_right) setCurrentFrame(aframe + 8);
-        else setCurrentFrame(aframe);
+        // if gun is out
+        if(m_shooting)
+        {
+            // if actively firing
+            if(m_shooting_clock.getElapsedTime().asMilliseconds() < m_shoot_time)
+            {
+                if(!m_facing_right) setCurrentFrame(aframe + 18+ spritecount);
+                else setCurrentFrame(aframe + 18);
+            }
+            else
+            {
+                if(!m_facing_right) setCurrentFrame(aframe + 10 + spritecount);
+                else setCurrentFrame(aframe + 10);
+
+            }
+
+        }
+        else
+        {
+            if( !m_facing_right) setCurrentFrame(aframe + spritecount);
+            else setCurrentFrame(aframe);
+        }
+
     }
     else if(m_jumping)
     {
-        if(m_facing_right) setCurrentFrame(2);
-        else setCurrentFrame(2+9);
+        if(m_shooting)
+        {
+            // if actively firing
+            if(m_shooting_clock.getElapsedTime().asMilliseconds() < m_shoot_time)
+            {
+                if(m_facing_right) setCurrentFrame(20);
+                else setCurrentFrame(20+spritecount);
+            }
+            else
+            {
+                if(m_facing_right) setCurrentFrame(12);
+                else setCurrentFrame(12+spritecount);
+            }
+
+        }
+        else
+        {
+            if(m_facing_right) setCurrentFrame(2);
+            else setCurrentFrame(2+spritecount);
+        }
+
     }
     else
     {
-        if(m_facing_right) m_current_sprite = 0;
-        else m_current_sprite = 9;
+
+        if(m_shooting)
+        {
+            if(m_shooting_clock.getElapsedTime().asMilliseconds() < m_shoot_time)
+                m_current_sprite = 10;
+            else m_current_sprite = 9;
+        }
+        else m_current_sprite = 0;
+
+        if(!m_facing_right) m_current_sprite += spritecount;
     }
 
-
-
-    //std::cout << "current frame = " << getCurrentFrame() << std::endl;
+    if(m_shooting) std::cout << "current frame = " << getCurrentFrame() << std::endl;
 
     // set current sprites to obj position
     m_sprites[m_current_sprite]->setPosition(m_position.x, m_position.y);
