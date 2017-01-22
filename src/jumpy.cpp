@@ -96,7 +96,7 @@ bool Jumpy::initResources()
     m_spritesheets.push_back(newsheet);
 
     // create a tile spritesheet - 1
-    newsheet = new SpriteSheet(".\\Data\\Art\\tiles001.png", 2, 2);
+    newsheet = new SpriteSheet(".\\Data\\Art\\tiles001.png", 4, 4);
     m_spritesheets.push_back(newsheet);
 
     // create tile background spritesheet - 2
@@ -162,19 +162,26 @@ void Jumpy::initPlayer()
 
 void Jumpy::initLevel()
 {
+    // if a level currently exists, delete it
     if(m_current_level != NULL) delete m_current_level;
 
+    // create a new level
     m_current_level = new Level(25,15);
 
+    // debug output
     std::cout << "map height = " << m_current_level->getHeight() << std::endl;
     std::cout << "map width = " << m_current_level->getWidth() << std::endl;
 
-    // testing
-    for(int i = m_current_level->getHeight()-5; i < m_current_level->getHeight(); i++)
+    // testing - some level data
+    for(int n = 0; n < m_current_level->getWidth(); n++)
+    {
+        m_current_level->setTile(n,m_current_level->getHeight()-5 , 1);
+    }
+    for(int i = m_current_level->getHeight()-4; i < m_current_level->getHeight(); i++)
     {
         for(int n = 0; n < m_current_level->getWidth(); n++)
         {
-            m_current_level->setTile(n, i, 1);
+            m_current_level->setTile(n, i, 2);
         }
     }
 
@@ -182,6 +189,11 @@ void Jumpy::initLevel()
 
 
     // test bg tile
+    for(int i = 0; i < m_current_level->getWidth(); i++)
+    {
+        if( i%2) m_current_level->setTileBG(i, 9, 6);
+        else m_current_level->setTileBG(i, 9, 7);
+    }
     m_current_level->setTileBG(5, 9, 5);
 
     // generate map

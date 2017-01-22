@@ -13,7 +13,7 @@
 
 #include "methui.hpp"
 
-
+// forward declarations
 class Player;
 class SpriteSheet;
 class Level;
@@ -36,7 +36,6 @@ private:
 
     // resources
     std::vector<SpriteSheet*> m_spritesheets;
-
 
     // init
     bool init();
