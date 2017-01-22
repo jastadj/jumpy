@@ -2,6 +2,7 @@
 #define CLASS_JUMPY
 
 #include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -38,6 +39,12 @@ private:
 
     // resources
     std::vector<SpriteSheet*> m_spritesheets;
+    std::vector<sf::SoundBuffer*> m_sounds;
+
+    // sounds
+    bool loadSound(std::string filename);
+    std::vector<sf::Sound*> m_soundqueue;
+    void processSoundQueue();
 
     // init
     bool init();
@@ -89,6 +96,9 @@ public:
 
     Level *getCurrentLevel() { return m_current_level;}
     const Player *getPlayer() const { return m_player;}
+
+    bool playSound(int soundindex);
+
     // debug
     bool m_dbg_showboundingboxes;
 

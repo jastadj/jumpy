@@ -121,6 +121,17 @@ bool Jumpy::initResources()
         }
     }
 
+    // load sounds
+    loadSound(".\\Data\\Sound\\pistol01.wav");
+    loadSound(".\\Data\\Sound\\gravel_left_01.wav");
+    loadSound(".\\Data\\Sound\\gravel_right_01.wav");
+    loadSound(".\\Data\\Sound\\gravel_left_02.wav");
+    loadSound(".\\Data\\Sound\\gravel_right_02.wav");
+    loadSound(".\\Data\\Sound\\gravel_left_03.wav");
+    loadSound(".\\Data\\Sound\\gravel_right_03.wav");
+    loadSound(".\\Data\\Sound\\gravel_left_04.wav");
+    loadSound(".\\Data\\Sound\\gravel_right_04.wav");
+
     return true;
 }
 
@@ -205,6 +216,16 @@ void Jumpy::initLevel()
     //m_current_level->generate();
 }
 
+bool Jumpy::loadSound(std::string filename)
+{
+    sf::SoundBuffer *newsound = new sf::SoundBuffer();
+    if(!newsound->loadFromFile(filename))
+    {
+        std::cout << "Error loading sound:" << filename << std::endl;
+        return false;
+    }
+    m_sounds.push_back(newsound);
+}
 
 SpriteSheet *Jumpy::getSpriteSheet(int index)
 {
@@ -365,7 +386,7 @@ int Jumpy::mainLoop()
         sf::Vector2f pvel = m_player->getVelocity();
         sf::Vector2f paccel = m_player->getAcceleration();
         sf::Vector2f ppos = m_player->getPosition();
-        debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << "," << paccel.y << " pos:" << ppos.x << "," << ppos.y << " colcnt:" << m_player->getCollisionCount();
+        debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << "," << paccel.y << " pos:" << ppos.x << "," << ppos.y << " colcnt:" << m_player->getCollisionCount() << " FRAME:" << m_player->getCurrentFrame();
         debugtext.setString( debugss.str() );
         m_screen->draw(debugtext);
 
@@ -381,6 +402,9 @@ int Jumpy::mainLoop()
 
             frameclock.restart();
         }
+
+        // process sound queue and cleanup
+        processSoundQueue();
     }
 
     return 0;
@@ -425,4 +449,29 @@ void Jumpy::drawLevel(Level *tlevel)
 void Jumpy::drawSkyBox()
 {
     m_screen->draw( *m_current_level->getSkyBox());
+}
+
+bool Jumpy::playSound(int soundindex)
+{
+    if(soundindex < 0 || soundindex >= int(m_sounds.size()) )
+    {
+        std::cout << "Error playing sound index # " << soundindex << ", out of bounds\n";
+        return false;
+    }
+
+    sf::Sound *newsound = new sf::Sound(*m_sounds[soundindex]);
+    newsound->play();
+    m_soundqueue.push_back(newsound);
+}
+
+void Jumpy::processSoundQueue()
+{
+    for(int i = int(m_soundqueue.size())-1; i >= 0; i--)
+    {
+        if(m_soundqueue[i]->getStatus() == sf::Sound::Stopped)
+        {
+            delete m_soundqueue[i];
+            m_soundqueue.erase(m_soundqueue.begin() + i);
+        }
+    }
 }

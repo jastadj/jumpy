@@ -91,6 +91,8 @@ void Player::shoot()
     {
         m_shooting = true;
         m_shooting_clock.restart();
+
+        m_jumpy->playSound(0);
     }
 }
 
@@ -102,6 +104,8 @@ void Player::update()
 
     // capture original position
     sf::Vector2f startpos = m_position;
+    int prevframe = m_current_sprite;
+
 
     // apply gravity
     m_acceleration += sf::Vector2f(0, 0.03);
@@ -314,7 +318,26 @@ void Player::update()
         if(!m_facing_right) m_current_sprite += spritecount;
     }
 
-    if(m_shooting) std::cout << "current frame = " << getCurrentFrame() << std::endl;
+    //std::cout << "current frame = " << getCurrentFrame() << std::endl;
+
+    // play footsteps
+    if(
+       (
+        m_current_sprite == 3 ||
+        m_current_sprite == 7 ||
+        m_current_sprite == 13 ||
+        m_current_sprite == 17 ||
+        m_current_sprite == 21 ||
+        m_current_sprite == 25 ||
+        m_current_sprite == 3 + spritecount||
+        m_current_sprite == 7 + spritecount||
+        m_current_sprite == 13 + spritecount||
+        m_current_sprite == 17 + spritecount||
+        m_current_sprite == 21 + spritecount||
+        m_current_sprite == 25 + spritecount
+        )
+       && m_current_sprite != prevframe)
+        m_jumpy->playSound( rand()%8+1);
 
     // set current sprites to obj position
     m_sprites[m_current_sprite]->setPosition(m_position.x, m_position.y);
