@@ -14,6 +14,9 @@ GameObj::GameObj()
 
     // default terminal velocity
     m_velocity_max = 5.f;
+
+    // dont forget to add sprites from a sprite sheet
+    // dont forget to add a bounding box for update collision
 }
 
 GameObj::~GameObj()

@@ -33,6 +33,9 @@ protected:
     int m_current_sprite;
     int m_facing_right;
 
+    // bounding box
+    std::vector<sf::FloatRect> m_bounding_boxes;
+
     // physics
     bool m_commanding_move;
     sf::Vector2f m_position;

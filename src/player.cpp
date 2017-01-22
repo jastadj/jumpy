@@ -19,6 +19,9 @@ Player::Player()
     }
 
     m_jumping = false;
+
+    // bounding box
+    m_bounding_boxes.push_back(sf::FloatRect(10 ,2, 12, 30) );
 }
 
 Player::~Player()
@@ -51,6 +54,8 @@ void Player::doMove(int movedir)
 
 void Player::update()
 {
+    sf::FloatRect srect;
+
     // capture original position
     sf::Vector2f startpos = m_position;
 
@@ -97,11 +102,11 @@ void Player::update()
 
     //std::cout << "vert vel:" << m_velocity.y << std::endl;
 
-    // get bounding box of sprite
-    sf::FloatRect srect = m_sprites[m_current_sprite]->getGlobalBounds();
+    // get bounding box
+    srect = m_bounding_boxes[0];
     // update bounding box position current working position
-    srect.left = m_position.x;
-    srect.top = m_position.y;
+    srect.left += m_position.x;
+    srect.top += m_position.y;
 
     // check if player is colliding with map
     Level *currentlevel = m_jumpy->getCurrentLevel();
@@ -110,8 +115,8 @@ void Player::update()
         sf::FloatRect vertrect = srect;
         sf::FloatRect horizrect = srect;
 
-        vertrect.left = startpos.x;
-        horizrect.top = startpos.y;
+        vertrect.left = startpos.x + m_bounding_boxes[0].left;
+        horizrect.top = startpos.y + m_bounding_boxes[0].top;
 
         // clean up coordinates?
         floor(srect.top);
@@ -123,14 +128,14 @@ void Player::update()
             while( currentlevel->isColliding(vertrect))
             {
                 // if intersecting below
-                if( startpos.y < vertrect.top)
+                if( startpos.y + m_bounding_boxes[0].top < vertrect.top)
                 {
                     vertrect.top--;
 
                     if(m_jumping) m_jumping = false;
                 }
                 // if intersecting above
-                else if(startpos.y > vertrect.top)vertrect.top++;
+                else if(startpos.y + m_bounding_boxes[0].top > vertrect.top)vertrect.top++;
             }
 
             srect.top = horizrect.top;
@@ -144,9 +149,9 @@ void Player::update()
             while( currentlevel->isColliding(horizrect))
             {
                 // if intersecting left
-                if( startpos.x > horizrect.left) horizrect.left++;
+                if( startpos.x + m_bounding_boxes[0].left > horizrect.left) horizrect.left++;
                 // if intersecting right
-                else if( startpos.x < horizrect.left) horizrect.left--;
+                else if( startpos.x + m_bounding_boxes[0].left < horizrect.left) horizrect.left--;
             }
 
             srect.left = vertrect.left;
@@ -157,7 +162,7 @@ void Player::update()
     }
 
     // adjust position to valid bounding box position
-    m_position = sf::Vector2f(srect.left, srect.top);
+    m_position = sf::Vector2f(srect.left - m_bounding_boxes[0].left, srect.top - m_bounding_boxes[0].top);
 
     if( currentlevel->isColliding(srect) )
     {
@@ -200,6 +205,6 @@ void Player::update()
     //std::cout << "current frame = " << getCurrentFrame() << std::endl;
 
     // set current sprites to obj position
-    m_sprites[m_current_sprite]->setPosition(m_position);
+    m_sprites[m_current_sprite]->setPosition(m_position.x, m_position.y);
 
 }
