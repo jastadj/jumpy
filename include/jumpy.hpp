@@ -11,6 +11,8 @@
 //#include "player.hpp"
 //#include "level.hpp"
 
+#include "methui.hpp"
+
 
 class Player;
 class SpriteSheet;
@@ -50,6 +52,9 @@ private:
     //
     time_t m_seed;
 
+    // UI elements
+    MethUI *m_meth_ui;
+
     // levels
     std::vector<Tile*> m_tiles;
     std::vector<Tile*> m_tiles_bg;
@@ -82,7 +87,7 @@ public:
     std::vector<Tile*> *getTilesBG() { return &m_tiles_bg;}
 
     Level *getCurrentLevel() { return m_current_level;}
-
+    const Player *getPlayer() const { return m_player;}
     // debug
     bool m_dbg_showboundingboxes;
 

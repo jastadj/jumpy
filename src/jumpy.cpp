@@ -15,6 +15,7 @@ Jumpy::Jumpy()
     // init pointers
     m_player = NULL;
     m_current_level = NULL;
+    m_meth_ui = NULL;
 
     // screen settings
     m_screen_width = 800;
@@ -67,6 +68,9 @@ bool Jumpy::init()
 
     // init random seed
     srand( time(NULL));
+
+    // init ui elements
+    m_meth_ui = new MethUI();
 
     return true;
 }
@@ -330,6 +334,9 @@ int Jumpy::mainLoop()
         // change view back to default for ui
         m_screen->setView( m_screen->getDefaultView());
         // draw debug test
+
+        // draw ui elements
+        m_meth_ui->draw(m_screen_width - 200,20, m_screen);
 
         std::stringstream debugss;
         sf::Vector2f pvel = m_player->getVelocity();
