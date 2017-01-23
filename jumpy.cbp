@@ -43,6 +43,8 @@
 			<Add directory="../../SFML-2.4.1/include" />
 		</Compiler>
 		<Linker>
+			<Add option="-static-libstdc++" />
+			<Add option="-static-libgcc" />
 			<Add directory="../../SFML-2.4.1/lib" />
 		</Linker>
 		<Unit filename="include/actor.hpp" />
