@@ -3,6 +3,7 @@
 #include "spritesheet.hpp"
 #include "level.hpp"
 #include "tile.hpp"
+#include "particle.hpp"
 
 #include <sstream>
 
@@ -16,6 +17,7 @@ Jumpy::Jumpy()
     m_player = NULL;
     m_current_level = NULL;
     m_meth_ui = NULL;
+    m_particle_manager = NULL;
 
     // screen settings
     m_screen_width = 800;
@@ -71,6 +73,9 @@ bool Jumpy::init()
 
     // init ui elements
     m_meth_ui = new MethUI();
+
+    // init particle manager
+    m_particle_manager = new ParticleManager;
 
     return true;
 }
@@ -225,6 +230,8 @@ bool Jumpy::loadSound(std::string filename)
         return false;
     }
     m_sounds.push_back(newsound);
+
+    return true;
 }
 
 SpriteSheet *Jumpy::getSpriteSheet(int index)
@@ -285,11 +292,14 @@ int Jumpy::mainLoop()
         // event que
         sf::Event event;
 
+        sf::Vector2i mousePosi = sf::Mouse::getPosition(*m_screen);
+        sf::Vector2f mousePos(mousePosi);
+
 
         // update
         m_player->update();
-
         m_current_level->update();
+        m_particle_manager->update();
 
         m_camera.setCenter(m_player->getPosition());
         m_screen->setView(m_camera);
@@ -338,6 +348,13 @@ int Jumpy::mainLoop()
                 else if(event.key.code == sf::Keyboard::E)
                 {
                     m_player->setCurrentFrame( m_player->getCurrentFrame()+1);
+                }
+                else if(event.key.code == sf::Keyboard::R)
+                {
+                    Particle *newparticle = new Particle();
+                    newparticle->setColor(sf::Color::Red);
+                    newparticle->m_life_time = 5000;
+                    m_particle_manager->addParticle(newparticle);
                 }
                 else if(event.key.code == sf::Keyboard::Space)
                 {
@@ -417,6 +434,9 @@ void Jumpy::drawScreen()
 
     // draw player
     m_player->draw(m_screen);
+
+    // draw particles
+    m_particle_manager->draw(m_screen);
 }
 
 void Jumpy::drawLevel(Level *tlevel)
@@ -462,6 +482,8 @@ bool Jumpy::playSound(int soundindex)
     sf::Sound *newsound = new sf::Sound(*m_sounds[soundindex]);
     newsound->play();
     m_soundqueue.push_back(newsound);
+
+    return true;
 }
 
 void Jumpy::processSoundQueue()

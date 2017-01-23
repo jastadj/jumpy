@@ -121,11 +121,10 @@ void Player::shoot()
 
         hitobjs = currentlevel->getObjectCollisionsWithLine(p1, p2);
 
-        for(int i = 0; i < int(hitobjs.size()); i++)
+        if(!hitobjs.empty())
         {
-            std::cout << "sorted collision : " << hitobjs[i]->getName() << std::endl;
+            std::cout << "Player shot " << hitobjs[0]->getName() << std::endl;
         }
-
 
     }
 

@@ -325,7 +325,7 @@ std::vector<GameObj*> Level::getObjectCollisionsWithLine(sf::Vector2f p1, sf::Ve
     {
         if( lineIntersectsRect(p1, p2, m_objects[i]->getBoundingBox()) )
         {
-            std::cout << "found los intersect with " << m_objects[i]->getName() << std::endl;
+            //std::cout << "found los intersect with " << m_objects[i]->getName() << std::endl;
 
             sortable newsortable;
             newsortable.gobj = m_objects[i];

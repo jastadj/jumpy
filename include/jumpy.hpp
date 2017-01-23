@@ -19,6 +19,7 @@ class Player;
 class SpriteSheet;
 class Level;
 class Tile;
+class ParticleManager;
 
 class Jumpy
 {
@@ -60,6 +61,9 @@ private:
     //
     time_t m_seed;
 
+    // particles
+    ParticleManager *m_particle_manager;
+
     // UI elements
     MethUI *m_meth_ui;
 
@@ -96,6 +100,8 @@ public:
 
     Level *getCurrentLevel() { return m_current_level;}
     const Player *getPlayer() const { return m_player;}
+
+    ParticleManager *getParticleManager() { return m_particle_manager;}
 
     bool playSound(int soundindex);
 

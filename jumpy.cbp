@@ -52,6 +52,7 @@
 		<Unit filename="include/meth.hpp" />
 		<Unit filename="include/methhead.hpp" />
 		<Unit filename="include/methui.hpp" />
+		<Unit filename="include/particle.hpp" />
 		<Unit filename="include/player.hpp" />
 		<Unit filename="include/spritesheet.hpp" />
 		<Unit filename="include/tile.hpp" />
@@ -64,6 +65,7 @@
 		<Unit filename="src/meth.cpp" />
 		<Unit filename="src/methhead.cpp" />
 		<Unit filename="src/methui.cpp" />
+		<Unit filename="src/particle.cpp" />
 		<Unit filename="src/player.cpp" />
 		<Unit filename="src/spritesheet.cpp" />
 		<Unit filename="src/tile.cpp" />
