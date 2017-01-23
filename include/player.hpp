@@ -9,6 +9,7 @@ private:
 
     int m_current_meth;
     int m_max_meth;
+    sf::Clock m_meth_timer;
 
     bool m_shooting;
     int m_shooting_timeout;

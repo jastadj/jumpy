@@ -377,4 +377,16 @@ void Player::update()
     // set current sprites to obj position
     m_sprites[m_current_sprite]->setPosition(m_position.x, m_position.y);
 
+    // update meth timer
+    if( m_meth_timer.getElapsedTime().asMilliseconds() > 500)
+    {
+        m_meth_timer.restart();
+
+        m_current_meth -= 5;
+
+        if(m_current_meth < 0) m_current_meth = 0;
+    }
+
+
+
 }
