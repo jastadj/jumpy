@@ -368,24 +368,41 @@ void Player::update()
 
     //std::cout << "current frame = " << getCurrentFrame() << std::endl;
 
+    // position foot emitters
+    m_left_foot_emit->setPosition( sf::Vector2f(srect.left+8, srect.top+srect.height) );
+    m_right_foot_emit->setPosition( sf::Vector2f(srect.left+20, srect.top+srect.height) );
     // play footsteps
+    // left side foot
     if(
        (
         m_current_sprite == 3 ||
-        m_current_sprite == 7 ||
         m_current_sprite == 13 ||
-        m_current_sprite == 17 ||
         m_current_sprite == 21 ||
-        m_current_sprite == 25 ||
-        m_current_sprite == 3 + spritecount||
         m_current_sprite == 7 + spritecount||
-        m_current_sprite == 13 + spritecount||
         m_current_sprite == 17 + spritecount||
-        m_current_sprite == 21 + spritecount||
         m_current_sprite == 25 + spritecount
         )
        && m_current_sprite != prevframe)
-        m_jumpy->playSound( rand()%8+1);
+       {
+            m_jumpy->playSound( rand()%8+1);
+            m_left_foot_emit->once();
+       }
+    // right side foot
+    else if(
+            (
+             m_current_sprite == 7 ||
+             m_current_sprite == 17 ||
+             m_current_sprite == 25 ||
+             m_current_sprite == 3 + spritecount||
+             m_current_sprite == 13 + spritecount||
+             m_current_sprite == 21 + spritecount
+             )
+            && m_current_sprite != prevframe
+            )
+        {
+            m_jumpy->playSound( rand()%8+1);
+            m_right_foot_emit->once();
+        }
 
     // set current sprites to obj position
     m_sprites[m_current_sprite]->setPosition(m_position.x, m_position.y);

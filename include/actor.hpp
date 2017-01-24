@@ -3,11 +3,17 @@
 
 #include "gameobj.hpp"
 
+// forward declarations
+class ParticleEmitter;
+
 class Actor:public GameObj
 {
 protected:
 
     bool m_jumping;
+
+    ParticleEmitter *m_left_foot_emit;
+    ParticleEmitter *m_right_foot_emit;
 
 public:
     Actor();

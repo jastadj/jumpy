@@ -25,11 +25,16 @@ Actor::Actor()
 
     // bounding box
     // be sure to add a bounding box
+
+    m_left_foot_emit = new ParticleEmitter(PEMIT_DUST1);
+    m_right_foot_emit = new ParticleEmitter(PEMIT_DUST1);
 }
 
 Actor::~Actor()
 {
-
+    // delete emitters
+    delete m_left_foot_emit;
+    delete m_right_foot_emit;
 }
 
 

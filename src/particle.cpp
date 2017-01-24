@@ -248,6 +248,21 @@ void ParticleEmitter::createParticle( sf::Vector2f offsetpos, sf::Vector2f initi
     m_particle_manager->addParticle(newparticle);
 }
 
+void ParticleEmitter::once()
+{
+    if(m_type == PEMIT_DUST1)
+    {
+        Particle *np = new Particle();
+        np->m_born = m_particle_manager->getClock()->getElapsedTime();
+        np->m_position = m_position;
+        np->m_color = sf::Color(250,200,200);
+        np->m_life_time = 500;
+        np->m_vel = sf::Vector2f(0, -0.3);
+        np->m_sprite = new sf::Sprite( *m_particle_manager->getTexture(1));
+        m_particle_manager->addParticle(np);
+    }
+}
+
 void ParticleEmitter::setPosition( sf::Vector2f tpos)
 {
     m_position = tpos;

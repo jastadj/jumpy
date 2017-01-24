@@ -6,7 +6,7 @@
 #include <vector>
 
 enum PARTICLETYPE{ PARTICLE_DEFAULT, PARTICLE_TINY};
-enum EMITTERTYPE{ PEMIT_CUSTOM};
+enum EMITTERTYPE{ PEMIT_CUSTOM, PEMIT_DUST1};
 
 struct Particle
 {
@@ -77,7 +77,7 @@ public:
     ~ParticleEmitter();
 
     void createParticle( sf::Vector2f offsetpos, sf::Vector2f initialvel);
-
+    void once();
     void setPosition( sf::Vector2f tpos);
 
     // custom emitter parameters
