@@ -126,6 +126,17 @@ void Player::shoot()
         if(!hitobjs.empty())
         {
             std::cout << "Player shot " << hitobjs[0]->getName() << std::endl;
+
+            if(hitobjs[0]->getType() == OBJ_ACTOR)
+            {
+                Actor *pa;
+                pa = dynamic_cast<Actor*>(hitobjs[0]);
+
+                if(pa)
+                {
+                    pa->getShot( isFacingRight());
+                }
+            }
         }
 
     }

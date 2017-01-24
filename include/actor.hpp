@@ -21,6 +21,7 @@ public:
 
     void addCollision(GameObj *tobj);
 
+    void getShot(bool rightside = true);
     //virtual void update()=0;
 };
 #endif // CLASS_ACTOR
