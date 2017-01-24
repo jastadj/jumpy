@@ -394,11 +394,42 @@ void Player::update()
 
 void Player::pee()
 {
-    sf::FloatRect srect = getBoundingBox();
-    ParticleEmitter p1(PEMIT_CUSTOM, sf::Vector2f( (srect.left + srect.width/2), (srect.top + srect.height/2) ));
-    p1.m_custom_min_life = 500;
-    p1.m_custom_max_life = 300;
+    int dirmod = 1;
+    if( !isFacingRight()) dirmod = -1;
 
-    p1.createParticle(sf::Vector2f(0,0), sf::Vector2f(1,0));
+    if( rand()%100 + 1 > 80)
+    {
+        sf::FloatRect srect = getBoundingBox();
+        ParticleEmitter p1(PEMIT_CUSTOM, sf::Vector2f( (srect.left + srect.width/2), (srect.top + srect.height/2)+5 ));
+        p1.m_custom_min_life = 500;
+        p1.m_custom_max_life = 300;
+        p1.m_custom_color = sf::Color(236,191,44,255);
+        p1.m_custom_accel = sf::Vector2f(0, 0.05);
+        p1.createParticle(sf::Vector2f(0,0), sf::Vector2f(1*dirmod,-0.7));
+    }
+
+    if( rand()%100 + 1 > 80)
+    {
+        sf::FloatRect srect = getBoundingBox();
+        ParticleEmitter p1(PEMIT_CUSTOM, sf::Vector2f( (srect.left + srect.width/2), (srect.top + srect.height/2)+5 ));
+        //p1.m_custom_texture_index = 1;
+        p1.m_custom_min_life = 500;
+        p1.m_custom_max_life = 300;
+        p1.m_custom_color = sf::Color(247,204,60,200);
+        p1.m_custom_accel = sf::Vector2f(0, 0.05);
+        p1.createParticle(sf::Vector2f(0,-1), sf::Vector2f(1*dirmod,-0.6));
+    }
+
+    if( rand()%100 + 1 > 90)
+    {
+        sf::FloatRect srect = getBoundingBox();
+        ParticleEmitter p1(PEMIT_CUSTOM, sf::Vector2f( (srect.left + srect.width/2), (srect.top + srect.height/2)+5 ));
+        //p1.m_custom_texture_index = 1;
+        p1.m_custom_min_life = 500;
+        p1.m_custom_max_life = 300;
+        p1.m_custom_color = sf::Color(228,185,45,200);
+        p1.m_custom_accel = sf::Vector2f(0, 0.05);
+        p1.createParticle(sf::Vector2f(0,1), sf::Vector2f(1*dirmod,-0.8));
+    }
 
 }

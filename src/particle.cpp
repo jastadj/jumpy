@@ -167,6 +167,9 @@ void ParticleManager::update()
         // else, update particle
         else
         {
+            // update particle velocity with acceleration
+            tp->m_vel += tp->m_accel;
+
             // update particle position based on velocity
             tp->m_position += tp->m_vel;
 
@@ -236,6 +239,8 @@ void ParticleEmitter::createParticle( sf::Vector2f offsetpos, sf::Vector2f initi
 
         int life = rand()%(m_custom_max_life - m_custom_min_life) + m_custom_min_life;
         newparticle->m_life_time = life;
+
+        newparticle->m_accel = m_custom_accel;
 
         break;
     }

@@ -85,6 +85,7 @@ public:
     int m_custom_texture_index;
     int m_custom_max_life;
     int m_custom_min_life;
+    sf::Vector2f m_custom_accel;
 
 };
 
