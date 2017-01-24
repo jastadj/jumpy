@@ -62,6 +62,7 @@ public:
 
     void setCurrentFrame(int tframe);
     int getCurrentFrame() { return m_current_sprite;}
+    bool isFacingRight() { return m_facing_right;}
     sf::FloatRect getBoundingBox();
 
     bool isCommandingMove() { return m_commanding_move;}

@@ -33,11 +33,12 @@ public:
 
     //void addCollision(GameObj *tobj);
 
-    ParticleEmitter *m_particle_emitter;
-
     void shoot();
 
     void update();
+
+    // test particles
+    void pee();
 };
 
 #endif // CLASS_PLAYER

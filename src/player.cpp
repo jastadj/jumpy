@@ -33,8 +33,6 @@ Player::Player()
     // bounding box
     m_bounding_boxes.push_back(sf::FloatRect(10 ,2, 12, 30) );
 
-    // particle emitter
-    m_particle_emitter = new ParticleEmitter(PEMIT_DEFAULT);
 }
 
 Player::~Player()
@@ -391,7 +389,16 @@ void Player::update()
         if(m_current_meth < 0) m_current_meth = 0;
     }
 
-    // put particle emitter in center of bounding box
-    m_particle_emitter->setPosition( sf::Vector2f( (srect.left + srect.width/2), (srect.top + srect.height/2) ) );
+
+}
+
+void Player::pee()
+{
+    sf::FloatRect srect = getBoundingBox();
+    ParticleEmitter p1(PEMIT_CUSTOM, sf::Vector2f( (srect.left + srect.width/2), (srect.top + srect.height/2) ));
+    p1.m_custom_min_life = 500;
+    p1.m_custom_max_life = 300;
+
+    p1.createParticle(sf::Vector2f(0,0), sf::Vector2f(1,0));
 
 }

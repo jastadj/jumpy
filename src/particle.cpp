@@ -82,13 +82,13 @@ void ParticleManager::deleteParticle(Particle *tparticle)
         // link prev if valid
         if(tparticle->prev)
         {
-            tparticle->prev = tparticle->next;
+            tparticle->prev->next = tparticle->next;
         }
 
         // link next if valid
         if(tparticle->next)
         {
-            tparticle->next = tparticle->prev;
+            tparticle->next->prev = tparticle->prev;
         }
 
         // delete particle
@@ -147,9 +147,12 @@ void ParticleManager::update()
 
     Particle *tp = head;
 
+    int pindex = 0;
+
     // do while particle pointer is not null
     while( tp)
     {
+
         // if particle has exceeded it's lifetime
         if(m_clock.getElapsedTime().asMilliseconds() >= tp->m_born.asMilliseconds() + tp->m_life_time)
         {
@@ -177,6 +180,7 @@ void ParticleManager::update()
             tp = tp->next;
         }
 
+        pindex++;
     }
 }
 
@@ -192,6 +196,11 @@ ParticleEmitter::ParticleEmitter(int ptype, sf::Vector2f ppos)
 
     m_type = ptype;
     m_position = ppos;
+
+    // init custom parameters
+    m_custom_texture_index = 0;
+    m_custom_max_life = 1000;
+    m_custom_min_life = m_custom_max_life;
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -199,8 +208,11 @@ ParticleEmitter::~ParticleEmitter()
 
 }
 
-void ParticleEmitter::createParticle( sf::Vector2f offsetpos, sf::Vector2f initialvel, int lifetimems)
+void ParticleEmitter::createParticle( sf::Vector2f offsetpos, sf::Vector2f initialvel)
 {
+    // life time calc
+    int plife = 1000;
+
     // create new particle
     Particle *newparticle = new Particle;
 
@@ -208,7 +220,7 @@ void ParticleEmitter::createParticle( sf::Vector2f offsetpos, sf::Vector2f initi
     newparticle->m_position = m_position + offsetpos;
     newparticle->m_vel = initialvel;
     newparticle->m_born = m_particle_manager->getClock()->getElapsedTime();
-    newparticle->m_life_time = lifetimems;
+    newparticle->m_life_time = plife;
 
 
     // init linked list
@@ -217,10 +229,14 @@ void ParticleEmitter::createParticle( sf::Vector2f offsetpos, sf::Vector2f initi
 
     switch(m_type)
     {
-    case PEMIT_DEFAULT:
+    case PEMIT_CUSTOM:
     default:
-        newparticle->m_color = sf::Color::Blue;
-        newparticle->m_sprite = new sf::Sprite( *m_particle_manager->getTexture(0));
+        newparticle->m_color = m_custom_color;
+        newparticle->m_sprite = new sf::Sprite( *m_particle_manager->getTexture(m_custom_texture_index));
+
+        int life = rand()%(m_custom_max_life - m_custom_min_life) + m_custom_min_life;
+        newparticle->m_life_time = life;
+
         break;
     }
 

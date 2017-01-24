@@ -306,32 +306,15 @@ int Jumpy::mainLoop()
 
         // process event que
 
-        /*
-        if( sf::Keyboard::isKeyPressed( sf::Keyboard::S))
-        {
-            //sf::Vector2f paccel = m_player->getAcceleration();
-            //paccel.y = 1;
-            //m_player->setAcceleration(paccel);
-
-            sf::Vector2f pvel = m_player->getVelocity();
-            m_player->setVelocity(sf::Vector2f(pvel.x, 5));
-        }
-        else if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        {
-            sf::Vector2f pvel = m_player->getVelocity();
-            m_player->setVelocity(sf::Vector2f(pvel.x,-5));
-        }
-        else
-        {
-            sf::Vector2f pvel = m_player->getVelocity();
-            m_player->setVelocity(sf::Vector2f(pvel.x,0));
-        }
-        */
-
         // handle key states
         if( sf::Keyboard::isKeyPressed( sf::Keyboard::A)) m_player->doMove(MOVE_LEFT);
         else if( sf::Keyboard::isKeyPressed( sf::Keyboard::D)) m_player->doMove(MOVE_RIGHT);
         else m_player->doMove(MOVE_NONE);
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+        {
+            m_player->pee();
+        }
 
         // process events (mouse clicks, key presses, etc)
         while(m_screen->pollEvent(event))
@@ -348,10 +331,6 @@ int Jumpy::mainLoop()
                 else if(event.key.code == sf::Keyboard::E)
                 {
                     m_player->setCurrentFrame( m_player->getCurrentFrame()+1);
-                }
-                else if(event.key.code == sf::Keyboard::R)
-                {
-                    m_player->m_particle_emitter->createParticle(sf::Vector2f(0,0), sf::Vector2f(0,-1), 2000);
                 }
                 else if(event.key.code == sf::Keyboard::Space)
                 {
@@ -405,7 +384,7 @@ int Jumpy::mainLoop()
         m_screen->draw(debugtext);
 
 
-        std::cout << "particles:" << m_particle_manager->getCount() << std::endl;
+        //std::cout << "particles:" << m_particle_manager->getCount() << std::endl;
 
         // display
         m_screen->display();

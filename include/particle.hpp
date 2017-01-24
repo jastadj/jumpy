@@ -6,7 +6,7 @@
 #include <vector>
 
 enum PARTICLETYPE{ PARTICLE_DEFAULT, PARTICLE_TINY};
-enum EMITTERTYPE{ PEMIT_DEFAULT};
+enum EMITTERTYPE{ PEMIT_CUSTOM};
 
 struct Particle
 {
@@ -76,9 +76,16 @@ public:
     ParticleEmitter(int ptype, sf::Vector2f ppos = sf::Vector2f(0,0) );
     ~ParticleEmitter();
 
-    void createParticle( sf::Vector2f offsetpos, sf::Vector2f initialvel, int lifetimems);
+    void createParticle( sf::Vector2f offsetpos, sf::Vector2f initialvel);
 
     void setPosition( sf::Vector2f tpos);
+
+    // custom emitter parameters
+    sf::Color m_custom_color;
+    int m_custom_texture_index;
+    int m_custom_max_life;
+    int m_custom_min_life;
+
 };
 
 #endif // CLASS_PARTICLE
