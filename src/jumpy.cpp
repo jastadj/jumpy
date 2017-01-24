@@ -351,10 +351,7 @@ int Jumpy::mainLoop()
                 }
                 else if(event.key.code == sf::Keyboard::R)
                 {
-                    Particle *newparticle = new Particle();
-                    newparticle->setColor(sf::Color::Red);
-                    newparticle->m_life_time = 5000;
-                    m_particle_manager->addParticle(newparticle);
+                    m_player->m_particle_emitter->createParticle(sf::Vector2f(0,0), sf::Vector2f(0,-1), 2000);
                 }
                 else if(event.key.code == sf::Keyboard::Space)
                 {
@@ -406,6 +403,9 @@ int Jumpy::mainLoop()
         debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << "," << paccel.y << " pos:" << ppos.x << "," << ppos.y << " colcnt:" << m_player->getCollisionCount() << " FRAME:" << m_player->getCurrentFrame();
         debugtext.setString( debugss.str() );
         m_screen->draw(debugtext);
+
+
+        std::cout << "particles:" << m_particle_manager->getCount() << std::endl;
 
         // display
         m_screen->display();

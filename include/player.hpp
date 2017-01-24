@@ -3,6 +3,9 @@
 
 #include "actor.hpp"
 
+// forward declarations
+class ParticleEmitter;
+
 class Player: public Actor
 {
 private:
@@ -15,6 +18,8 @@ private:
     int m_shooting_timeout;
     int m_shoot_time;
     sf::Clock m_shooting_clock;
+
+
 public:
     Player();
     ~Player();
@@ -27,6 +32,8 @@ public:
     //void doMove(int movedir);
 
     //void addCollision(GameObj *tobj);
+
+    ParticleEmitter *m_particle_emitter;
 
     void shoot();
 

@@ -5,70 +5,80 @@
 
 #include <vector>
 
-class Particle
+enum PARTICLETYPE{ PARTICLE_DEFAULT, PARTICLE_TINY};
+enum EMITTERTYPE{ PEMIT_DEFAULT};
+
+struct Particle
 {
-private:
-
-
-public:
-    Particle();
-    ~Particle();
-
+    // linked list stuff
     Particle *next;
     Particle *prev;
 
+    // particle graphics
     sf::Sprite *m_sprite;
 
+    // particle params
     sf::Color m_color;
     sf::Time m_born;
     int m_life_time;
 
+    // particle physics
     sf::Vector2f m_position;
     sf::Vector2f m_vel;
     sf::Vector2f m_accel;
-
-    void setColor(sf::Color tcolor);
-
-    void draw(sf::RenderTarget *tscreen);
-    void update();
-};
-
-class ParticleEmitter
-{
-private:
-
-public:
-    ParticleEmitter();
-    ~ParticleEmitter();
-
 };
 
 class ParticleManager
 {
 private:
 
+    // linked list pointers
     Particle *head;
     Particle *tail;
+
+    // master clock
     sf::Clock m_clock;
 
+    // texture list for different particle types
     std::vector<sf::Texture*> m_textures;
+
 public:
     ParticleManager();
     ~ParticleManager();
 
+    // linked list management
+    int getCount();
     void addParticle(Particle *tparticle);
-    bool deleteParticle(Particle *tparticle);
+    void deleteParticle(Particle *tparticle);
     void clear();
 
-    sf::Time getTime() { return m_clock.getElapsedTime();}
+    // get particle manager stuff
+    sf::Texture *getTexture(int index);
+    sf::Clock *getClock() {return &m_clock;}
 
-    int particleCount();
-
+    // draw and update particles
     void draw(sf::RenderTarget *tscreen);
     void update();
 
 
-
-
 };
+
+class ParticleEmitter
+{
+private:
+
+    int m_type;
+    sf::Vector2f m_position;
+
+    ParticleManager *m_particle_manager;
+
+public:
+    ParticleEmitter(int ptype, sf::Vector2f ppos = sf::Vector2f(0,0) );
+    ~ParticleEmitter();
+
+    void createParticle( sf::Vector2f offsetpos, sf::Vector2f initialvel, int lifetimems);
+
+    void setPosition( sf::Vector2f tpos);
+};
+
 #endif // CLASS_PARTICLE

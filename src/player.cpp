@@ -3,6 +3,7 @@
 #include "jumpy.hpp"
 #include "level.hpp"
 #include "meth.hpp"
+#include "particle.hpp"
 
 Player::Player()
 {
@@ -31,6 +32,9 @@ Player::Player()
 
     // bounding box
     m_bounding_boxes.push_back(sf::FloatRect(10 ,2, 12, 30) );
+
+    // particle emitter
+    m_particle_emitter = new ParticleEmitter(PEMIT_DEFAULT);
 }
 
 Player::~Player()
@@ -387,6 +391,7 @@ void Player::update()
         if(m_current_meth < 0) m_current_meth = 0;
     }
 
-
+    // put particle emitter in center of bounding box
+    m_particle_emitter->setPosition( sf::Vector2f( (srect.left + srect.width/2), (srect.top + srect.height/2) ) );
 
 }
