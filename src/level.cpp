@@ -222,6 +222,7 @@ bool Level::setTile(int x, int y, int tileid)
     if( m_tiles[y][x])
     {
         delete m_tiles[y][x];
+        m_tiles[y][x] = 0;
     }
 
     m_mapdata[y][x] = tileid;
