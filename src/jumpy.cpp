@@ -10,6 +10,8 @@
 
 #include "tools.hpp"
 
+#include "leveleditor.hpp"
+
 Jumpy *Jumpy::m_instance = NULL;
 
 Jumpy::Jumpy()
@@ -28,6 +30,7 @@ Jumpy::Jumpy()
     // debug
     m_dbg_showboundingboxes = false;
     m_dbg_noclip = false;
+    m_dbg_editor = NULL;
 }
 
 Jumpy::~Jumpy()
@@ -448,6 +451,32 @@ int Jumpy::mainLoop()
         // process events (mouse clicks, key presses, etc)
         while(m_screen->pollEvent(event))
         {
+
+            if(m_dbg_editor)
+            {
+                if(event.type == sf::Event::Closed)
+                {
+
+                }
+                else if(event.type == sf::Event::KeyPressed)
+                {
+                    if(event.key.code == sf::Keyboard::F9)
+                    {
+                        delete m_dbg_editor;
+                        m_dbg_editor = NULL;
+
+                        m_dbg_noclip = false;
+                        m_dbg_showboundingboxes = false;
+
+                        break;
+                    }
+                }
+
+                m_dbg_editor->processEvent(&event, m_screen);
+
+                continue;
+            }
+
             // if 'x' on window was closed
             if( event.type == sf::Event::Closed) quit = true;
 
@@ -479,6 +508,22 @@ int Jumpy::mainLoop()
                 {
                     m_dbg_noclip = !m_dbg_noclip;
                 }
+                else if(event.key.code == sf::Keyboard::F9)
+                {
+                    if(!m_dbg_editor)
+                    {
+                        m_dbg_editor = new LevelEditor;
+                        m_dbg_noclip = true;
+                        m_dbg_showboundingboxes = true;
+                    }
+                    else
+                    {
+                        delete m_dbg_editor;
+                        m_dbg_editor = NULL;
+
+                    }
+
+                }
 
 
             } // end key pressed
@@ -490,9 +535,6 @@ int Jumpy::mainLoop()
                 }
             }
         }
-
-
-
 
 
         // draw
@@ -520,6 +562,8 @@ int Jumpy::mainLoop()
 
 
         //std::cout << "particles:" << m_particle_manager->getCount() << std::endl;
+
+        if(m_dbg_editor) m_dbg_editor->draw(m_screen);
 
         // display
         m_screen->display();

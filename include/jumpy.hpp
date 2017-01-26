@@ -22,6 +22,7 @@ class Tile;
 class ParticleManager;
 class Decoration;
 class Animation;
+class LevelEditor;
 
 class Jumpy
 {
@@ -117,6 +118,7 @@ public:
     // debug
     bool m_dbg_showboundingboxes;
     bool m_dbg_noclip;
+    LevelEditor *m_dbg_editor;
 
 
 };

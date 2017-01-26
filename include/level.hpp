@@ -9,7 +9,6 @@ class Jumpy;
 class Tile;
 class GameObj;
 class Decoration;
-
 class Level
 {
 private:
