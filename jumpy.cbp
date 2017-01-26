@@ -51,6 +51,8 @@
 		<Unit filename="TinyXML2/include/tinyxml2.h" />
 		<Unit filename="TinyXML2/src/tinyxml2.cpp" />
 		<Unit filename="include/actor.hpp" />
+		<Unit filename="include/animation.hpp" />
+		<Unit filename="include/decoration.hpp" />
 		<Unit filename="include/gameobj.hpp" />
 		<Unit filename="include/jumpy.hpp" />
 		<Unit filename="include/level.hpp" />
@@ -63,6 +65,8 @@
 		<Unit filename="include/tile.hpp" />
 		<Unit filename="include/tools.hpp" />
 		<Unit filename="src/actor.cpp" />
+		<Unit filename="src/animation.cpp" />
+		<Unit filename="src/decoration.cpp" />
 		<Unit filename="src/gameobj.cpp" />
 		<Unit filename="src/jumpy.cpp" />
 		<Unit filename="src/level.cpp" />
