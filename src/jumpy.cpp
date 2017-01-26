@@ -195,6 +195,7 @@ bool Jumpy::initTiles()
 bool Jumpy::initDecorations()
 {
     m_decorations.push_back( new Tile( m_spritesheets[5]->createSprite(0)));
+    return true;
 }
 
 
