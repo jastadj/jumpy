@@ -303,6 +303,8 @@ void Jumpy::initLevel()
     // if a level currently exists, delete it
     if(m_current_level != NULL) delete m_current_level;
 
+    m_current_level = new Level(".\\testlevel.xml");
+/*
     // create a new level
     m_current_level = new Level(25,15);
 
@@ -343,6 +345,7 @@ void Jumpy::initLevel()
 
     // generate map
     //m_current_level->generate();
+    */
 }
 
 bool Jumpy::loadSound(std::string filename)

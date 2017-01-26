@@ -12,6 +12,7 @@ public:
     ~MethHead();
 
     int getType() { return OBJ_ACTOR;}
+    XMLNode *saveToNode(XMLDocument *tdoc);
 
     void update();
 };

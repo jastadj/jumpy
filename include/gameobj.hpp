@@ -15,6 +15,10 @@
 
 #include "animation.hpp"
 
+#include "tinyxml2.h"
+
+using namespace tinyxml2;
+
 // forward declarations
 class Jumpy;
 
@@ -31,6 +35,7 @@ protected:
     Jumpy *m_jumpy;
 
     std::string m_name;
+    int m_id;
 
     // list of sprite frames
     std::vector<sf::Sprite*> m_sprites;
@@ -56,9 +61,13 @@ public:
     GameObj();
     virtual ~GameObj();
     virtual int getType()=0;
+    virtual XMLNode *saveToNode(XMLDocument *tdoc)=0;
 
     std::string getName() { return m_name;}
     void setName(std::string nname) { m_name = nname;}
+
+    int getID() { return m_id;}
+    void setID(int nid) { m_id = nid;}
 
     // sprites
     void addSprite(sf::Sprite *tsprite);

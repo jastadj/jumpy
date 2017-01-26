@@ -36,5 +36,21 @@
             <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>
             <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>
         </TilesBG>
+        <Objects>
+            <Decoration>
+                <ID>0</ID>
+                <X>400</X>
+                <Y>150</Y>
+            </Decoration>
+            <Meth>
+                <Value>500</Value>
+                <X>400</X>
+                <Y>288</Y>
+            </Meth>
+            <MethHead>
+                <X>350</X>
+                <Y>200</Y>
+            </MethHead>
+        </Objects>
     </Level>
 </Methd_Up>

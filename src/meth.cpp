@@ -19,6 +19,27 @@ Meth::~Meth()
 
 }
 
+XMLNode *Meth::saveToNode(XMLDocument *tdoc)
+{
+
+    if(!tdoc) return NULL;
+
+    XMLNode *anode = tdoc->NewElement("Meth");
+
+    XMLElement *element = tdoc->NewElement("Value");
+    element->SetText(m_value);
+    anode->InsertEndChild(element);
+
+    element = tdoc->NewElement("X");
+    element->SetText(m_position.x);
+    anode->InsertEndChild(element);
+
+    element = tdoc->NewElement("Y");
+    element->SetText( m_position.y);
+    anode->InsertEndChild(element);
+
+    return anode;
+}
 
 void Meth::update()
 {

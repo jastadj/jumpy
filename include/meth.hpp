@@ -14,6 +14,7 @@ public:
     ~Meth();
 
     int getType() { return OBJ_METH;}
+    XMLNode *saveToNode(XMLDocument *tdoc);
 
     void addCollision(GameObj *tobj) {};
 

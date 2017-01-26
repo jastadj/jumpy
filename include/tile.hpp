@@ -14,6 +14,7 @@ public:
     Tile( const Tile &ttile);
     ~Tile();
     int getType() { return OBJ_TILE;}
+    XMLNode *saveToNode(XMLDocument *tdoc) { return NULL;}
 
     void addCollision(GameObj *tobj) {};
 

@@ -37,6 +37,26 @@ Decoration::~Decoration()
 
 }
 
+XMLNode *Decoration::saveToNode(XMLDocument *tdoc)
+{
+    if(!tdoc) return NULL;
+
+    XMLNode *anode = tdoc->NewElement("Decoration");
+
+    XMLElement *element = tdoc->NewElement("ID");
+    element->SetText(m_id);
+    anode->InsertEndChild(element);
+
+    element = tdoc->NewElement("X");
+    element->SetText(m_position.x);
+    anode->InsertEndChild(element);
+
+    element = tdoc->NewElement("Y");
+    element->SetText( m_position.y);
+    anode->InsertEndChild(element);
+
+    return anode;
+}
 
 void Decoration::draw(sf::RenderTarget *tscreen)
 {

@@ -23,6 +23,59 @@ struct sortable
 
 Level::Level(int width, int height)
 {
+    m_initialized = init(width, height);
+}
+
+Level::Level(std::string filename)
+{
+    m_initialized = false;
+
+    if(!load(filename))
+    {
+        std::cout << "Error loading level!\n";
+    }
+
+}
+
+Level::~Level()
+{
+    // delete tiles
+    for(int i = 0; i < getHeight(); i++)
+    {
+        for(int n = 0; n < getWidth(); n++)
+        {
+            delete m_tiles[i][n];
+            delete m_tiles_bg[i][n];
+        }
+        m_tiles[i].clear();
+        m_tiles_bg[i].clear();
+    }
+    m_tiles.clear();
+    m_tiles_bg.clear();
+
+    // delete objects
+    for(int i = 0; i < int(m_objects.size()); i++)
+    {
+        delete m_objects[i];
+    }
+    m_objects.clear();
+
+    // delete decorations
+    for(int i = 0; i < int(m_decorations.size()); i++)
+    {
+        delete m_decorations[i];
+    }
+    m_decorations.clear();
+}
+
+bool Level::init(int width, int height)
+{
+    if(m_initialized)
+    {
+        std::cout << "Level already initialized!\n";
+        return false;
+    }
+
     m_jumpy = Jumpy::getInstance();
 
     if(height < 0) height = 1;
@@ -100,30 +153,8 @@ Level::Level(int width, int height)
     delete bgtile1;
     delete bgtile2;
     delete bgtile3;
-}
 
-Level::~Level()
-{
-    // delete tiles
-    for(int i = 0; i < getHeight(); i++)
-    {
-        for(int n = 0; n < getWidth(); n++)
-        {
-            delete m_tiles[i][n];
-            delete m_tiles_bg[i][n];
-        }
-        m_tiles[i].clear();
-        m_tiles_bg[i].clear();
-    }
-    m_tiles.clear();
-    m_tiles_bg.clear();
-
-    // delete objects
-    for(int i = 0; i < int(m_objects.size()); i++)
-    {
-        delete m_objects[i];
-    }
-    m_objects.clear();
+    return true;
 }
 
 int Level::getWidth()
@@ -426,19 +457,19 @@ bool Level::addObject(GameObj *tobj)
     m_objects.push_back(tobj);
 }
 
-void Level::addMeth(int x, int y, int val)
+void Level::addMeth(int val, sf::Vector2f tpos)
 {
     Meth *newmeth = new Meth(val);
-    newmeth->setPosition( sf::Vector2f(x,y));
+    newmeth->setPosition( tpos );
     newmeth->update();
 
     addObject(newmeth);
 }
 
-void Level::addMethHead(int x, int y)
+void Level::addMethHead(sf::Vector2f tpos)
 {
     MethHead *newmethhead = new MethHead();
-    newmethhead->setPosition( sf::Vector2f(x, y));
+    newmethhead->setPosition( tpos);
 
     addObject(newmethhead);
 }
@@ -470,6 +501,7 @@ void Level::addDecoration(int dindex, sf::Vector2f dpos)
     Decoration *newdec = new Decoration( *(*m_jumpy->getDecorations())[dindex] );
     newdec->setPosition(dpos);
     newdec->update();
+    newdec->setID(dindex);
     m_decorations.push_back(newdec);
 }
 
@@ -505,7 +537,7 @@ void Level::update()
 }
 
 
-void Level::save(std::string filename)
+bool Level::save(std::string filename)
 {
     std::cout << "Saving level " << filename << std::endl;
 
@@ -571,7 +603,198 @@ void Level::save(std::string filename)
     }
 
     // objects
+    anode = ldoc.NewElement("Objects");
+    root->FirstChildElement("Level")->InsertEndChild(anode);
+
+    // save decorations
+    for(int i = 0; i < int(m_decorations.size()); i++)
+    {
+        anode->InsertEndChild( m_decorations[i]->saveToNode(&ldoc));
+    }
+
+    // save objects
+    for(int i = 0; i < int(m_objects.size()); i++)
+    {
+        anode->InsertEndChild( m_objects[i]->saveToNode(&ldoc));
+    }
 
 
-    ldoc.SaveFile(filename.c_str());
+    if(ldoc.SaveFile(filename.c_str())) return false;
+    else return true;
+}
+
+bool Level::load(std::string filename)
+{
+
+    int height = 0;
+    int width = 0;
+
+    if(m_initialized)
+    {
+        std::cout << "Error loading level, already initialized!\n";
+        return false;
+    }
+
+    XMLDocument tdoc;
+    XMLNode *root;
+    XMLNode *anode;
+    XMLNode *lnode;
+    XMLElement *element;
+
+    int errorcode = tdoc.LoadFile(filename.c_str());
+    if(errorcode)
+    {
+        std::cout << "Error loading level from " << filename << ", error code:" << errorcode << std::endl;
+        return false;
+    }
+
+    root = tdoc.FirstChildElement("Methd_Up");
+    if(!root)
+    {
+        std::cout << "Not a valid Methd Up file!\n";
+        return false;
+    }
+
+    lnode = root->FirstChildElement("Level");
+    if(!lnode)
+    {
+        std::cout << "Not a valid level file!\n";
+        return false;
+    }
+
+    element = lnode->FirstChildElement("Width");
+    if(!element) { std::cout << "Error loading level, no width!\n"; return false;}
+    element->QueryIntText(&width);
+
+    element = lnode->FirstChildElement("Height");
+    if(!element) { std::cout << "Error loading level, no height!\n"; return false;}
+    element->QueryIntText(&height);
+
+    std::cout << "Loading level with dimensions " << width << "x" << height << std::endl;
+
+    if(!init(width, height) )
+    {
+        std::cout << "Error initializing level!\n";
+        return false;
+    }
+
+    // load tile data
+    anode = lnode->FirstChildElement("Tiles");
+    if(!anode){ std::cout << "Error loading level, no tile data found!\n"; return false;}
+    XMLElement *trow;
+    int rowcount = 0;
+    trow = anode->FirstChildElement("Row");
+    if(!trow) { std::cout << "Error loading level, no tile data row found!\n"; return false;}
+
+    while(trow)
+    {
+        std::string rowstr;
+        std::vector<std::string> rowdata;
+        rowstr = trow->GetText();
+
+        rowdata = csvParse(rowstr);
+
+        for(int i = 0; i < int(rowdata.size()); i++)
+        {
+            setTile(i, rowcount, atoi( rowdata[i].c_str()));
+        }
+
+        rowcount++;
+
+        trow = trow->NextSiblingElement("Row");
+    }
+
+    rowcount = 0;
+
+    anode = lnode->FirstChildElement("TilesBG");
+    if(!anode){ std::cout << "Error loading level, no bg tile data found!\n"; return false;}
+    trow = anode->FirstChildElement("Row");
+    if(!trow) { std::cout << "Error loading level, not bg tile data row found!\n"; return false;}
+
+    while(trow)
+    {
+        std::string rowstr;
+        std::vector<std::string> rowdata;
+        rowstr = trow->GetText();
+
+        rowdata = csvParse(rowstr);
+
+        for(int i = 0; i < int(rowdata.size()); i++)
+        {
+            setTileBG(i, rowcount, atoi( rowdata[i].c_str()));
+        }
+
+        rowcount++;
+
+        trow = trow->NextSiblingElement("Row");
+    }
+
+    // load objects
+    anode = lnode->FirstChildElement("Objects");
+    XMLNode *onode;
+    if(anode)
+    {
+        onode = anode->FirstChildElement();
+
+        // read in each object
+        while(onode)
+        {
+            std::string objtype = onode->Value();
+
+            if(objtype == "Decoration")
+            {
+                int decid = 0;
+                float dx = 0;
+                float dy = 0;
+
+                XMLElement *dd = onode->FirstChildElement("ID");
+                if(!dd) {std::cout << "Error loading level, decoration id not present!\n"; return false;}
+
+                dd->QueryIntText(&decid);
+
+                dd = onode->FirstChildElement("X");
+                dd->QueryFloatText(&dx);
+                dd = onode->FirstChildElement("Y");
+                dd->QueryFloatText(&dy);
+
+                addDecoration(decid, sf::Vector2f(dx, dy));
+
+            }
+            else if(objtype == "Meth")
+            {
+                int di = 0;
+                float dx = 0;
+                float dy = 0;
+
+                XMLElement *dd = onode->FirstChildElement("Value");
+                dd->QueryIntText(&di);
+
+                dd = onode->FirstChildElement("X");
+                dd->QueryFloatText(&dx);
+                dd = onode->FirstChildElement("Y");
+                dd->QueryFloatText(&dy);
+
+                addMeth(di, sf::Vector2f(dx,dy));
+            }
+            else if(objtype == "MethHead")
+            {
+                float dx = 0;
+                float dy = 0;
+
+                XMLElement *dd;
+
+                dd = onode->FirstChildElement("X");
+                dd->QueryFloatText(&dx);
+                dd = onode->FirstChildElement("Y");
+                dd->QueryFloatText(&dy);
+
+                addMethHead(sf::Vector2f(dx,dy));
+            }
+            onode = onode->NextSiblingElement();
+        }
+
+
+    }
+
+    return true;
 }

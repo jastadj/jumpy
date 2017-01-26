@@ -13,6 +13,9 @@ public:
     Decoration(sf::Sprite *tsprite);
     Decoration(const Decoration &tdec);
     ~Decoration();
+    XMLNode *saveToNode(XMLDocument *tdoc);
+
+
 
     int getType() { return OBJ_DECORATION;}
     void addCollision(GameObj *tobj) {};

@@ -7,7 +7,12 @@ GameObj::GameObj()
     // get main callback reference
     m_jumpy = Jumpy::getInstance();
 
+    // set default name
     setName("unnamed");
+
+    // set default id (used for save / load), -1 by default
+    // level class will set ID when using an add method
+    m_id = -1;
 
     // init animation
     m_animations.push_back(Animation());

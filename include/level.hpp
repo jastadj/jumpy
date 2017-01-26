@@ -16,6 +16,8 @@ private:
 
     Jumpy *m_jumpy;
 
+    bool m_initialized;
+
     std::vector< std::vector<int> > m_mapdata;
     std::vector< std::vector<int> > m_mapdata_bg;
 
@@ -30,6 +32,10 @@ private:
     std::vector< GameObj*> m_objects;
 public:
     Level(int width = 10, int height = 10);
+    Level(std::string filename);
+    bool init(int width, int height);
+    bool save(std::string filename);
+    bool load(std::string filename);
     ~Level();
 
     void fillMap(int tileid);
@@ -53,9 +59,8 @@ public:
 
     bool addObject( GameObj *tobj);
     bool deleteObject( GameObj *tobj);
-    void addMeth(int x, int y, int val);
-    void addMethHead(int x, int y);
-
+    void addMeth(int val, sf::Vector2f tpos);
+    void addMethHead(sf::Vector2f tpos);
     void addDecoration(int dindex, sf::Vector2f dpos);
 
     sf::Sprite *getSkyBox() { return &m_skybox;}
@@ -64,6 +69,6 @@ public:
     void drawDecorations(sf::RenderTarget *tscreen);
     void update();
 
-    void save(std::string filename);
+
 };
 #endif // CLASS_LEVEL
