@@ -73,6 +73,7 @@ public:
     void addSprite(sf::Sprite *tsprite);
     int spriteCount() { return int(m_sprites.size());}
     virtual void draw(sf::RenderTarget *tscreen);
+    sf::Sprite *getSprite() { return m_sprites[ getCurrentSpriteIndex()];}
 
 
     // animations

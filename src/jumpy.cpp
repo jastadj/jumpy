@@ -643,28 +643,20 @@ void Jumpy::drawLevel(Level *tlevel)
 void Jumpy::drawLevelFG(Level *tlevel)
 {
 
+    bool fade_fg = false;
+
     sf::FloatRect pr = m_player->getBoundingBox();
     sf::Vector2i mp( (pr.left + pr.width/2)/32, (pr.top + pr.height/2)/32 );
     std::cout << "x:" << mp.x << "," << "y:" << mp.y << std::endl;
 
-    if(m_current_level->getTileFG( mp.x, mp.y)) return;
+    if(m_current_level->getTileFG( mp.x, mp.y)) fade_fg = true;
 
     // draw each tile in map
     for(int i = 0; i < m_current_level->getHeight(); i++)
     {
         for(int n = 0; n < m_current_level->getWidth(); n++)
         {
-            /*
-            // get tile at x/y position
-            int ttile = m_current_level->getTile(n, i);
-
-            // if tile is 0, do nothing, tile 0 is hardcoded as blank
-            if( ttile == 0) continue;
-
-            // else, draw tile index
-            m_tiles[ m_current_level->getTile(n, i) ]->draw(m_screen, n*32, i*32);
-            */
-            m_current_level->drawTileFG(n, i, m_screen);
+            m_current_level->drawTileFG(n, i, m_screen, fade_fg);
         }
     }
 }

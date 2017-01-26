@@ -81,6 +81,8 @@ bool Level::init(int width, int height)
 
     m_jumpy = Jumpy::getInstance();
 
+    m_fade_fg = false;
+
     if(height < 0) height = 1;
     if(width < 0) width = 1;
 
@@ -511,7 +513,7 @@ void Level::drawTileBG(int x, int y, sf::RenderTarget *tscreen)
 
 }
 
-void Level::drawTileFG(int x, int y, sf::RenderTarget *tscreen)
+void Level::drawTileFG(int x, int y, sf::RenderTarget *tscreen, bool fade)
 {
     if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
     {
@@ -528,6 +530,36 @@ void Level::drawTileFG(int x, int y, sf::RenderTarget *tscreen)
     // ignore blanks
     if(m_tiles_fg[y][x] == NULL) return;
 
+
+    // if fade mode changed
+    if(m_fade_fg != fade)
+    {
+        m_fade_fg = fade;
+        m_fg_fade_timer.restart();
+    }
+
+    float fadeamount = 0;
+    static float fadecap = 300;
+    static float fademod = fadecap / 255.f;
+
+    if(!m_fade_fg)
+    {
+        if(m_fg_fade_timer.getElapsedTime().asMilliseconds() > fadecap) fadeamount = 255.f;
+        else fadeamount =  m_fg_fade_timer.getElapsedTime().asMilliseconds() * fademod;
+    }
+    else
+    {
+        if(m_fg_fade_timer.getElapsedTime().asMilliseconds() > fadecap) fadeamount = 0;
+        else fadeamount =  m_fg_fade_timer.getElapsedTime().asMilliseconds() * fademod * (-1) + 255.f;
+    }
+    // y = mx + b
+
+    if(fadeamount < 0) fadeamount = 0;
+    else if(fadeamount > 255) fadeamount = 255;
+
+    sf::Color tcolor = m_tiles_fg[y][x]->getSprite()->getColor();
+    tcolor.a = int(fadeamount);
+    m_tiles_fg[y][x]->getSprite()->setColor(tcolor);
     m_tiles_fg[y][x]->draw(tscreen);
 
 }

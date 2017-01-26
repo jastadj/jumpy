@@ -31,6 +31,9 @@ private:
     std::vector< std::vector<Tile*> > m_tiles_fg;
 
     std::vector< GameObj*> m_objects;
+
+    bool m_fade_fg;
+    sf::Clock m_fg_fade_timer;
 public:
     Level(int width = 10, int height = 10);
     Level(std::string filename);
@@ -59,7 +62,7 @@ public:
 
     void drawTile(int x, int y, sf::RenderTarget *tscreen);
     void drawTileBG(int x, int y, sf::RenderTarget *tscreen);
-    void drawTileFG(int x, int y, sf::RenderTarget *tscreen);
+    void drawTileFG(int x, int y, sf::RenderTarget *tscreen, bool fade = false);
     //void generate();
 
     bool addObject( GameObj *tobj);

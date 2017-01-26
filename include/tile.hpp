@@ -23,7 +23,6 @@ public:
 
     void draw(sf::RenderTarget *tscreen);
     void update();
-
 };
 
 #endif
