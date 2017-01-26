@@ -7,16 +7,22 @@
 class Jumpy;
 class SpriteSheet;
 class Level;
+class Player;
 
-enum EDITMODE{ ED_NONE, ED_TILE, ED_TILEDRAW, ED_TILEBG, ED_TILEDRAWBG};
+enum EDITMODE{ ED_NONE, ED_SAVE, ED_TILE, ED_TILEDRAW, ED_TILEBG, ED_TILEDRAWBG};
 
 class LevelEditor
 {
 private:
 
     Jumpy *m_jumpy;
-
+    Player *m_player;
     Level *m_currentlevel;
+
+    sf::Font m_font;
+    sf::Text m_saveastext;
+    sf::Text m_filenametxt;
+    std::string m_savefilename;
 
     int m_screenwidth;
     int m_screenheight;
@@ -47,5 +53,7 @@ public:
     void draw(sf::RenderWindow *tscreen);
 
     void processEvent(sf::Event *event, sf::RenderWindow *tscreen);
+
+    int getMode() { return m_mode;}
 };
 #endif // CLASS_LEVELEDITOR

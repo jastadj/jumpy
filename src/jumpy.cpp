@@ -437,16 +437,20 @@ int Jumpy::mainLoop()
         // process event que
 
         // handle key states
-        if( sf::Keyboard::isKeyPressed( sf::Keyboard::A)) m_player->doMove(MOVE_LEFT);
-        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::D)) m_player->doMove(MOVE_RIGHT);
-        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::W)) m_player->doMove(MOVE_UP);
-        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::S)) m_player->doMove(MOVE_DOWN);
-        else m_player->doMove(MOVE_NONE);
-
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+        if(!m_dbg_editor)
         {
-            m_player->pee();
+            if( sf::Keyboard::isKeyPressed( sf::Keyboard::A)) m_player->doMove(MOVE_LEFT);
+            else if( sf::Keyboard::isKeyPressed( sf::Keyboard::D)) m_player->doMove(MOVE_RIGHT);
+            else if( sf::Keyboard::isKeyPressed( sf::Keyboard::W)) m_player->doMove(MOVE_UP);
+            else if( sf::Keyboard::isKeyPressed( sf::Keyboard::S)) m_player->doMove(MOVE_DOWN);
+            else m_player->doMove(MOVE_NONE);
+
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+            {
+                m_player->pee();
+            }
         }
+
 
         // process events (mouse clicks, key presses, etc)
         while(m_screen->pollEvent(event))

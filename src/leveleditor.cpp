@@ -3,12 +3,16 @@
 #include "jumpy.hpp"
 #include "spritesheet.hpp"
 #include "level.hpp"
+#include "player.hpp"
 
 LevelEditor::LevelEditor()
 {
     m_jumpy = Jumpy::getInstance();
+    m_player = m_jumpy->getPlayer();
 
     m_currentlevel = m_jumpy->getCurrentLevel();
+
+    m_font.loadFromFile(".\\Data\\font.ttf");
 
     m_mode = ED_NONE;
     m_drawmode = ED_NONE;
@@ -21,7 +25,7 @@ LevelEditor::LevelEditor()
     SpriteSheet *newss;
 
     // edit buttons
-    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 2,1);
+    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 4,1);
     newss->setScale(2);
     m_spritesheets.push_back(newss);
     for(int i = 0; i < newss->getCount(); i++)
@@ -75,6 +79,18 @@ LevelEditor::~LevelEditor()
 
 void LevelEditor::update()
 {
+
+    if(m_mode == ED_NONE || m_mode == ED_TILEDRAW || m_mode == ED_TILEDRAWBG)
+    {
+        if( sf::Keyboard::isKeyPressed( sf::Keyboard::A)) m_player->doMove(MOVE_LEFT);
+        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::D)) m_player->doMove(MOVE_RIGHT);
+        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::W)) m_player->doMove(MOVE_UP);
+        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::S)) m_player->doMove(MOVE_DOWN);
+        else m_player->doMove(MOVE_NONE);
+    }
+
+
+
     for(int i = 0; i < int(m_edit_buttons.size()); i++)
     {
         m_edit_buttons[i]->setPosition( m_screenwidth-50, i*34);
@@ -91,17 +107,17 @@ void LevelEditor::draw(sf::RenderWindow *tscreen)
     sf::Vector2f m_mouseleft;
     // capture mouse position
     m_mouseleft = sf::Vector2f(sf::Mouse::getPosition(*tscreen));
-    std::cout << "Mouse clicked at :" << m_mouseleft.x << "," << m_mouseleft.y << std::endl;
+    //std::cout << "Mouse clicked at :" << m_mouseleft.x << "," << m_mouseleft.y << std::endl;
 
     sf::Vector2f m_mouseleftw;
     //m_mouseleftw = tview->getTransform().transformPoint(m_mouseleft);
     m_mouseleftw = tscreen->mapPixelToCoords(sf::Vector2i(m_mouseleft));
-    std::cout << "Mouse clicked at :" << m_mouseleftw.x << "," << m_mouseleftw.y << std::endl;
+    //std::cout << "Mouse clicked at :" << m_mouseleftw.x << "," << m_mouseleftw.y << std::endl;
 
     sf::Vector2i m_mouseleftg = sf::Vector2i(m_mouseleftw);
     m_mouseleftg.x = int(m_mouseleftg.x / 32);
     m_mouseleftg.y = int(m_mouseleftg.y / 32);
-    std::cout << "Mouse clicked at :" << m_mouseleftg.x << "," << m_mouseleftg.y << std::endl;
+    //std::cout << "Mouse clicked at :" << m_mouseleftg.x << "," << m_mouseleftg.y << std::endl;
 
     //tscreen->setView( tscreen->getDefaultView());
 
@@ -161,6 +177,26 @@ void LevelEditor::draw(sf::RenderWindow *tscreen)
             tscreen->draw(*m_brushsprite);
         }
     }
+    else if(m_mode == ED_SAVE)
+    {
+        tscreen->draw(*m_coverscreen);
+
+        m_saveastext.setString("SAVE AS :");
+        m_saveastext.setFont(m_font);
+
+        m_saveastext.setPosition(200,200);
+        m_saveastext.setFillColor(sf::Color::White);
+
+        tscreen->draw(m_saveastext);
+
+        sf::Text myfile;
+        myfile.setFont(m_font);
+        myfile.setString( m_savefilename.c_str());
+        myfile.setPosition(380, 200);
+        myfile.setFillColor(sf::Color::White);
+
+        tscreen->draw(myfile);
+    }
 
 }
 
@@ -205,6 +241,13 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                     {
                         if(i == 0) m_mode = ED_TILE;
                         else if(i == 1) m_mode = ED_TILEBG;
+                        else if(i == 3)
+                        {
+                            m_savefilename = std::string("");
+                            m_mode = ED_SAVE;
+                        }
+
+                        std::cout << "SETTING EDIT MODE TO " << m_mode << std::endl;
                     }
                 }
             }
@@ -272,6 +315,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
             }
 
 
+
         }
 
         // if right mouse button clicked
@@ -304,5 +348,39 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                 else m_mode = ED_NONE;
             }
         }
+    }
+    else if(event->type == sf::Event::TextEntered)
+    {
+        if(m_mode == ED_SAVE)
+        {
+
+            if(event->text.unicode > 80)
+            {
+                m_savefilename += char(event->text.unicode);
+
+            }
+            else if(event->text.unicode == 32)
+            {
+                m_savefilename += ' ';
+            }
+            // backspace
+            else if(event->text.unicode == 8)
+            {
+                int slen = m_savefilename.length();
+
+                if(slen > 0)m_savefilename.resize( slen-1);
+            }
+            // return
+            else if(event->text.unicode == 13)
+            {
+                m_savefilename += ".xml";
+                m_currentlevel->save(m_savefilename);
+                m_mode = ED_NONE;
+            }
+
+        }
+
+
+
     }
 }

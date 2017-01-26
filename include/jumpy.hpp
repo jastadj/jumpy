@@ -111,7 +111,7 @@ public:
     std::vector<Decoration*> *getDecorations() { return &m_decorations;}
 
     Level *getCurrentLevel() { return m_current_level;}
-    const Player *getPlayer() const { return m_player;}
+    Player *getPlayer() { return m_player;}
 
     ParticleManager *getParticleManager() { return m_particle_manager;}
 
