@@ -9,11 +9,9 @@ class Tile: public GameObj
 {
 private:
 
-    int m_tile_sprite_index;
-    SpriteSheet *m_tile_sprite_sheet;
 
 public:
-    Tile(SpriteSheet *tsheet, int spriteindex);
+    Tile(sf::Sprite *tsprite);
     Tile( const Tile &ttile);
     ~Tile();
     int getType() { return OBJ_TILE;}

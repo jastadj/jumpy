@@ -145,13 +145,13 @@ bool Jumpy::initTiles()
     // create tiles
     for(int i = 0; i < m_spritesheets[1]->getCount(); i++)
     {
-        m_tiles.push_back(new Tile(m_spritesheets[1], i));
+        m_tiles.push_back( new Tile(m_spritesheets[1]->createSprite(i)) );
     }
 
     // create background tiles
     for(int i = 0; i < m_spritesheets[2]->getCount(); i++)
     {
-        m_tiles_bg.push_back(new Tile(m_spritesheets[2], i));
+        m_tiles_bg.push_back( new Tile(m_spritesheets[2]->createSprite(i) ) );
     }
 
 
