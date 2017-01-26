@@ -41,12 +41,15 @@
 			<Add option="-Wall" />
 			<Add directory="include" />
 			<Add directory="../../SFML-2.4.1/include" />
+			<Add directory="TinyXML2/include" />
 		</Compiler>
 		<Linker>
 			<Add option="-static-libstdc++" />
 			<Add option="-static-libgcc" />
 			<Add directory="../../SFML-2.4.1/lib" />
 		</Linker>
+		<Unit filename="TinyXML2/include/tinyxml2.h" />
+		<Unit filename="TinyXML2/src/tinyxml2.cpp" />
 		<Unit filename="include/actor.hpp" />
 		<Unit filename="include/gameobj.hpp" />
 		<Unit filename="include/jumpy.hpp" />
