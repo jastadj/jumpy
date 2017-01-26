@@ -8,7 +8,7 @@ class Jumpy;
 class SpriteSheet;
 class Level;
 
-enum EDITMODE{ ED_NONE, ED_TILE, ED_TILEDRAW};
+enum EDITMODE{ ED_NONE, ED_TILE, ED_TILEDRAW, ED_TILEBG, ED_TILEDRAWBG};
 
 class LevelEditor
 {
@@ -33,6 +33,7 @@ private:
     std::vector<sf::Sprite*> m_edit_buttons;
 
     std::vector<sf::Sprite*> m_tiles;
+    std::vector<sf::Sprite*> m_tilesbg;
 
     sf::RectangleShape *m_coverscreen;
 
