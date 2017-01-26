@@ -29,7 +29,7 @@ public:
     int getMeth() const { return m_current_meth;}
     int getMaxMeth() const { return m_max_meth;}
 
-    //void doMove(int movedir);
+    void doMove(int movedir);
 
     //void addCollision(GameObj *tobj);
 

@@ -110,6 +110,7 @@ public:
 
     // debug
     bool m_dbg_showboundingboxes;
+    bool m_dbg_noclip;
 
 
 };

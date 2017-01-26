@@ -40,30 +40,35 @@ Player::~Player()
 
 }
 
-/*
+
 void Player::doMove(int movedir)
 {
-
-    switch(movedir)
+    if(m_jumpy->m_dbg_noclip)
     {
-    case MOVE_RIGHT:
-        m_acceleration.x += 5.f;
-        m_commanding_move = true;
-        m_facing_right = true;
-        break;
-    case MOVE_LEFT:
-        m_acceleration.x -= 5.f;
-        m_commanding_move = true;
-        m_facing_right = false;
-        break;
-    default:
-        m_commanding_move = false;
-        m_acceleration.x = 0;
-        break;
+        switch(movedir)
+        {
+        case MOVE_RIGHT:
+            m_position.x += 5;
+            break;
+        case MOVE_LEFT:
+            m_position.x -= 5;
+            break;
+        case MOVE_UP:
+            m_position.y -= 5;
+            break;
+        case MOVE_DOWN:
+            m_position.y += 5;
+            break;
+        default:
+            //m_commanding_move = false;
+            //m_acceleration.x = 0;
+            break;
+        }
     }
+    else Actor::doMove(movedir);
 
 }
-*/
+
 
 void Player::addMeth(int val)
 {
@@ -146,6 +151,13 @@ void Player::shoot()
 
 void Player::update()
 {
+    if(m_jumpy->m_dbg_noclip)
+    {
+        // set current sprites to obj position
+        m_sprites[m_current_sprite]->setPosition(m_position.x, m_position.y);
+        return;
+    }
+
     sf::FloatRect srect;
     // sprite count divided by two (left and right animations)
     static int spritecount = spriteCount()/2;

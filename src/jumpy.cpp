@@ -26,6 +26,7 @@ Jumpy::Jumpy()
 
     // debug
     m_dbg_showboundingboxes = false;
+    m_dbg_noclip = false;
 }
 
 Jumpy::~Jumpy()
@@ -338,6 +339,8 @@ int Jumpy::mainLoop()
         // handle key states
         if( sf::Keyboard::isKeyPressed( sf::Keyboard::A)) m_player->doMove(MOVE_LEFT);
         else if( sf::Keyboard::isKeyPressed( sf::Keyboard::D)) m_player->doMove(MOVE_RIGHT);
+        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::W)) m_player->doMove(MOVE_UP);
+        else if( sf::Keyboard::isKeyPressed( sf::Keyboard::S)) m_player->doMove(MOVE_DOWN);
         else m_player->doMove(MOVE_NONE);
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::R))
@@ -374,6 +377,10 @@ int Jumpy::mainLoop()
                 else if(event.key.code == sf::Keyboard::F1)
                 {
                     m_dbg_showboundingboxes = !m_dbg_showboundingboxes;
+                }
+                else if(event.key.code == sf::Keyboard::F2)
+                {
+                    m_dbg_noclip = !m_dbg_noclip;
                 }
 
 
