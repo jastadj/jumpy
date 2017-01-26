@@ -254,6 +254,7 @@ bool Level::setTileBG(int x, int y, int tileid)
     if( m_tiles_bg[y][x])
     {
         delete m_tiles_bg[y][x];
+        m_tiles_bg[y][x] = 0;
     }
 
     m_mapdata_bg[y][x] = tileid;

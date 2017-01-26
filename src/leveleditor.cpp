@@ -86,12 +86,24 @@ void LevelEditor::draw(sf::RenderWindow *tscreen)
     update();
 
     sf::View *tview = m_jumpy->getView();
+    //tscreen->setView(*tview);
 
-    sf::Vector2f mousepos = sf::Vector2f( sf::Mouse::getPosition(*tscreen));
+    sf::Vector2f m_mouseleft;
+    // capture mouse position
+    m_mouseleft = sf::Vector2f(sf::Mouse::getPosition(*tscreen));
+    std::cout << "Mouse clicked at :" << m_mouseleft.x << "," << m_mouseleft.y << std::endl;
 
-    sf::Vector2i m_mouseleftg = sf::Vector2i(tscreen->mapPixelToCoords(sf::Vector2i(mousepos)));
+    sf::Vector2f m_mouseleftw;
+    //m_mouseleftw = tview->getTransform().transformPoint(m_mouseleft);
+    m_mouseleftw = tscreen->mapPixelToCoords(sf::Vector2i(m_mouseleft));
+    std::cout << "Mouse clicked at :" << m_mouseleftw.x << "," << m_mouseleftw.y << std::endl;
+
+    sf::Vector2i m_mouseleftg = sf::Vector2i(m_mouseleftw);
     m_mouseleftg.x = int(m_mouseleftg.x / 32);
     m_mouseleftg.y = int(m_mouseleftg.y / 32);
+    std::cout << "Mouse clicked at :" << m_mouseleftg.x << "," << m_mouseleftg.y << std::endl;
+
+    //tscreen->setView( tscreen->getDefaultView());
 
     for(int i = 0; i < int(m_edit_buttons.size()); i++)
     {
