@@ -3,16 +3,11 @@
 
 #include "gameobj.hpp"
 
-class SpriteSheet;
-
 class Tile: public GameObj
 {
-private:
+protected:
 
-    // animation
-    sf::Clock *m_anim_clock;
-    int m_anim_time;
-    std::vector<int> m_anim_sequence;
+    bool m_animated;
 
 public:
     Tile(sf::Sprite *tsprite);
@@ -22,15 +17,12 @@ public:
 
     void addCollision(GameObj *tobj) {};
 
+    void setAnimated(bool nanim) { m_animated = nanim;}
+    bool isAnimated() { return m_animated;}
+
     void draw(sf::RenderTarget *tscreen);
     void update();
 
-    void clearAnimationSequence();
-    void addAnimationIndex(int nspriteindex);
-    bool isAnimated() { if(m_anim_clock) return true; else return false;}
-
-    //void draw(sf::RenderWindow *tscreen, int x, int y);
-    //void draw(sf::RenderTarget *tscreen);
 };
 
 #endif

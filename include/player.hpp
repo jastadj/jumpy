@@ -14,12 +14,6 @@ private:
     int m_max_meth;
     sf::Clock m_meth_timer;
 
-    bool m_shooting;
-    int m_shooting_timeout;
-    int m_shoot_time;
-    sf::Clock m_shooting_clock;
-
-
 public:
     Player();
     ~Player();

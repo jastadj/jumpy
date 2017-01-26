@@ -8,6 +8,7 @@
 class Jumpy;
 class Tile;
 class GameObj;
+class Decoration;
 
 class Level
 {
@@ -18,7 +19,7 @@ private:
     std::vector< std::vector<int> > m_mapdata;
     std::vector< std::vector<int> > m_mapdata_bg;
 
-    std::vector< Tile*> m_decorations;
+    std::vector<Decoration*> m_decorations;
 
     sf::RenderTexture m_skybox_rtxt;
     sf::Sprite m_skybox;
@@ -62,5 +63,7 @@ public:
     void drawObjects(sf::RenderTarget *tscreen);
     void drawDecorations(sf::RenderTarget *tscreen);
     void update();
+
+    void save(std::string filename);
 };
 #endif // CLASS_LEVEL

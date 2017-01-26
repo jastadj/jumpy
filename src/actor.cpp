@@ -22,6 +22,9 @@ Actor::Actor()
 
     // initial variables
     m_jumping = false;
+    m_shooting = false;
+    m_shooting_timeout = 1500;
+    m_shoot_time = 200;
 
     // bounding box
     // be sure to add a bounding box

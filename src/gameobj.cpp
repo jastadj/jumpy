@@ -9,7 +9,10 @@ GameObj::GameObj()
 
     setName("unnamed");
 
-    m_current_sprite = 0;
+    // init animation
+    m_animations.push_back(Animation());
+    m_current_animation = 0;
+
 
     m_commanding_move = false;
     m_facing_right = true;
@@ -46,9 +49,24 @@ void GameObj::addSprite(sf::Sprite *tsprite)
     m_sprites.push_back(tsprite);
 }
 
+////////////////////////////////////////////////
+//  ANIMATIONS
+
+int GameObj::animationCount()
+{
+    return int(m_animations.size());
+}
+
+bool GameObj::setCurrentAnimationIndex(int tindex)
+{
+    if(tindex < 0 || tindex >= animationCount()) return false;
+
+    m_current_animation = tindex;
+}
+
 void GameObj::draw(sf::RenderTarget *tscreen)
 {
-    tscreen->draw( *m_sprites[m_current_sprite] );
+    tscreen->draw( *m_sprites[ getCurrentSpriteIndex()] );
 
     // if debug on to draw bounding boxes
     if(m_jumpy->m_dbg_showboundingboxes)
@@ -60,14 +78,6 @@ void GameObj::draw(sf::RenderTarget *tscreen)
 void GameObj::doMove(int movedir)
 {
 
-}
-
-void GameObj::setCurrentFrame(int tframe)
-{
-    if(tframe >= int(m_sprites.size()) ) tframe = 0;
-    else if(tframe < 0) tframe = int(m_sprites.size())-1;
-
-    m_current_sprite = tframe;
 }
 
 
@@ -92,5 +102,5 @@ void GameObj::update()
     m_position += m_velocity;
 
     // set current sprites to obj position
-    m_sprites[m_current_sprite]->setPosition(m_position);
+    m_sprites[ getCurrentSpriteIndex() ]->setPosition(m_position);
 }

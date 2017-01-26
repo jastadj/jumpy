@@ -22,6 +22,14 @@ MethHead::MethHead()
     // initial variables
     m_jumping = false;
 
+    // init animations
+    m_animations.clear();
+    std::vector<Animation> *ta = m_jumpy->getAnimations();
+    for(int i = 0; i < 18; i++)
+    {
+        m_animations.push_back( (*ta)[i]);
+    }
+
     // bounding box
     m_bounding_boxes.push_back(sf::FloatRect(10 ,2, 12, 30) );
 }
@@ -33,7 +41,11 @@ MethHead::~MethHead()
 
 void MethHead::update()
 {
+
+
     sf::FloatRect srect;
+    // sprite count divided by two (left and right animations)
+    static int spritecount = spriteCount()/2;
 
     // capture original position
     sf::Vector2f startpos = m_position;
@@ -143,6 +155,7 @@ void MethHead::update()
     // adjust position to valid bounding box position
     m_position = sf::Vector2f(srect.left - m_bounding_boxes[0].left, srect.top - m_bounding_boxes[0].top);
 
+    /*
     if( currentlevel->isCollidingWithMap(srect) )
     {
         std::cout <<"STILL COLLIDING WITH MAP!!\n";
@@ -155,45 +168,63 @@ void MethHead::update()
     // if there are collisions to handle
     for(int i = 0; i < int(m_collisions.size()); i++)
     {
+        if(m_collisions[i]->getType() == OBJ_METH)
+        {
+            Meth *methobj;
+            methobj = dynamic_cast<Meth*>(m_collisions[i]);
 
+            addMeth( methobj->getMethValue());
+
+            currentlevel->deleteObject( m_collisions[i]);
+        }
     }
+    */
     clearCollisions();
 
 
+    // update shooting timeout (holster weapon if haven't fired for some time
+    bool active_shooting = false;
+    if(m_shooting_clock.getElapsedTime().asMilliseconds() >= m_shooting_timeout)
+        m_shooting = false;
+    else if(m_shooting_clock.getElapsedTime().asMilliseconds() < m_shoot_time)
+        active_shooting = true;
     // update animation
-    if(m_commanding_move && !m_jumping)
-    {
-        static int animtiming = 100;
-        int animtime = m_anim_clock.getElapsedTime().asMilliseconds();
-        int aframe = animtime / animtiming;
+    static int flipped = animationCount()/2;
 
-        if( aframe > 7)
+    if( m_jumping)
+    {
+        if(m_shooting)
         {
-            aframe = 0;
-            m_anim_clock.restart();
+            if(active_shooting) m_current_animation = 8;
+            else m_current_animation = 7;
         }
-
-        aframe++;
-
-        if( !m_facing_right) setCurrentFrame(aframe + 8);
-        else setCurrentFrame(aframe);
+        else m_current_animation = 6;
     }
-    else if(m_jumping)
+    else if( m_commanding_move)
     {
-        if(m_facing_right) setCurrentFrame(2);
-        else setCurrentFrame(2+9);
+        if(m_shooting)
+        {
+            if(active_shooting) m_current_animation = 5;
+            else m_current_animation = 4;
+        }
+        else m_current_animation = 1;
     }
     else
     {
-        if(m_facing_right) m_current_sprite = 0;
-        else m_current_sprite = 9;
+        if(m_shooting)
+        {
+            if(active_shooting) m_current_animation = 3;
+            else m_current_animation = 2;
+        }
+        else m_current_animation = 0;
     }
 
+    if(!m_facing_right) m_current_animation = getCurrentAnimationIndex()+flipped;
+    for(int i = 0; i < animationCount(); i++) m_animations[i].update();
+    //m_animations[m_current_animation].update();
 
-
-    //std::cout << "current frame = " << getCurrentFrame() << std::endl;
 
     // set current sprites to obj position
-    m_sprites[m_current_sprite]->setPosition(m_position.x, m_position.y);
+    m_sprites[ getCurrentSpriteIndex()]->setPosition(m_position.x, m_position.y);
 
 }

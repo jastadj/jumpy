@@ -20,6 +20,8 @@ class SpriteSheet;
 class Level;
 class Tile;
 class ParticleManager;
+class Decoration;
+class Animation;
 
 class Jumpy
 {
@@ -40,10 +42,11 @@ private:
 
     // resources
     std::vector<SpriteSheet*> m_spritesheets;
+    std::vector<Animation> m_animations;
     std::vector<sf::SoundBuffer*> m_sounds;
     std::vector<Tile*> m_tiles;
     std::vector<Tile*> m_tiles_bg;
-    std::vector<Tile*> m_decorations;
+    std::vector<Decoration*> m_decorations;
 
     // sounds
     bool loadSound(std::string filename);
@@ -54,6 +57,8 @@ private:
     bool init();
     bool initScreen();
     bool initResources();
+    bool initSounds();
+    bool initAnimations();
     bool initTiles();
     bool initDecorations();
     void initPlayer();
@@ -97,9 +102,10 @@ public:
     int getScreenHeight() { return m_screen_height;}
 
     SpriteSheet *getSpriteSheet(int index);
+    std::vector<Animation> *getAnimations() { return &m_animations;}
     std::vector<Tile*> *getTiles() { return &m_tiles;}
     std::vector<Tile*> *getTilesBG() { return &m_tiles_bg;}
-    std::vector<Tile*> *getDecorations() { return &m_decorations;}
+    std::vector<Decoration*> *getDecorations() { return &m_decorations;}
 
     Level *getCurrentLevel() { return m_current_level;}
     const Player *getPlayer() const { return m_player;}

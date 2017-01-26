@@ -1,12 +1,19 @@
 #include "level.hpp"
+
 #include <math.h>
+#include <sstream>
 
 #include "jumpy.hpp"
 #include "tile.hpp"
 #include "meth.hpp"
 #include "methhead.hpp"
+#include "decoration.hpp"
 
 #include "tools.hpp"
+
+#include "tinyxml2.h"
+
+using namespace tinyxml2;
 
 struct sortable
 {
@@ -387,7 +394,6 @@ void Level::drawTile(int x, int y, sf::RenderTarget *tscreen)
     if(m_tiles[y][x] == NULL) return;
 
     if(m_tiles[y][x]->isAnimated()) m_tiles[y][x]->update();
-
     m_tiles[y][x]->draw(tscreen);
 
 }
@@ -461,17 +467,10 @@ bool Level::deleteObject( GameObj *tobj)
 
 void Level::addDecoration(int dindex, sf::Vector2f dpos)
 {
-    std::vector<Tile*> *dptr = m_jumpy->getDecorations();
-
-    if(dindex < 0 || dindex >= int(dptr->size()) )
-    {
-        std::cout << "Error adding decoration index " << dindex << ", out of bounds!\n";
-        return;
-    }
-
-    m_decorations.push_back( new Tile( *(*dptr)[dindex]) );
-    m_decorations.back()->setPosition( dpos);
-    m_decorations.back()->update();
+    Decoration *newdec = new Decoration( *(*m_jumpy->getDecorations())[dindex] );
+    newdec->setPosition(dpos);
+    newdec->update();
+    m_decorations.push_back(newdec);
 }
 
 void Level::drawObjects(sf::RenderTarget *tscreen)
@@ -497,4 +496,82 @@ void Level::update()
     {
         m_objects[i]->update();
     }
+
+    // update all decorations
+    for(int i = 0; i < int(m_decorations.size()); i++)
+    {
+        if(m_decorations[i]->isAnimated()) m_decorations[i]->update();
+    }
+}
+
+
+void Level::save(std::string filename)
+{
+    std::cout << "Saving level " << filename << std::endl;
+
+    XMLDocument ldoc;
+
+    // add root tags
+    XMLNode *root = ldoc.NewElement("Methd_Up");
+    ldoc.InsertFirstChild(root);
+
+    // create level node
+    XMLNode *anode = ldoc.NewElement("Level");
+    root->InsertEndChild(anode);
+
+    // tile data
+    XMLElement *element = ldoc.NewElement("Width");
+    element->SetText(getWidth());
+    anode->InsertEndChild(element);
+
+    element = ldoc.NewElement("Height");
+    element->SetText(getHeight());
+    anode->InsertEndChild(element);
+
+    // tile array node
+    anode = ldoc.NewElement("Tiles");
+    root->FirstChildElement("Level")->InsertEndChild(anode);
+
+    // add rows
+    for(int i = 0; i < getHeight(); i++)
+    {
+        std::stringstream rowdata;
+
+        for(int n = 0; n < getWidth(); n++)
+        {
+            if( n != getWidth()-1) rowdata << m_mapdata[i][n] << ",";
+            else rowdata << m_mapdata[i][n];
+        }
+
+        element = ldoc.NewElement("Row");
+        element->SetText(rowdata.str().c_str());
+        anode->InsertEndChild(element);
+
+    }
+
+    // tile bg array node
+    anode = ldoc.NewElement("TilesBG");
+    root->FirstChildElement("Level")->InsertEndChild(anode);
+
+    // add rows
+    for(int i = 0; i < getHeight(); i++)
+    {
+        std::stringstream rowdata;
+
+        for(int n = 0; n < getWidth(); n++)
+        {
+            if( n != getWidth()-1) rowdata << m_mapdata_bg[i][n] << ",";
+            else rowdata << m_mapdata_bg[i][n];
+        }
+
+        element = ldoc.NewElement("Row");
+        element->SetText(rowdata.str().c_str());
+        anode->InsertEndChild(element);
+
+    }
+
+    // objects
+
+
+    ldoc.SaveFile(filename.c_str());
 }

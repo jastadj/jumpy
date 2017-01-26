@@ -4,6 +4,7 @@
 #include "level.hpp"
 #include "tile.hpp"
 #include "particle.hpp"
+#include "decoration.hpp"
 
 #include <sstream>
 
@@ -61,6 +62,18 @@ bool Jumpy::init()
     if(!initResources())
     {
         std::cout << "Error initializing resources!\n";
+    }
+
+    // init sounds
+    if(!initSounds())
+    {
+        std::cout << "Error initializing sounds!\n";
+    }
+
+    // init animations
+    if(!initAnimations())
+    {
+        std::cout << "Error initializing animations!\n";
     }
 
     // init tiles
@@ -137,6 +150,13 @@ bool Jumpy::initResources()
         }
     }
 
+
+
+    return true;
+}
+
+bool Jumpy::initSounds()
+{
     // load sounds
     loadSound(".\\Data\\Sound\\pistol01.wav");
     loadSound(".\\Data\\Sound\\gravel_left_01.wav");
@@ -151,22 +171,91 @@ bool Jumpy::initResources()
     return true;
 }
 
+bool Jumpy::initAnimations()
+{
+    int leftoffset = 27;
+
+    // right stand - 0
+    Animation r_stand;
+    m_animations.push_back(r_stand);
+
+    // right runanimation - 1
+    Animation r_run;
+    if(!r_run.loadFromFile(".\\data\\animations\\r_run.xml")) return false;
+    m_animations.push_back(r_run);
+
+    // right stand wield animation - 2
+    Animation r_wield;
+    r_wield.getCurrentAnimationFrame()->m_sprite_index = 9;
+    m_animations.push_back(r_wield);
+
+    // right stand shoot animation - 3
+    Animation r_shoot;
+    r_shoot.getCurrentAnimationFrame()->m_sprite_index = 10;
+    m_animations.push_back(r_shoot);
+
+    // right run wield animation - 4
+    Animation r_run_wield;
+    if(!r_run_wield.loadFromFile(".\\data\\animations\\r_run_wield.xml")) return false;
+    m_animations.push_back(r_run_wield);
+
+    // right run shoot animation - 5
+    Animation r_run_shoot;
+    if(!r_run_shoot.loadFromFile(".\\data\\animations\\r_run_shoot.xml")) return false;
+    m_animations.push_back(r_run_shoot);
+
+    // right jumping - 6
+    Animation r_jump;
+    r_jump.getCurrentAnimationFrame()->m_sprite_index = 2;
+    m_animations.push_back(r_jump);
+
+    // right jumping wield - 7
+    Animation r_jump_wield;
+    r_jump_wield.getCurrentAnimationFrame()->m_sprite_index = 12;
+    m_animations.push_back(r_jump_wield);
+
+    // right jumping shoot - 8
+    Animation r_jump_shoot;
+    r_jump_shoot.getCurrentAnimationFrame()->m_sprite_index = 20;
+    m_animations.push_back(r_jump_shoot);
+
+    // mirror frames for left side
+    m_animations.push_back(r_stand); // 9
+    m_animations.back().offsetFrames(leftoffset);
+    m_animations.push_back(r_run); // 10
+    m_animations.back().offsetFrames(leftoffset);
+    m_animations.push_back(r_wield); // 11
+    m_animations.back().offsetFrames(leftoffset);
+    m_animations.push_back(r_shoot); // 12
+    m_animations.back().offsetFrames(leftoffset);
+    m_animations.push_back(r_run_wield); // 13
+    m_animations.back().offsetFrames(leftoffset);
+    m_animations.push_back(r_run_shoot); // 14
+    m_animations.back().offsetFrames(leftoffset);
+    m_animations.push_back(r_jump); // 15
+    m_animations.back().offsetFrames(leftoffset);
+    m_animations.push_back(r_jump_wield); // 16
+    m_animations.back().offsetFrames(leftoffset);
+    m_animations.push_back(r_jump_shoot); // 17
+    m_animations.back().offsetFrames(leftoffset);
+
+    return true;
+}
+
 bool Jumpy::initTiles()
 {
     // create tiles
     for(int i = 0; i < m_spritesheets[1]->getCount(); i++)
     {
-        if(i == 3)
+        // make animated tile
+        if( i == 3)
         {
-            Tile *newanim = new Tile(m_spritesheets[1]->createSprite(i));
+            m_tiles.push_back( new Tile(m_spritesheets[1]->createSprite(i)) );
+            m_tiles.back()->addSprite( m_spritesheets[1]->createSprite(4));
 
-            newanim->addSprite(m_spritesheets[1]->createSprite(i+1));
-
-            newanim->addAnimationIndex(0);
-            newanim->addAnimationIndex(1);
-
-            m_tiles.push_back(newanim);
-
+            m_tiles.back()->getCurrentAnimation()->getCurrentAnimationFrame()->m_time=300;
+            m_tiles.back()->getCurrentAnimation()->addAnimationFrame(1,300);
+            m_tiles.back()->setAnimated(true);
         }
         else m_tiles.push_back( new Tile(m_spritesheets[1]->createSprite(i)) );
     }
@@ -194,7 +283,8 @@ bool Jumpy::initTiles()
 
 bool Jumpy::initDecorations()
 {
-    m_decorations.push_back( new Tile( m_spritesheets[5]->createSprite(0)));
+    Decoration *newdec = new Decoration( m_spritesheets[5]->createSprite(0));
+    m_decorations.push_back(newdec);
     return true;
 }
 
@@ -247,6 +337,9 @@ void Jumpy::initLevel()
         else m_current_level->setTileBG(i, 9, 7);
     }
     m_current_level->setTileBG(5, 9, 5);
+
+    // save level test
+    m_current_level->save("testlevel.xml");
 
     // generate map
     //m_current_level->generate();
@@ -363,7 +456,7 @@ int Jumpy::mainLoop()
 
                 else if(event.key.code == sf::Keyboard::E)
                 {
-                    m_player->setCurrentFrame( m_player->getCurrentFrame()+1);
+                    //m_player->setCurrentFrame( m_player->getCurrentFrame()+1);
                 }
                 else if(event.key.code == sf::Keyboard::Space)
                 {
@@ -416,7 +509,9 @@ int Jumpy::mainLoop()
         sf::Vector2f pvel = m_player->getVelocity();
         sf::Vector2f paccel = m_player->getAcceleration();
         sf::Vector2f ppos = m_player->getPosition();
-        debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << "," << paccel.y << " pos:" << ppos.x << "," << ppos.y << " colcnt:" << m_player->getCollisionCount() << " FRAME:" << m_player->getCurrentFrame();
+        debugss << "FPS: " << fps << " playerv:" << pvel.x << "," << pvel.y << "  playera:" << paccel.x << ",";
+        debugss << paccel.y << " pos:" << ppos.x << "," << ppos.y << " colcnt:" << m_player->getCollisionCount();
+        debugss << " A/F:" << m_player->getCurrentAnimationIndex() << "/" << m_player->getCurrentSpriteIndex();
         debugtext.setString( debugss.str() );
         m_screen->draw(debugtext);
 

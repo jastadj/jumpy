@@ -1,0 +1,31 @@
+<Methd_Up>
+	<Animation>
+		<Name>run right shoot</Name>
+		<GlobalAnimTime>100</GlobalAnimTime>
+		<Frame>
+			<SpriteIndex>19</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>20</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>21</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>22</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>23</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>24</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>25</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>26</SpriteIndex>
+		</Frame>
+	</Animation>
+</Methd_Up>
+

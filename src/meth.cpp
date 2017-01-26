@@ -22,5 +22,5 @@ Meth::~Meth()
 
 void Meth::update()
 {
-    m_sprites[m_current_sprite]->setPosition(m_position);
+    m_sprites[ getCurrentSpriteIndex()]->setPosition(m_position);
 }

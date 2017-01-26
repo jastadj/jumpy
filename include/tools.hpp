@@ -19,6 +19,8 @@ float getDistance(sf::Vector2f p1, sf::Vector2f p2);
 
 // misc tools
 int rollDice(int num, int sides, int modifier);
+bool randBool();
 void drawFloatRect(sf::FloatRect trect, sf::RenderTarget *tscreen);
+std::vector<std::string> csvParse(std::string pstring, char delim = ',');
 
 #endif // CLASS_TOOLS

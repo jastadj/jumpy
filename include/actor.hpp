@@ -12,6 +12,11 @@ protected:
 
     bool m_jumping;
 
+    bool m_shooting;
+    int m_shooting_timeout;
+    int m_shoot_time;
+    sf::Clock m_shooting_clock;
+
     ParticleEmitter *m_left_foot_emit;
     ParticleEmitter *m_right_foot_emit;
 

@@ -23,12 +23,16 @@ Player::Player()
     }
 
     // initial variables
-    m_jumping = false;
-    m_shooting = false;
-    m_shooting_timeout = 1500;
-    m_shoot_time = 200;
     m_max_meth = 1000;
     m_current_meth = 0;
+
+    // init animations
+    m_animations.clear();
+    std::vector<Animation> *ta = m_jumpy->getAnimations();
+    for(int i = 0; i < 18; i++)
+    {
+        m_animations.push_back( (*ta)[i]);
+    }
 
     // bounding box
     m_bounding_boxes.push_back(sf::FloatRect(10 ,2, 12, 30) );
@@ -154,7 +158,7 @@ void Player::update()
     if(m_jumpy->m_dbg_noclip)
     {
         // set current sprites to obj position
-        m_sprites[m_current_sprite]->setPosition(m_position.x, m_position.y);
+        m_sprites[ getCurrentSpriteIndex()]->setPosition(m_position.x, m_position.y);
         return;
     }
 
@@ -164,8 +168,7 @@ void Player::update()
 
     // capture original position
     sf::Vector2f startpos = m_position;
-    int prevframe = m_current_sprite;
-
+    int prevspriteindex = getCurrentSpriteIndex();
 
     // apply gravity
     m_acceleration += sf::Vector2f(0, 0.03);
@@ -298,126 +301,75 @@ void Player::update()
 
 
     // update shooting timeout (holster weapon if haven't fired for some time
+    bool active_shooting = false;
     if(m_shooting_clock.getElapsedTime().asMilliseconds() >= m_shooting_timeout)
         m_shooting = false;
+    else if(m_shooting_clock.getElapsedTime().asMilliseconds() < m_shoot_time)
+        active_shooting = true;
 
     // update animation
-    if(m_commanding_move && !m_jumping)
+    static int flipped = animationCount()/2;
+
+    if( m_jumping)
     {
-        static int animtiming = 100;
-        int animtime = m_anim_clock.getElapsedTime().asMilliseconds();
-        int aframe = animtime / animtiming;
-
-        if( aframe > 7)
-        {
-            aframe = 0;
-            m_anim_clock.restart();
-        }
-
-        aframe++;
-
-        // if gun is out
         if(m_shooting)
         {
-            // if actively firing
-            if(m_shooting_clock.getElapsedTime().asMilliseconds() < m_shoot_time)
-            {
-                if(!m_facing_right) setCurrentFrame(aframe + 18+ spritecount);
-                else setCurrentFrame(aframe + 18);
-            }
-            else
-            {
-                if(!m_facing_right) setCurrentFrame(aframe + 10 + spritecount);
-                else setCurrentFrame(aframe + 10);
-
-            }
-
+            if(active_shooting) m_current_animation = 8;
+            else m_current_animation = 7;
         }
-        else
-        {
-            if( !m_facing_right) setCurrentFrame(aframe + spritecount);
-            else setCurrentFrame(aframe);
-        }
-
+        else m_current_animation = 6;
     }
-    else if(m_jumping)
+    else if( m_commanding_move)
     {
         if(m_shooting)
         {
-            // if actively firing
-            if(m_shooting_clock.getElapsedTime().asMilliseconds() < m_shoot_time)
-            {
-                if(m_facing_right) setCurrentFrame(20);
-                else setCurrentFrame(20+spritecount);
-            }
-            else
-            {
-                if(m_facing_right) setCurrentFrame(12);
-                else setCurrentFrame(12+spritecount);
-            }
-
+            if(active_shooting) m_current_animation = 5;
+            else m_current_animation = 4;
         }
-        else
-        {
-            if(m_facing_right) setCurrentFrame(2);
-            else setCurrentFrame(2+spritecount);
-        }
-
+        else m_current_animation = 1;
     }
     else
     {
-
         if(m_shooting)
         {
-            if(m_shooting_clock.getElapsedTime().asMilliseconds() < m_shoot_time)
-                m_current_sprite = 10;
-            else m_current_sprite = 9;
+            if(active_shooting) m_current_animation = 3;
+            else m_current_animation = 2;
         }
-        else m_current_sprite = 0;
-
-        if(!m_facing_right) m_current_sprite += spritecount;
+        else m_current_animation = 0;
     }
 
-    //std::cout << "current frame = " << getCurrentFrame() << std::endl;
+    if(!m_facing_right) m_current_animation = getCurrentAnimationIndex()+flipped;
+    for(int i = 0; i < animationCount(); i++) m_animations[i].update();
+    //m_animations[m_current_animation].update();
+
+
+
+
+    // set current sprites to obj position
+    m_sprites[ getCurrentSpriteIndex()]->setPosition(m_position.x, m_position.y);
 
     // position foot emitters
     m_left_foot_emit->setPosition( sf::Vector2f(srect.left+8, srect.top+srect.height) );
     m_right_foot_emit->setPosition( sf::Vector2f(srect.left+20, srect.top+srect.height) );
-    // play footsteps
-    // left side foot
-    if(
-       (
-        m_current_sprite == 3 ||
-        m_current_sprite == 13 ||
-        m_current_sprite == 21 ||
-        m_current_sprite == 7 + spritecount||
-        m_current_sprite == 17 + spritecount||
-        m_current_sprite == 25 + spritecount
-        )
-       && m_current_sprite != prevframe)
-       {
-            m_jumpy->playSound( rand()%8+1);
-            m_left_foot_emit->once();
-       }
-    // right side foot
-    else if(
-            (
-             m_current_sprite == 7 ||
-             m_current_sprite == 17 ||
-             m_current_sprite == 25 ||
-             m_current_sprite == 3 + spritecount||
-             m_current_sprite == 13 + spritecount||
-             m_current_sprite == 21 + spritecount
-             )
-            && m_current_sprite != prevframe
-            )
+
+    // if sprite changed
+    if(prevspriteindex != getCurrentSpriteIndex())
+    {
+
+        int currentframeindex = getCurrentAnimation()->getCurrentFrameIndex();
+
+        if(m_commanding_move)
         {
-            m_jumpy->playSound( rand()%8+1);
-            m_right_foot_emit->once();
+            if( currentframeindex == 2 || currentframeindex == 6)
+            {
+                m_jumpy->playSound( rand()%8+1);
+                if(randBool())m_right_foot_emit->once();
+                else m_left_foot_emit->once();
+            }
+
         }
 
-    // set current sprites to obj position
-    m_sprites[m_current_sprite]->setPosition(m_position.x, m_position.y);
+    }
 
     // update meth timer
     if( m_meth_timer.getElapsedTime().asMilliseconds() > 500)
@@ -429,8 +381,8 @@ void Player::update()
         if(m_current_meth < 0) m_current_meth = 0;
     }
 
-
 }
+
 
 void Player::pee()
 {
@@ -471,5 +423,4 @@ void Player::pee()
         p1.m_custom_accel = sf::Vector2f(0, 0.05);
         p1.createParticle(sf::Vector2f(0,1), sf::Vector2f(1*dirmod,-0.8));
     }
-
 }

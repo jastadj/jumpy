@@ -1,8 +1,6 @@
-#include "tile.hpp"
+#include "decoration.hpp"
 
-#include "spritesheet.hpp"
-
-Tile::Tile(sf::Sprite *tsprite)
+Decoration::Decoration(sf::Sprite *tsprite)
 {
     // create sprite for tile from sprite sheet/index
     m_sprites.push_back(tsprite);
@@ -13,50 +11,41 @@ Tile::Tile(sf::Sprite *tsprite)
 }
 
 // copy constructor
-Tile::Tile(const Tile &ttile)
+Decoration::Decoration(const Decoration &tdec)
 {
-
     // clear sprite pointers
     m_sprites.clear();
 
     // create sprite copies
-    for(int i = 0; i < int(ttile.m_sprites.size()); i++)
+    for(int i = 0; i < int(tdec.m_sprites.size()); i++)
     {
         sf::Sprite *newsprite = new sf::Sprite;
-        *newsprite = *ttile.m_sprites[i];
+        *newsprite = *tdec.m_sprites[i];
         m_sprites.push_back(newsprite);
     }
 
     // copy animations
-    m_animated = ttile.m_animated;
-    m_animations = ttile.m_animations;
+    m_animated = tdec.m_animated;
+    m_animations = tdec.m_animations;
 
     m_bounding_boxes.push_back( m_sprites[0]->getLocalBounds());
 
 }
 
-Tile::~Tile()
+Decoration::~Decoration()
 {
 
 }
 
 
-void Tile::draw(sf::RenderTarget *tscreen)
+void Decoration::draw(sf::RenderTarget *tscreen)
 {
     tscreen->draw( *m_sprites[getCurrentSpriteIndex()]);
 }
 
-void Tile::update()
+void Decoration::update()
 {
     if(m_animated)getCurrentAnimation()->update();
 
     m_sprites[getCurrentSpriteIndex()]->setPosition(m_position);
 }
-
-/*
-void Tile::draw(sf::RenderTarget *tscreen)
-{
-
-}
-
-*/

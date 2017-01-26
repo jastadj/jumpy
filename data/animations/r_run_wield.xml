@@ -1,0 +1,31 @@
+<Methd_Up>
+	<Animation>
+		<Name>run right wield</Name>
+		<GlobalAnimTime>100</GlobalAnimTime>
+		<Frame>
+			<SpriteIndex>11</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>12</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>13</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>14</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>15</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>16</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>17</SpriteIndex>
+		</Frame>
+		<Frame>
+			<SpriteIndex>18</SpriteIndex>
+		</Frame>
+	</Animation>
+</Methd_Up>
+
