@@ -6,8 +6,9 @@
 // forward declarations
 class Jumpy;
 class SpriteSheet;
+class Level;
 
-enum EDITMODE{ ED_NONE, ED_TILE};
+enum EDITMODE{ ED_NONE, ED_TILE, ED_TILEDRAW};
 
 class LevelEditor
 {
@@ -15,11 +16,17 @@ private:
 
     Jumpy *m_jumpy;
 
+    Level *m_currentlevel;
+
     int m_screenwidth;
     int m_screenheight;
 
     int m_mode;
+    int m_drawmode;
+
     sf::Vector2f m_mouseleft;
+    int m_brushid;
+    sf::Sprite *m_brushsprite;
 
     std::vector<SpriteSheet*> m_spritesheets;
 
@@ -36,7 +43,7 @@ public:
 
     void update();
 
-    void draw(sf::RenderTarget *tscreen);
+    void draw(sf::RenderWindow *tscreen);
 
     void processEvent(sf::Event *event, sf::RenderWindow *tscreen);
 };

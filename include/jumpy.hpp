@@ -101,6 +101,8 @@ public:
 
     int getScreenWidth() { return m_screen_width;}
     int getScreenHeight() { return m_screen_height;}
+    int getScreenZoom() { return m_zoom;}
+    sf::View *getView() { return &m_camera;}
 
     SpriteSheet *getSpriteSheet(int index);
     std::vector<Animation> *getAnimations() { return &m_animations;}
