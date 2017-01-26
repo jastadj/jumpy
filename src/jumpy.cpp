@@ -145,7 +145,19 @@ bool Jumpy::initTiles()
     // create tiles
     for(int i = 0; i < m_spritesheets[1]->getCount(); i++)
     {
-        m_tiles.push_back( new Tile(m_spritesheets[1]->createSprite(i)) );
+        if(i == 3)
+        {
+            Tile *newanim = new Tile(m_spritesheets[1]->createSprite(i));
+
+            newanim->addSprite(m_spritesheets[1]->createSprite(i+1));
+
+            newanim->addAnimationIndex(0);
+            newanim->addAnimationIndex(1);
+
+            m_tiles.push_back(newanim);
+
+        }
+        else m_tiles.push_back( new Tile(m_spritesheets[1]->createSprite(i)) );
     }
 
     // create background tiles
@@ -204,6 +216,9 @@ void Jumpy::initLevel()
             m_current_level->setTile(n, i, 2);
         }
     }
+
+    // place animated tile
+    m_current_level->setTile(0, m_current_level->getHeight()-6, 3);
 
     m_current_level->addMeth(400,288, 500);
     m_current_level->addMethHead(350,200);

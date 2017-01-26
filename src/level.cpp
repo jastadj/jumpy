@@ -386,6 +386,8 @@ void Level::drawTile(int x, int y, sf::RenderTarget *tscreen)
     // ignore blanks
     if(m_tiles[y][x] == NULL) return;
 
+    if(m_tiles[y][x]->isAnimated()) m_tiles[y][x]->update();
+
     m_tiles[y][x]->draw(tscreen);
 
 }
