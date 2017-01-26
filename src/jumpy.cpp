@@ -647,7 +647,7 @@ void Jumpy::drawLevelFG(Level *tlevel)
 
     sf::FloatRect pr = m_player->getBoundingBox();
     sf::Vector2i mp( (pr.left + pr.width/2)/32, (pr.top + pr.height/2)/32 );
-    std::cout << "x:" << mp.x << "," << "y:" << mp.y << std::endl;
+    //std::cout << "x:" << mp.x << "," << "y:" << mp.y << std::endl;
 
     if(m_current_level->getTileFG( mp.x, mp.y)) fade_fg = true;
 
