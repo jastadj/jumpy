@@ -47,6 +47,7 @@ private:
     std::vector<sf::SoundBuffer*> m_sounds;
     std::vector<Tile*> m_tiles;
     std::vector<Tile*> m_tiles_bg;
+    std::vector<Tile*> m_tiles_fg;
     std::vector<Decoration*> m_decorations;
 
     // sounds
@@ -85,6 +86,7 @@ private:
     void drawScreen();
     void drawSkyBox();
     void drawLevel(Level *tlevel);
+    void drawLevelFG(Level *tlevel);
 
 public:
     static Jumpy *getInstance()
@@ -108,6 +110,7 @@ public:
     std::vector<Animation> *getAnimations() { return &m_animations;}
     std::vector<Tile*> *getTiles() { return &m_tiles;}
     std::vector<Tile*> *getTilesBG() { return &m_tiles_bg;}
+    std::vector<Tile*> *getTilesFG() { return &m_tiles_fg;}
     std::vector<Decoration*> *getDecorations() { return &m_decorations;}
 
     Level *getCurrentLevel() { return m_current_level;}

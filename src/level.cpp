@@ -46,12 +46,15 @@ Level::~Level()
         {
             delete m_tiles[i][n];
             delete m_tiles_bg[i][n];
+            delete m_tiles_fg[i][n];
         }
         m_tiles[i].clear();
         m_tiles_bg[i].clear();
+        m_tiles_fg[i].clear();
     }
     m_tiles.clear();
     m_tiles_bg.clear();
+    m_tiles_fg.clear();
 
     // delete objects
     for(int i = 0; i < int(m_objects.size()); i++)
@@ -84,14 +87,18 @@ bool Level::init(int width, int height)
     // size array map
     m_mapdata.resize(height);
     m_mapdata_bg.resize(height);
+    m_mapdata_fg.resize(height);
     m_tiles.resize(height);
     m_tiles_bg.resize(height);
+    m_tiles_fg.resize(height);
     for(int i = 0; i < height; i++)
     {
         m_mapdata[i].resize(width);
         m_mapdata_bg[i].resize(width);
+        m_mapdata_fg[i].resize(width);
         m_tiles[i].resize(width);
         m_tiles_bg[i].resize(width);
+        m_tiles_fg[i].resize(width);
     }
 
     // null out tiles
@@ -102,6 +109,7 @@ bool Level::init(int width, int height)
             //std::cout << "x:" << n << " , y:" << i << std::endl;
             m_tiles[i][n] = NULL;
             m_tiles_bg[i][n] = NULL;
+            m_tiles_fg[i][n] = NULL;
         }
     }
 
@@ -195,7 +203,19 @@ void Level::fillMapBG(int tileid)
     }
 }
 
+void Level::fillMapFG(int tileid)
+{
+    int width = getWidth();
+    int height = getHeight();
 
+    for(int i = 0; i < height; i++)
+    {
+        for(int n = 0; n < width; n++)
+        {
+            setTileFG(n,i, tileid);
+        }
+    }
+}
 
 
 int Level::getTile(int x, int y)
@@ -210,6 +230,13 @@ int Level::getTileBG(int x, int y)
     if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return 0;
 
     return m_mapdata_bg[y][x];
+}
+
+int Level::getTileFG(int x, int y)
+{
+    if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return 0;
+
+    return m_mapdata_fg[y][x];
 }
 
 bool Level::setTile(int x, int y, int tileid)
@@ -271,6 +298,38 @@ bool Level::setTileBG(int x, int y, int tileid)
         m_tiles_bg[y][x] = new Tile( *(*m_jumpy->getTilesBG())[tileid] );
         m_tiles_bg[y][x]->setPosition( sf::Vector2f(x*32, y*32) );
         m_tiles_bg[y][x]->update();
+    }
+
+
+    return true;
+}
+
+bool Level::setTileFG(int x, int y, int tileid)
+{
+    if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return false;
+
+    if( m_mapdata_fg[y][x] == tileid) return true;
+
+    if( m_tiles_fg[y][x])
+    {
+        delete m_tiles_fg[y][x];
+        m_tiles_fg[y][x] = 0;
+    }
+
+    m_mapdata_fg[y][x] = tileid;
+
+    // if tile is blank
+    if( tileid == 0)
+    {
+        // if there was an existing tile there before, delete it
+        if(m_tiles_fg[y][x]) delete m_tiles_fg[y][x];
+        m_tiles_fg[y][x] = NULL;
+    }
+    else
+    {
+        m_tiles_fg[y][x] = new Tile( *(*m_jumpy->getTilesFG())[tileid] );
+        m_tiles_fg[y][x]->setPosition( sf::Vector2f(x*32, y*32) );
+        m_tiles_fg[y][x]->update();
     }
 
 
@@ -452,6 +511,27 @@ void Level::drawTileBG(int x, int y, sf::RenderTarget *tscreen)
 
 }
 
+void Level::drawTileFG(int x, int y, sf::RenderTarget *tscreen)
+{
+    if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+    {
+        std::cout << "Error in Tile::drawTile, x,y out of bounds\n";
+        return;
+    }
+
+    if(tscreen == NULL)
+    {
+        std::cout << "Error in Tile::drawTile, tscreen = NULL!\n";
+        return;
+    }
+
+    // ignore blanks
+    if(m_tiles_fg[y][x] == NULL) return;
+
+    m_tiles_fg[y][x]->draw(tscreen);
+
+}
+
 bool Level::addObject(GameObj *tobj)
 {
     if(tobj == NULL) return false;
@@ -604,6 +684,27 @@ bool Level::save(std::string filename)
 
     }
 
+    // tile fg array node
+    anode = ldoc.NewElement("TilesFG");
+    root->FirstChildElement("Level")->InsertEndChild(anode);
+
+    // add rows
+    for(int i = 0; i < getHeight(); i++)
+    {
+        std::stringstream rowdata;
+
+        for(int n = 0; n < getWidth(); n++)
+        {
+            if( n != getWidth()-1) rowdata << m_mapdata_fg[i][n] << ",";
+            else rowdata << m_mapdata_fg[i][n];
+        }
+
+        element = ldoc.NewElement("Row");
+        element->SetText(rowdata.str().c_str());
+        anode->InsertEndChild(element);
+
+    }
+
     // objects
     anode = ldoc.NewElement("Objects");
     root->FirstChildElement("Level")->InsertEndChild(anode);
@@ -724,6 +825,31 @@ bool Level::load(std::string filename)
         for(int i = 0; i < int(rowdata.size()); i++)
         {
             setTileBG(i, rowcount, atoi( rowdata[i].c_str()));
+        }
+
+        rowcount++;
+
+        trow = trow->NextSiblingElement("Row");
+    }
+
+    rowcount = 0;
+
+    anode = lnode->FirstChildElement("TilesFG");
+    if(!anode){ std::cout << "Error loading level, no fg tile data found!\n"; return false;}
+    trow = anode->FirstChildElement("Row");
+    if(!trow) { std::cout << "Error loading level, not fg tile data row found!\n"; return false;}
+
+    while(trow)
+    {
+        std::string rowstr;
+        std::vector<std::string> rowdata;
+        rowstr = trow->GetText();
+
+        rowdata = csvParse(rowstr);
+
+        for(int i = 0; i < int(rowdata.size()); i++)
+        {
+            setTileFG(i, rowcount, atoi( rowdata[i].c_str()));
         }
 
         rowcount++;

@@ -19,6 +19,7 @@ private:
 
     std::vector< std::vector<int> > m_mapdata;
     std::vector< std::vector<int> > m_mapdata_bg;
+    std::vector< std::vector<int> > m_mapdata_fg;
 
     std::vector<Decoration*> m_decorations;
 
@@ -27,6 +28,7 @@ private:
 
     std::vector< std::vector<Tile*> > m_tiles;
     std::vector< std::vector<Tile*> > m_tiles_bg;
+    std::vector< std::vector<Tile*> > m_tiles_fg;
 
     std::vector< GameObj*> m_objects;
 public:
@@ -39,14 +41,17 @@ public:
 
     void fillMap(int tileid);
     void fillMapBG(int tileid);
+    void fillMapFG(int tileid);
 
     int getWidth();
     int getHeight();
 
     int getTile(int x, int y);
     int getTileBG(int x, int y);
+    int getTileFG(int x, int y);
     bool setTile(int x, int y, int tileid);
     bool setTileBG(int x, int y, int tileid);
+    bool setTileFG(int x, int y, int tileid);
 
     bool isCollidingWithMap(sf::FloatRect trect);
     void getObjectCollisions(sf::FloatRect trect, GameObj *source);
@@ -54,6 +59,7 @@ public:
 
     void drawTile(int x, int y, sf::RenderTarget *tscreen);
     void drawTileBG(int x, int y, sf::RenderTarget *tscreen);
+    void drawTileFG(int x, int y, sf::RenderTarget *tscreen);
     //void generate();
 
     bool addObject( GameObj *tobj);

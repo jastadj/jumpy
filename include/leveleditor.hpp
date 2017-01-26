@@ -9,7 +9,7 @@ class SpriteSheet;
 class Level;
 class Player;
 
-enum EDITMODE{ ED_NONE, ED_SAVE, ED_TILE, ED_TILEDRAW, ED_TILEBG, ED_TILEDRAWBG};
+enum EDITMODE{ ED_NONE, ED_SAVE, ED_TILE, ED_TILEDRAW, ED_TILEBG, ED_TILEDRAWBG, ED_TILEFG, ED_TILEDRAWFG};
 
 class LevelEditor
 {
@@ -40,6 +40,7 @@ private:
 
     std::vector<sf::Sprite*> m_tiles;
     std::vector<sf::Sprite*> m_tilesbg;
+    std::vector<sf::Sprite*> m_tilesfg;
 
     sf::RectangleShape *m_coverscreen;
 

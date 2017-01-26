@@ -51,6 +51,14 @@ LevelEditor::LevelEditor()
 
     }
 
+    // create tile fg edit buttons
+    tss = m_jumpy->getSpriteSheet(6);
+    for(int i = 0; i < tss->getCount(); i++)
+    {
+        m_tilesfg.push_back( tss->createSprite(i));
+
+    }
+
     m_coverscreen = new sf::RectangleShape(sf::Vector2f(m_screenwidth, m_screenheight));
     m_coverscreen->setFillColor(sf::Color(0,0,200,230));
 
@@ -71,6 +79,18 @@ LevelEditor::~LevelEditor()
     }
     m_tiles.clear();
 
+    for(int i = 0; i < int(m_tilesbg.size()); i++)
+    {
+        delete m_tilesbg[i];
+    }
+    m_tilesbg.clear();
+
+    for(int i = 0; i < int(m_tilesfg.size()); i++)
+    {
+        delete m_tilesfg[i];
+    }
+    m_tilesfg.clear();
+
     // delete sprite sheets
     for(int i = 0; i < int(m_spritesheets.size()); i++) delete m_spritesheets[i];
     m_spritesheets.clear();
@@ -80,7 +100,7 @@ LevelEditor::~LevelEditor()
 void LevelEditor::update()
 {
 
-    if(m_mode == ED_NONE || m_mode == ED_TILEDRAW || m_mode == ED_TILEDRAWBG)
+    if(m_mode == ED_NONE || m_mode == ED_TILEDRAW || m_mode == ED_TILEDRAWBG || m_mode == ED_TILEDRAWFG)
     {
         if( sf::Keyboard::isKeyPressed( sf::Keyboard::A)) m_player->doMove(MOVE_LEFT);
         else if( sf::Keyboard::isKeyPressed( sf::Keyboard::D)) m_player->doMove(MOVE_RIGHT);
@@ -159,7 +179,32 @@ void LevelEditor::draw(sf::RenderWindow *tscreen)
             tscreen->draw( *m_tilesbg[i]);
         }
     }
+    else if(m_mode == ED_TILEFG)
+    {
+        tscreen->draw(*m_coverscreen);
+
+        // adjust sprite positions
+        for(int i = 0; i < int(m_tilesfg.size()); i++)
+        {
+            m_tilesfg[i]->setPosition(34*i, 32);
+        }
+
+        // draw tiles
+        for(int i = 0; i < int(m_tilesfg.size()); i++)
+        {
+            tscreen->draw( *m_tilesfg[i]);
+        }
+    }
     else if(m_mode == ED_TILEDRAW)
+    {
+        // draw brush at mouse pos
+        if(m_brushsprite)
+        {
+            m_brushsprite->setPosition(m_mouseleftg.x*32, m_mouseleftg.y*32);
+            tscreen->draw(*m_brushsprite);
+        }
+    }
+    else if(m_mode == ED_TILEDRAWBG)
     {
         // draw brush at mouse pos
         if(m_brushsprite)
@@ -241,6 +286,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                     {
                         if(i == 0) m_mode = ED_TILE;
                         else if(i == 1) m_mode = ED_TILEBG;
+                        else if(i == 2) m_mode = ED_TILEFG;
                         else if(i == 3)
                         {
                             m_savefilename = std::string("");
@@ -301,6 +347,31 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                     }
                 }
             }
+            // if selecting foreground tile to draw
+            else if(m_mode == ED_TILEFG)
+            {
+                // check all the tiles for mouse click
+                for(int i = 0; i < int(m_tilesfg.size()); i++)
+                {
+                    // if a tile was clicked
+                    if(m_tilesfg[i]->getGlobalBounds().contains(m_mouseleft))
+                    {
+                        // set brush id
+                        m_brushid = i;
+
+                        // set draw mode
+                        m_drawmode = ED_TILEDRAWFG;
+                        m_mode = ED_TILEDRAWFG;
+
+                        // create brush sprite
+                        if(m_brushsprite) delete m_brushsprite;
+                        m_brushsprite = m_jumpy->getSpriteSheet(2)->createSprite(m_brushid);
+                        m_brushsprite->setScale(m_jumpy->getScreenZoom(), m_jumpy->getScreenZoom());
+
+
+                    }
+                }
+            }
             // ELSE IF DRAWING A TILE
             else if(m_mode == ED_TILEDRAW)
             {
@@ -313,7 +384,12 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                 // set brush tile to map position
                 m_currentlevel->setTileBG(m_mouseleftg.x, m_mouseleftg.y, m_brushid);
             }
-
+            // ELSE IF DRAWING A TILE
+            else if(m_mode == ED_TILEDRAWFG)
+            {
+                // set brush tile to map position
+                m_currentlevel->setTileFG(m_mouseleftg.x, m_mouseleftg.y, m_brushid);
+            }
 
 
         }
@@ -332,6 +408,11 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                 // erase tile at mouse position
                 m_currentlevel->setTileBG(m_mouseleftg.x, m_mouseleftg.y, 0);
             }
+            else if(m_mode == ED_TILEDRAWFG)
+            {
+                // erase tile at mouse position
+                m_currentlevel->setTileFG(m_mouseleftg.x, m_mouseleftg.y, 0);
+            }
         }
     }
     // key pressed
@@ -345,6 +426,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
             {
                 if(m_mode == ED_TILEDRAW) m_mode = ED_TILE;
                 else if(m_mode == ED_TILEDRAWBG) m_mode = ED_TILEBG;
+                else if(m_mode == ED_TILEDRAWFG) m_mode = ED_TILEFG;
                 else m_mode = ED_NONE;
             }
         }

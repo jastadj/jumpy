@@ -143,6 +143,10 @@ bool Jumpy::initResources()
     newsheet = new SpriteSheet(".\\Data\\Art\\inddryer.png", 1, 1);
     m_spritesheets.push_back(newsheet);
 
+    // create foreground tiles spritesheet - 6
+    newsheet = new SpriteSheet(".\\Data\\Art\\tiles001fg.png", 4, 4);
+    m_spritesheets.push_back(newsheet);
+
     // check sprite sheets are valid
     for(int i = 0; i < int(m_spritesheets.size()); i++)
     {
@@ -269,6 +273,11 @@ bool Jumpy::initTiles()
         m_tiles_bg.push_back( new Tile(m_spritesheets[2]->createSprite(i) ) );
     }
 
+    // create foreground tiles
+    for(int i = 0; i < m_spritesheets[6]->getCount(); i++)
+    {
+        m_tiles_fg.push_back( new Tile(m_spritesheets[6]->createSprite(i) ) );
+    }
 
     // check for validity
     for(int i = 0; i < int(m_tiles.size()); i++)
@@ -599,6 +608,9 @@ void Jumpy::drawScreen()
 
     // draw particles
     m_particle_manager->draw(m_screen);
+
+    // draw level
+    drawLevelFG(m_current_level);
 }
 
 void Jumpy::drawLevel(Level *tlevel)
@@ -626,6 +638,35 @@ void Jumpy::drawLevel(Level *tlevel)
     }
     m_current_level->drawDecorations(m_screen);
     m_current_level->drawObjects(m_screen);
+}
+
+void Jumpy::drawLevelFG(Level *tlevel)
+{
+
+    sf::FloatRect pr = m_player->getBoundingBox();
+    sf::Vector2i mp( (pr.left + pr.width/2)/32, (pr.top + pr.height/2)/32 );
+    std::cout << "x:" << mp.x << "," << "y:" << mp.y << std::endl;
+
+    if(m_current_level->getTileFG( mp.x, mp.y)) return;
+
+    // draw each tile in map
+    for(int i = 0; i < m_current_level->getHeight(); i++)
+    {
+        for(int n = 0; n < m_current_level->getWidth(); n++)
+        {
+            /*
+            // get tile at x/y position
+            int ttile = m_current_level->getTile(n, i);
+
+            // if tile is 0, do nothing, tile 0 is hardcoded as blank
+            if( ttile == 0) continue;
+
+            // else, draw tile index
+            m_tiles[ m_current_level->getTile(n, i) ]->draw(m_screen, n*32, i*32);
+            */
+            m_current_level->drawTileFG(n, i, m_screen);
+        }
+    }
 }
 
 void Jumpy::drawSkyBox()
