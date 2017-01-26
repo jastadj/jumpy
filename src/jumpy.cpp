@@ -68,6 +68,12 @@ bool Jumpy::init()
         std::cout << "Error initializing tiles!\n";
     }
 
+    // init decorations
+    if(!initDecorations())
+    {
+        std::cout << "Error initializing decorations!\n";
+    }
+
     // init random seed
     srand( time(NULL));
 
@@ -114,6 +120,10 @@ bool Jumpy::initResources()
 
     // create methhead spritesheet - 4
     newsheet = new SpriteSheet(".\\Data\\Art\\methhead.png", 9, 1);
+    m_spritesheets.push_back(newsheet);
+
+    // create dryer spritesheet - 5
+    newsheet = new SpriteSheet(".\\Data\\Art\\inddryer.png", 1, 1);
     m_spritesheets.push_back(newsheet);
 
     // check sprite sheets are valid
@@ -181,6 +191,10 @@ bool Jumpy::initTiles()
     return true;
 }
 
+bool Jumpy::initDecorations()
+{
+    m_decorations.push_back( new Tile( m_spritesheets[5]->createSprite(0)));
+}
 
 
 void Jumpy::initPlayer()
@@ -222,7 +236,7 @@ void Jumpy::initLevel()
 
     m_current_level->addMeth(400,288, 500);
     m_current_level->addMethHead(350,200);
-
+    m_current_level->addDecoration(0, sf::Vector2f(400,150) );
 
     // test bg tile
     for(int i = 0; i < m_current_level->getWidth(); i++)
@@ -456,7 +470,7 @@ void Jumpy::drawLevel(Level *tlevel)
             m_current_level->drawTile(n,i, m_screen);
         }
     }
-
+    m_current_level->drawDecorations(m_screen);
     m_current_level->drawObjects(m_screen);
 }
 

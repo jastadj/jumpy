@@ -41,6 +41,9 @@ private:
     // resources
     std::vector<SpriteSheet*> m_spritesheets;
     std::vector<sf::SoundBuffer*> m_sounds;
+    std::vector<Tile*> m_tiles;
+    std::vector<Tile*> m_tiles_bg;
+    std::vector<Tile*> m_decorations;
 
     // sounds
     bool loadSound(std::string filename);
@@ -52,6 +55,7 @@ private:
     bool initScreen();
     bool initResources();
     bool initTiles();
+    bool initDecorations();
     void initPlayer();
     void initLevel();
 
@@ -68,8 +72,6 @@ private:
     MethUI *m_meth_ui;
 
     // levels
-    std::vector<Tile*> m_tiles;
-    std::vector<Tile*> m_tiles_bg;
     Level *m_current_level;
 
     // main loop logic
@@ -97,6 +99,7 @@ public:
     SpriteSheet *getSpriteSheet(int index);
     std::vector<Tile*> *getTiles() { return &m_tiles;}
     std::vector<Tile*> *getTilesBG() { return &m_tiles_bg;}
+    std::vector<Tile*> *getDecorations() { return &m_decorations;}
 
     Level *getCurrentLevel() { return m_current_level;}
     const Player *getPlayer() const { return m_player;}

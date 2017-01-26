@@ -18,6 +18,8 @@ private:
     std::vector< std::vector<int> > m_mapdata;
     std::vector< std::vector<int> > m_mapdata_bg;
 
+    std::vector< Tile*> m_decorations;
+
     sf::RenderTexture m_skybox_rtxt;
     sf::Sprite m_skybox;
 
@@ -53,9 +55,12 @@ public:
     void addMeth(int x, int y, int val);
     void addMethHead(int x, int y);
 
+    void addDecoration(int dindex, sf::Vector2f dpos);
+
     sf::Sprite *getSkyBox() { return &m_skybox;}
 
     void drawObjects(sf::RenderTarget *tscreen);
+    void drawDecorations(sf::RenderTarget *tscreen);
     void update();
 };
 #endif // CLASS_LEVEL

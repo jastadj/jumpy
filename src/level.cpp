@@ -459,13 +459,34 @@ bool Level::deleteObject( GameObj *tobj)
     return false;
 }
 
+void Level::addDecoration(int dindex, sf::Vector2f dpos)
+{
+    std::vector<Tile*> *dptr = m_jumpy->getDecorations();
 
+    if(dindex < 0 || dindex >= int(dptr->size()) )
+    {
+        std::cout << "Error adding decoration index " << dindex << ", out of bounds!\n";
+        return;
+    }
+
+    m_decorations.push_back( new Tile( *(*dptr)[dindex]) );
+    m_decorations.back()->setPosition( dpos);
+    m_decorations.back()->update();
+}
 
 void Level::drawObjects(sf::RenderTarget *tscreen)
 {
     for(int i = 0; i < int(m_objects.size()); i++)
     {
         m_objects[i]->draw(tscreen);
+    }
+}
+
+void Level::drawDecorations(sf::RenderTarget *tscreen)
+{
+    for(int i = 0; i < int(m_decorations.size()); i++)
+    {
+        m_decorations[i]->draw(tscreen);
     }
 }
 
