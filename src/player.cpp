@@ -241,7 +241,7 @@ void Player::update()
                 // if intersecting below
                 if( startpos.y + m_bounding_boxes[0].top < vertrect.top)
                 {
-                    vertrect.top--;
+                    vertrect.top --;
 
                     if(m_jumping) m_jumping = false;
                 }
@@ -277,7 +277,10 @@ void Player::update()
 
     if( currentlevel->isCollidingWithMap(srect) )
     {
-        std::cout <<"STILL COLLIDING WITH MAP!!\n";
+        std::cout <<"STILL COLLIDING WITH MAP!!  trying to reset pos\n";
+        m_position = startpos;
+        m_velocity = sf::Vector2f(0,0);
+        m_acceleration = sf::Vector2f(0,0);
     }
 
 

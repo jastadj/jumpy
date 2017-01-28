@@ -112,7 +112,7 @@ bool Jumpy::initScreen()
     m_screen->setVerticalSyncEnabled(true);
 
     // enable fps limit in sfml?
-    m_screen->setFramerateLimit(60);
+    //m_screen->setFramerateLimit(60);
 
     return true;
 }
