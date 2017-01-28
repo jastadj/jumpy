@@ -84,6 +84,7 @@ private:
     // main loop logic
     int mainLoop();
     void drawScreen();
+    void update();
     void drawSkyBox();
     void drawLevel(Level *tlevel);
     void drawLevelFG(Level *tlevel);

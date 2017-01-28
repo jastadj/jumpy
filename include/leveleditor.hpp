@@ -52,6 +52,7 @@ public:
     void update();
 
     void draw(sf::RenderWindow *tscreen);
+    void drawUI(sf::RenderWindow *tscreen);
 
     void processEvent(sf::Event *event, sf::RenderWindow *tscreen);
 

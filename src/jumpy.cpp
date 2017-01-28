@@ -436,9 +436,7 @@ int Jumpy::mainLoop()
 
 
         // update
-        m_player->update();
-        m_current_level->update();
-        m_particle_manager->update();
+        update();
 
         m_camera.setCenter(m_player->getPosition());
         m_screen->setView(m_camera);
@@ -562,6 +560,7 @@ int Jumpy::mainLoop()
 
         // draw ui elements
         m_meth_ui->draw(m_screen_width - 200,20, m_screen);
+        if(m_dbg_editor) m_dbg_editor->drawUI(m_screen);
 
         std::stringstream debugss;
         sf::Vector2f pvel = m_player->getVelocity();
@@ -575,8 +574,6 @@ int Jumpy::mainLoop()
 
 
         //std::cout << "particles:" << m_particle_manager->getCount() << std::endl;
-
-        if(m_dbg_editor) m_dbg_editor->draw(m_screen);
 
         // display
         m_screen->display();
@@ -611,6 +608,8 @@ void Jumpy::drawScreen()
 
     // draw level
     drawLevelFG(m_current_level);
+
+    if(m_dbg_editor) m_dbg_editor->draw(m_screen);
 }
 
 void Jumpy::drawLevel(Level *tlevel)
@@ -664,6 +663,14 @@ void Jumpy::drawLevelFG(Level *tlevel)
 void Jumpy::drawSkyBox()
 {
     m_screen->draw( *m_current_level->getSkyBox());
+}
+
+void Jumpy::update()
+{
+    m_player->update();
+    m_current_level->update();
+    m_particle_manager->update();
+    if(m_dbg_editor) m_dbg_editor->update();
 }
 
 bool Jumpy::playSound(int soundindex)

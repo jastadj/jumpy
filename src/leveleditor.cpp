@@ -109,8 +109,6 @@ void LevelEditor::update()
         else m_player->doMove(MOVE_NONE);
     }
 
-
-
     for(int i = 0; i < int(m_edit_buttons.size()); i++)
     {
         m_edit_buttons[i]->setPosition( m_screenwidth-50, i*34);
@@ -119,28 +117,35 @@ void LevelEditor::update()
 
 void LevelEditor::draw(sf::RenderWindow *tscreen)
 {
-    update();
-
-    sf::View *tview = m_jumpy->getView();
-    //tscreen->setView(*tview);
-
-    sf::Vector2f m_mouseleft;
     // capture mouse position
     m_mouseleft = sf::Vector2f(sf::Mouse::getPosition(*tscreen));
-    //std::cout << "Mouse clicked at :" << m_mouseleft.x << "," << m_mouseleft.y << std::endl;
+    std::cout << "*********Mouse clicked at :" << m_mouseleft.x << "," << m_mouseleft.y << std::endl;
 
     sf::Vector2f m_mouseleftw;
     //m_mouseleftw = tview->getTransform().transformPoint(m_mouseleft);
     m_mouseleftw = tscreen->mapPixelToCoords(sf::Vector2i(m_mouseleft));
-    //std::cout << "Mouse clicked at :" << m_mouseleftw.x << "," << m_mouseleftw.y << std::endl;
+    std::cout << "*********Mouse clicked at :" << m_mouseleftw.x << "," << m_mouseleftw.y << std::endl;
 
     sf::Vector2i m_mouseleftg = sf::Vector2i(m_mouseleftw);
     m_mouseleftg.x = int(m_mouseleftg.x / 32);
     m_mouseleftg.y = int(m_mouseleftg.y / 32);
-    //std::cout << "Mouse clicked at :" << m_mouseleftg.x << "," << m_mouseleftg.y << std::endl;
+    std::cout << "*********Mouse clicked at :" << m_mouseleftg.x << "," << m_mouseleftg.y << std::endl;
 
-    //tscreen->setView( tscreen->getDefaultView());
 
+    if(m_mode == ED_TILEDRAW || m_mode == ED_TILEDRAWBG || m_mode == ED_TILEDRAWFG)
+    {
+        // draw brush at mouse pos
+        if(m_brushsprite)
+        {
+            m_brushsprite->setPosition(m_mouseleftg.x*32, m_mouseleftg.y*32);
+            tscreen->draw(*m_brushsprite);
+        }
+    }
+
+}
+
+void LevelEditor::drawUI(sf::RenderWindow *tscreen)
+{
     for(int i = 0; i < int(m_edit_buttons.size()); i++)
     {
         tscreen->draw( *m_edit_buttons[i]);
@@ -195,33 +200,6 @@ void LevelEditor::draw(sf::RenderWindow *tscreen)
             tscreen->draw( *m_tilesfg[i]);
         }
     }
-    else if(m_mode == ED_TILEDRAW)
-    {
-        // draw brush at mouse pos
-        if(m_brushsprite)
-        {
-            m_brushsprite->setPosition(m_mouseleftg.x*32, m_mouseleftg.y*32);
-            tscreen->draw(*m_brushsprite);
-        }
-    }
-    else if(m_mode == ED_TILEDRAWBG)
-    {
-        // draw brush at mouse pos
-        if(m_brushsprite)
-        {
-            m_brushsprite->setPosition(m_mouseleftg.x*32, m_mouseleftg.y*32);
-            tscreen->draw(*m_brushsprite);
-        }
-    }
-    else if(m_mode == ED_TILEDRAWBG)
-    {
-        // draw brush at mouse pos
-        if(m_brushsprite)
-        {
-            m_brushsprite->setPosition(m_mouseleftg.x*32, m_mouseleftg.y*32);
-            tscreen->draw(*m_brushsprite);
-        }
-    }
     else if(m_mode == ED_SAVE)
     {
         tscreen->draw(*m_coverscreen);
@@ -244,7 +222,6 @@ void LevelEditor::draw(sf::RenderWindow *tscreen)
     }
 
 }
-
 
 void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
 {
@@ -316,8 +293,6 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                         // create brush sprite
                         if(m_brushsprite) delete m_brushsprite;
                         m_brushsprite = m_jumpy->getSpriteSheet(1)->createSprite(m_brushid);
-                        m_brushsprite->setScale(m_jumpy->getScreenZoom(), m_jumpy->getScreenZoom());
-
 
                     }
                 }
@@ -341,8 +316,6 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                         // create brush sprite
                         if(m_brushsprite) delete m_brushsprite;
                         m_brushsprite = m_jumpy->getSpriteSheet(2)->createSprite(m_brushid);
-                        m_brushsprite->setScale(m_jumpy->getScreenZoom(), m_jumpy->getScreenZoom());
-
 
                     }
                 }
@@ -366,8 +339,6 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                         // create brush sprite
                         if(m_brushsprite) delete m_brushsprite;
                         m_brushsprite = m_jumpy->getSpriteSheet(2)->createSprite(m_brushid);
-                        m_brushsprite->setScale(m_jumpy->getScreenZoom(), m_jumpy->getScreenZoom());
-
 
                     }
                 }
@@ -461,8 +432,6 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
             }
 
         }
-
-
 
     }
 }
