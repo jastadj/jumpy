@@ -169,9 +169,11 @@ void Player::update()
     // capture original position
     sf::Vector2f startpos = m_position;
     int prevspriteindex = getCurrentSpriteIndex();
+    bool isonladder = onLadder();
 
     // apply gravity
-    m_acceleration += sf::Vector2f(0, 0.03);
+    if(isonladder) {}
+    else m_acceleration += sf::Vector2f(0, 0.03);
 
     // apply horizontal deceleration if move is not commanded
     if(!m_commanding_move)
@@ -382,6 +384,13 @@ void Player::update()
         m_current_meth -= 5;
 
         if(m_current_meth < 0) m_current_meth = 0;
+    }
+
+    // if on ladder still or now, kill accel
+    if(onLadder())
+    {
+        m_acceleration = sf::Vector2f(0,0);
+        m_velocity = m_acceleration;
     }
 
 }

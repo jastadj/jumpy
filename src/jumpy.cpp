@@ -270,7 +270,12 @@ bool Jumpy::initTiles()
     // create background tiles
     for(int i = 0; i < m_spritesheets[2]->getCount(); i++)
     {
-        m_tiles_bg.push_back( new Tile(m_spritesheets[2]->createSprite(i) ) );
+        if(i == 8)
+        {
+            Ladder *newladder = new Ladder( m_spritesheets[2]->createSprite(8));
+            m_tiles_bg.push_back( newladder );
+        }
+        else m_tiles_bg.push_back( new Tile(m_spritesheets[2]->createSprite(i) ) );
     }
 
     // create foreground tiles

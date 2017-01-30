@@ -1,5 +1,8 @@
 #include "actor.hpp"
 #include "particle.hpp"
+#include "jumpy.hpp"
+#include "level.hpp"
+#include "tile.hpp"
 
 Actor::Actor()
 {
@@ -44,6 +47,7 @@ Actor::~Actor()
 void Actor::doMove(int movedir)
 {
 
+
     switch(movedir)
     {
     case MOVE_RIGHT:
@@ -56,12 +60,55 @@ void Actor::doMove(int movedir)
         m_commanding_move = true;
         m_facing_right = false;
         break;
+    case MOVE_UP:
+        if(onLadder())
+        {
+            m_acceleration.y -= 5.f;
+            m_commanding_move = true;
+            break;
+        }
+
+        m_commanding_move = false;
+        m_acceleration.x = 0;
+        break;
+    case MOVE_DOWN:
+        if(onLadder())
+        {
+            m_acceleration.y += 5.f;
+            m_commanding_move = true;
+            break;
+        }
+
+        m_commanding_move = false;
+        m_acceleration.x = 0;
+        break;
     default:
         m_commanding_move = false;
         m_acceleration.x = 0;
         break;
     }
 
+}
+
+bool Actor::onLadder()
+{
+    // get bounding box
+    sf::FloatRect bb = getBoundingBox();
+    // get bottom midpoint of bounding box (floor center), then convert to grid coordinate
+    sf::Vector2i c_floor( int((bb.left + bb.width/2)/32), int(bb.top+bb.height)/32 );
+
+    // get tile at grid position
+    int btile =  m_jumpy->getCurrentLevel()->getTileBG( c_floor.x, c_floor.y );
+
+    // debug
+    //std::cout << "on ladder : tile at pos(" << c_floor.x << "," << c_floor.y << " = " << btile << std::endl;
+
+    // check if tile at grid coordinate is a ladder
+    std::vector<Tile*> *tiles = m_jumpy->getTilesBG();
+    if(btile < 0 || btile >= int(tiles->size()) ) return false;
+
+    if( (*tiles)[btile]->getType() == OBJ_TILE_LADDER) return true;
+    else return false;
 }
 
 void Actor::addCollision(GameObj *tobj)
