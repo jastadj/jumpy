@@ -25,7 +25,7 @@ void HealthUI::draw(int x, int y, sf::RenderTarget *tscreen)
     m_healthbar.setPosition( m_healthuispr.getPosition() + sf::Vector2f(45,11));
 
     if(m_jumpy->getPlayer()->getMaxHealth() != 0)
-        m_healthbar.setScale(sf::Vector2f( float(m_jumpy->getPlayer()->getHealth()) / float(m_jumpy->getPlayer()->getMaxHealth()),1) );
+        m_healthbar.setScale(sf::Vector2f( float(m_jumpy->getPlayer()->getCurrentHealth()) / float(m_jumpy->getPlayer()->getMaxHealth()),1) );
     else
         m_healthbar.setScale(sf::Vector2f( 0,1) );
 

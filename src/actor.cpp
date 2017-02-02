@@ -28,6 +28,8 @@ Actor::Actor()
     m_shooting = false;
     m_shooting_timeout = 1500;
     m_shoot_time = 200;
+    m_maxhealth = 100;
+    m_currenthealth = m_maxhealth;
 
     // bounding box
     // be sure to add a bounding box
@@ -150,4 +152,20 @@ void Actor::getShot(bool rightside)
         p1.createParticle(sf::Vector2f( rand()%3-1,rand()%3-1), sf::Vector2f( (1 + (rand()%4)*0.5)*dirmod,p1h*(rand()%10)*0.1 ) );
     }
 
+}
+void Actor::setCurrentHealth(int t)
+{
+    m_currenthealth = t;
+
+    if(m_currenthealth < 0)
+        m_currenthealth = 0;
+    else if(m_currenthealth > m_maxhealth)
+        m_currenthealth = m_maxhealth;
+}
+void Actor::setMaxHealth(int t)
+{
+    m_maxhealth = t;
+
+    if(m_currenthealth > m_maxhealth)
+        setCurrentHealth(m_maxhealth);
 }

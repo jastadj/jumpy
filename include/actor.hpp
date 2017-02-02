@@ -12,6 +12,9 @@ protected:
 
     bool m_jumping;
 
+    int m_maxhealth;
+    int m_currenthealth;
+
     bool m_shooting;
     int m_shooting_timeout;
     int m_shoot_time;
@@ -35,6 +38,10 @@ public:
     void addCollision(GameObj *tobj);
 
     void getShot(bool rightside = true);
+    int getCurrentHealth() { return m_currenthealth;}
+    void setCurrentHealth(int t);
+    int getMaxHealth() { return m_maxhealth;}
+    void setMaxHealth(int t);
     //virtual void update()=0;
 };
 #endif // CLASS_ACTOR

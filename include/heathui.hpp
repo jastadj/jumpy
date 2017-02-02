@@ -10,7 +10,7 @@ class HealthUI
 private:
 
     sf::Texture m_healthuitxt;
-    sf::Sprite m_healthspr;
+    sf::Sprite m_healthuispr;
 
     sf::RectangleShape m_healthbar;
 

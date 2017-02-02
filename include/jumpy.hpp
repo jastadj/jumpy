@@ -13,6 +13,7 @@
 //#include "level.hpp"
 
 #include "methui.hpp"
+#include "heathui.hpp"
 
 // forward declarations
 class Player;
@@ -77,6 +78,8 @@ private:
 
     // UI elements
     MethUI *m_meth_ui;
+
+    HealthUI *m_health_ui;
 
     // levels
     Level *m_current_level;

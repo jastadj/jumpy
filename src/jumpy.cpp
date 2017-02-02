@@ -97,6 +97,8 @@ bool Jumpy::init()
     // init ui elements
     m_meth_ui = new MethUI();
 
+    m_health_ui = new HealthUI();
+
     // init particle manager
     m_particle_manager = new ParticleManager;
 
