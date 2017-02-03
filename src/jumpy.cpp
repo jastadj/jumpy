@@ -567,6 +567,7 @@ int Jumpy::mainLoop()
 
         // draw ui elements
         m_meth_ui->draw(m_screen_width - 200,20, m_screen);
+        m_health_ui->draw(m_screen_width - 200,45, m_screen);
         if(m_dbg_editor) m_dbg_editor->drawUI(m_screen);
 
         std::stringstream debugss;

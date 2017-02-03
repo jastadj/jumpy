@@ -10,7 +10,7 @@ HealthUI::HealthUI()
 
     m_jumpy = Jumpy::getInstance();
 
-    m_healthbar = sf::RectangleShape( sf::Vector2f(80-44, 19-10));
+    m_healthbar = sf::RectangleShape( sf::Vector2f(106-44, 20-10));
     m_healthbar.setFillColor( sf::Color(255, 0, 0) );
 }
 
@@ -22,7 +22,7 @@ HealthUI::~HealthUI()
 void HealthUI::draw(int x, int y, sf::RenderTarget *tscreen)
 {
     m_healthuispr.setPosition(sf::Vector2f(x,y));
-    m_healthbar.setPosition( m_healthuispr.getPosition() + sf::Vector2f(45,11));
+    m_healthbar.setPosition( m_healthuispr.getPosition() + sf::Vector2f(54,10));
 
     if(m_jumpy->getPlayer()->getMaxHealth() != 0)
         m_healthbar.setScale(sf::Vector2f( float(m_jumpy->getPlayer()->getCurrentHealth()) / float(m_jumpy->getPlayer()->getMaxHealth()),1) );
