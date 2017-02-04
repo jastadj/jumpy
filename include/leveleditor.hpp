@@ -51,7 +51,7 @@ private:
 
     sf::RectangleShape *m_coverscreen;
 
-    std::string selectLevelFile(sf::RenderWindow *tscreen);
+    std::string drawSelectLevelFile(sf::RenderWindow *tscreen);
 
 public:
     LevelEditor();

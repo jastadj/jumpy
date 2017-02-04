@@ -5,6 +5,8 @@
 #include "level.hpp"
 #include "player.hpp"
 
+#include "tools.hpp"
+
 LevelEditor::LevelEditor()
 {
     m_jumpy = Jumpy::getInstance();
@@ -450,7 +452,12 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
     }
 }
 
-std::string LevelEditor::selectLevelFile(sf::RenderWindow *tscreen)
+std::string LevelEditor::drawSelectLevelFile(sf::RenderWindow *tscreen)
 {
     tscreen->draw(*m_coverscreen);
+
+    std::vector <std::string> levelfiles = getFiles(LEVEL_FILE, ".xml");
+
+    std::vector< sf::Text > leveltext;
+
 }
