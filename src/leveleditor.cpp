@@ -204,12 +204,21 @@ void LevelEditor::drawUI(sf::RenderWindow *tscreen)
     {
         tscreen->draw(*m_coverscreen);
 
+        // filename
+        std::string mfilestr("Map File:");
+        mfilestr += m_currentlevel->getFilename();
+        sf::Text cfilename(mfilestr, m_font);
+        cfilename.setPosition(25, 100);
+        cfilename.setFillColor(sf::Color::White);
+
+
         m_saveastext.setString("SAVE AS :");
         m_saveastext.setFont(m_font);
 
         m_saveastext.setPosition(200,200);
         m_saveastext.setFillColor(sf::Color::White);
 
+        tscreen->draw(cfilename);
         tscreen->draw(m_saveastext);
 
         sf::Text myfile;
@@ -426,7 +435,12 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
             // return
             else if(event->text.unicode == 13)
             {
-                m_savefilename += ".xml";
+                // if user didn't add extension, go ahead and add it
+                if(m_savefilename.find_first_of(".xml") == std::string::npos)
+                {
+                    m_savefilename += ".xml";
+                }
+
                 m_currentlevel->save( std::string(".\\Data\\Levels\\") + m_savefilename);
                 m_mode = ED_NONE;
             }
@@ -434,4 +448,9 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
         }
 
     }
+}
+
+std::string LevelEditor::selectLevelFile(sf::RenderWindow *tscreen)
+{
+    tscreen->draw(*m_coverscreen);
 }

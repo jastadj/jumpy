@@ -24,13 +24,17 @@ struct sortable
 Level::Level(int width, int height)
 {
     m_initialized = init(width, height);
+
+    m_filename = std::string("temp.xml");
 }
 
 Level::Level(std::string filename)
 {
     m_initialized = false;
 
-    if(!load(filename))
+    m_filename = filename;
+
+    if(!load(m_filename))
     {
         std::cout << "Error loading level!\n";
     }
@@ -653,7 +657,9 @@ void Level::update()
 
 bool Level::save(std::string filename)
 {
-    std::cout << "Saving level " << filename << std::endl;
+    std::cout << "Saving level " << LEVEL_FILE << filename << std::endl;
+
+    m_filename = filename;
 
     XMLDocument ldoc;
 
@@ -754,7 +760,7 @@ bool Level::save(std::string filename)
     }
 
 
-    if(ldoc.SaveFile(filename.c_str())) return false;
+    if(ldoc.SaveFile( std::string( std::string(LEVEL_FILE) + filename).c_str() ) ) return false;
     else return true;
 }
 
@@ -776,10 +782,10 @@ bool Level::load(std::string filename)
     XMLNode *lnode;
     XMLElement *element;
 
-    int errorcode = tdoc.LoadFile(filename.c_str());
+    int errorcode = tdoc.LoadFile( std::string( std::string(LEVEL_FILE) + filename).c_str() );
     if(errorcode)
     {
-        std::cout << "Error loading level from " << filename << ", error code:" << errorcode << std::endl;
+        std::cout << "Error loading level from " << LEVEL_FILE << filename << ", error code:" << errorcode << std::endl;
         return false;
     }
 

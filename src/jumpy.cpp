@@ -320,7 +320,7 @@ void Jumpy::initLevel()
     // if a level currently exists, delete it
     if(m_current_level != NULL) delete m_current_level;
 
-    m_current_level = new Level(".\\Data\\Levels\\testlevel.xml");
+    m_current_level = new Level("testlevel.xml");
 /*
     // create a new level
     m_current_level = new Level(25,15);

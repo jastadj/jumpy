@@ -2,8 +2,8 @@
 #define CLASS_TOOLS
 
 #include <SFML\Graphics.hpp>
-#include <math.h>
-#include <time.h>
+
+
 
 // vector stuff
 float getMagnitude(sf::Vector2f tvec);
@@ -21,6 +21,10 @@ float getDistance(sf::Vector2f p1, sf::Vector2f p2);
 int rollDice(int num, int sides, int modifier);
 bool randBool();
 void drawFloatRect(sf::FloatRect trect, sf::RenderTarget *tscreen);
+
+
+// file tools
+std::vector<std::string> getFiles(std::string directory, std::string extension = "");
 std::vector<std::string> csvParse(std::string pstring, char delim = ',');
 
 #endif // CLASS_TOOLS
