@@ -64,8 +64,11 @@ private:
     bool initAnimations();
     bool initTiles();
     bool initDecorations();
+
+    // init newgame
     void initPlayer();
     void initLevel();
+
 
     // player
     Player *m_player;
