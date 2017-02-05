@@ -76,6 +76,7 @@ private:
     //
     time_t m_seed;
 
+
     // particles
     ParticleManager *m_particle_manager;
 

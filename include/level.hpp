@@ -52,6 +52,9 @@ public:
     void fillMapBG(int tileid);
     void fillMapFG(int tileid);
 
+    void resizeX(int tdir);
+    void resizeY(int tdir);
+
     int getWidth();
     int getHeight();
 

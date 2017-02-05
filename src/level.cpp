@@ -223,6 +223,75 @@ void Level::fillMapFG(int tileid)
     }
 }
 
+void Level::resizeX(int tdir)
+{
+    int width = getWidth();
+    int height = getHeight();
+
+    if(tdir < 0)
+    {
+        for(int i = 0; i < height; i++)
+        {
+            setTile(width-1, i, 0);
+            setTileBG(width-1, i, 0);
+            setTileFG(width-1, i, 0);
+
+            m_mapdata[i].resize(width-1);
+            m_mapdata_bg[i].resize(width-1);
+            m_mapdata_fg[i].resize(width-1);
+
+            m_tiles[i].resize(width-1);
+            m_tiles_bg[i].resize(width-1);
+            m_tiles_fg[i].resize(width-1);
+        }
+    }
+    else if(tdir > 0)
+    {
+        for(int i = 0; i < height; i++)
+        {
+            m_mapdata[i].resize(width+1);
+            m_mapdata[i].back() = 0;
+            m_mapdata_bg[i].resize(width+1);
+            m_mapdata_bg[i].back() = 0;
+            m_mapdata_fg[i].resize(width+1);
+            m_mapdata_fg[i].back() = 0;
+
+            m_tiles[i].resize(width+1);
+            m_tiles[i].back() = NULL;
+            m_tiles_bg[i].resize(width+1);
+            m_tiles_bg[i].back() = NULL;
+            m_tiles_fg[i].resize(width+1);
+            m_tiles_fg[i].back() = NULL;
+
+            setTile(width, i, getTile(width-1, i));
+            setTileBG(width, i, getTileBG(width-1, i));
+            setTileFG(width, i, getTileFG(width-1, i));
+
+        }
+    }
+}
+
+void Level::resizeY(int tdir)
+{
+    int width = getWidth();
+    int height = getHeight();
+
+    if(tdir < 0)
+    {
+        for(int i = 0; i < width; i++)
+        {
+
+        }
+    }
+    else if(tdir > 0)
+    {
+        for(int i = 0; i < width; i++)
+        {
+
+
+        }
+    }
+}
 
 int Level::getTile(int x, int y)
 {

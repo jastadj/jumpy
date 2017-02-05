@@ -412,6 +412,14 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                 else m_mode = ED_NONE;
             }
         }
+        else if(event->key.code == sf::Keyboard::Numpad6)
+        {
+            m_currentlevel->resizeX(1);
+        }
+        else if(event->key.code == sf::Keyboard::Numpad4)
+        {
+            m_currentlevel->resizeX(-1);
+        }
     }
     else if(event->type == sf::Event::TextEntered)
     {
