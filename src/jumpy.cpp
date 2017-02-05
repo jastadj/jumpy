@@ -149,6 +149,10 @@ bool Jumpy::initResources()
     newsheet = new SpriteSheet(".\\Data\\Art\\tiles001fg.png", 4, 4);
     m_spritesheets.push_back(newsheet);
 
+    // create foreground tiles spritesheet - 7
+    newsheet = new SpriteSheet(".\\Data\\Art\\gasstationbld1.png", 8, 4);
+    m_spritesheets.push_back(newsheet);
+
     // check sprite sheets are valid
     for(int i = 0; i < int(m_spritesheets.size()); i++)
     {
@@ -253,6 +257,8 @@ bool Jumpy::initAnimations()
 
 bool Jumpy::initTiles()
 {
+
+
     // create tiles
     for(int i = 0; i < m_spritesheets[1]->getCount(); i++)
     {
@@ -267,6 +273,10 @@ bool Jumpy::initTiles()
             m_tiles.back()->setAnimated(true);
         }
         else m_tiles.push_back( new Tile(m_spritesheets[1]->createSprite(i)) );
+    }
+    for(int i = 0; i < m_spritesheets[7]->getCount(); i++)
+    {
+        m_tiles.push_back( new Tile(m_spritesheets[7]->createSprite(i)) );
     }
 
     // create background tiles

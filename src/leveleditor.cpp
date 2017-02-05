@@ -5,6 +5,8 @@
 #include "level.hpp"
 #include "player.hpp"
 
+#include "tile.hpp"
+
 #include "tools.hpp"
 
 LevelEditor::LevelEditor()
@@ -37,14 +39,17 @@ LevelEditor::LevelEditor()
 
 
 
+    SpriteSheet *tss = NULL;
 
     // create tile edit buttons
-    SpriteSheet *tss = m_jumpy->getSpriteSheet(1);
-    for(int i = 0; i < tss->getCount(); i++)
+    std::vector<Tile*> *temptiles = m_jumpy->getTiles();
+    for(int i = 0; i < int(temptiles->size()); i++)
     {
-        m_tiles.push_back( tss->createSprite(i));
-
+        sf::Sprite *tsprite = new sf::Sprite();
+        *tsprite = *(*temptiles)[i]->getSprite();
+        m_tiles.push_back( tsprite);
     }
+
     // create tile bg edit buttons
     tss = m_jumpy->getSpriteSheet(2);
     for(int i = 0; i < tss->getCount(); i++)
@@ -161,7 +166,7 @@ void LevelEditor::drawUI(sf::RenderWindow *tscreen)
         // adjust sprite positions
         for(int i = 0; i < int(m_tiles.size()); i++)
         {
-            m_tiles[i]->setPosition(34*i, 32);
+            m_tiles[i]->setPosition(34*((i/8)+i%8), 34*(i/8) );
         }
 
         // draw tiles
