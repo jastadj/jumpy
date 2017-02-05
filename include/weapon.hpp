@@ -30,10 +30,18 @@ public:
     XMLNode *saveToNode(XMLDocument *tdoc) {return NULL;}
 
     // getters
-
+    int getCurrentClip() { return m_ammo_current_clip;}
+    int getMaxClip() { return m_ammo_max_clip;}
+    int getRange() { return m_wpn_range;}
+    int getFireRate() { return m_wpn_fire_rate;}
+    int getReloadRate() { return m_wpn_reload_rate;}
 
     // setters
-
+    void setCurrentClip(int tclip);
+    void setMaxClip(int tmaxclip);
+    int setRange(int trange);
+    int setFireRate(int tfirerate);
+    int setReloadRate(int treloadrate);
 
 };
 
