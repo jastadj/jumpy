@@ -4,6 +4,8 @@
 #include <vector>
 #include <SFML\Graphics.hpp>
 
+#define LEVEL_FILE ".\\Data\\Levels\\"
+
 // forward declarations
 class Jumpy;
 class Tile;
@@ -14,6 +16,8 @@ class Level
 private:
 
     Jumpy *m_jumpy;
+
+    std::string m_filename;
 
     bool m_initialized;
 
@@ -41,6 +45,8 @@ public:
     bool save(std::string filename);
     bool load(std::string filename);
     ~Level();
+
+    std::string getFilename() { return m_filename;}
 
     void fillMap(int tileid);
     void fillMapBG(int tileid);

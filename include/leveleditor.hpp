@@ -9,7 +9,14 @@ class SpriteSheet;
 class Level;
 class Player;
 
-enum EDITMODE{ ED_NONE, ED_SAVE, ED_TILE, ED_TILEDRAW, ED_TILEBG, ED_TILEDRAWBG, ED_TILEFG, ED_TILEDRAWFG};
+enum EDITMODE{ ED_NONE,
+               ED_SAVE,
+               ED_TILE,
+               ED_TILEDRAW,
+               ED_TILEBG,
+               ED_TILEDRAWBG,
+               ED_TILEFG,
+               ED_TILEDRAWFG};
 
 class LevelEditor
 {
@@ -43,6 +50,8 @@ private:
     std::vector<sf::Sprite*> m_tilesfg;
 
     sf::RectangleShape *m_coverscreen;
+
+    std::string drawSelectLevelFile(sf::RenderWindow *tscreen);
 
 public:
     LevelEditor();

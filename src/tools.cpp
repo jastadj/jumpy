@@ -1,5 +1,14 @@
 #include "tools.hpp"
 
+#include <iostream>
+
+#include <math.h>
+#include <time.h>
+
+#include <dirent.h> // for directory / files
+#include <sys/types.h>
+#include <sys/stat.h>
+
 float getMagnitude(sf::Vector2f tvec)
 {
     return sqrt( tvec.x*tvec.x + tvec.y*tvec.y);
@@ -90,6 +99,9 @@ bool hasIntersection(float p0_x, float p0_y, float p1_x, float p1_y,
     return false; // No collision
 }
 
+//////////////////////////////////////////////////////////////////
+// FILE TOOLS
+
 std::vector<std::string> csvParse(std::string pstring, char delim)
 {
     std::vector<std::string> parsedStrings;
@@ -149,4 +161,65 @@ std::vector<std::string> csvParse(std::string pstring, char delim)
 
     return parsedStrings;
 
+}
+
+std::vector<std::string> getFiles(std::string directory, std::string extension)
+{
+    //create file list vector
+    std::vector<std::string> fileList;
+
+    //create directory pointer and directory entry struct
+    DIR *dir;
+    struct dirent *ent;
+    struct stat st;
+
+    //if able to open directory
+    if ( (dir = opendir (directory.c_str() ) ) != NULL)
+    {
+      //go through each file in directory
+      while ((ent = readdir (dir)) != NULL)
+      {
+            //convert read in file to a string
+            std::string filename(ent->d_name);
+
+            if(filename != "." && filename != "..")
+            {
+
+                //check that entry is a directory
+                stat(std::string(directory+filename).c_str(), &st);
+                if(!S_ISDIR(st.st_mode))
+                {
+                    //check that file matches given extension parameter
+                    //if an extension is provided, make sure it matches
+                    if(extension != "")
+                    {
+                        //find location of extension identifier '.'
+                        size_t trim = filename.find_last_of('.');
+                        if(trim > 200) std::cout << "ERROR:getFiles extension is invalid\n";
+                        else
+                        {
+                            std::string target_extension = filename.substr(trim);
+
+                            if(target_extension == extension) fileList.push_back(filename);
+                            //else std::cout << "Filename:" << filename << " does not match extension parameter - ignoring\n";
+                        }
+                    }
+                    else fileList.push_back(filename);
+                }
+
+            }
+
+      }
+
+      closedir (dir);
+    }
+    //else failed to open directory
+    else
+    {
+      std::cout << "Failed to open directory:" << directory << std::endl;
+      //return empty file list
+      return fileList;
+    }
+
+    return fileList;
 }
