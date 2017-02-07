@@ -149,6 +149,22 @@ void LevelEditor::draw(sf::RenderWindow *tscreen)
         }
     }
 
+    // draw border tiles
+    for(int i = -1; i <= m_currentlevel->getHeight(); i++)
+    {
+        for(int n = -1; n <= m_currentlevel->getWidth(); n++)
+        {
+            if( i == -1 || i == m_currentlevel->getHeight() || n == -1 || n == m_currentlevel->getWidth())
+            {
+                sf::RectangleShape bordertile(sf::Vector2f(32,32));
+                bordertile.setFillColor(sf::Color(255,0,0,128));
+                bordertile.setPosition(n*32, i*32);
+                tscreen->draw(bordertile);
+            }
+
+        }
+    }
+
 }
 
 void LevelEditor::drawUI(sf::RenderWindow *tscreen)
