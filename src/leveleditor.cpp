@@ -420,13 +420,25 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                 else m_mode = ED_NONE;
             }
         }
+        // resize map x bigger
         else if(event->key.code == sf::Keyboard::Numpad6)
         {
             m_currentlevel->resizeX(1);
         }
+        // resize map x smaller
         else if(event->key.code == sf::Keyboard::Numpad4)
         {
             m_currentlevel->resizeX(-1);
+        }
+        // resize map y bigger
+        else if(event->key.code == sf::Keyboard::Numpad8)
+        {
+            m_currentlevel->resizeY(1);
+        }
+        // resize map y smaller
+        else if(event->key.code == sf::Keyboard::Numpad2)
+        {
+            m_currentlevel->resizeY(-1);
         }
     }
     else if(event->type == sf::Event::TextEntered)

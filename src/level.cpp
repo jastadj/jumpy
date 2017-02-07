@@ -8,6 +8,7 @@
 #include "meth.hpp"
 #include "methhead.hpp"
 #include "decoration.hpp"
+#include "player.hpp"
 
 #include "tools.hpp"
 
@@ -276,21 +277,90 @@ void Level::resizeY(int tdir)
     int width = getWidth();
     int height = getHeight();
 
+    sf::Vector2f pos_offset;
+
+    // if decreasing height
     if(tdir < 0)
     {
+        // clear top row tiles
         for(int i = 0; i < width; i++)
         {
-
+            setTile(i, 0, 0);
+            setTileBG(i, 0, 0);
+            setTileFG(i, 0, 0);
         }
+
+        // remove top row
+        m_mapdata.erase(m_mapdata.begin());
+        m_mapdata_bg.erase(m_mapdata_bg.begin());
+        m_mapdata_fg.erase(m_mapdata_fg.begin());
+
+        m_tiles.erase(m_tiles.begin());
+        m_tiles_bg.erase(m_tiles_bg.begin());
+        m_tiles_fg.erase(m_tiles_fg.begin());
+
+        pos_offset = sf::Vector2f(0,-32);
     }
     else if(tdir > 0)
     {
-        for(int i = 0; i < width; i++)
-        {
+        // copy top row of tile data
+        m_mapdata.insert(m_mapdata.begin(), m_mapdata[0]);
+        m_mapdata_bg.insert(m_mapdata_bg.begin(), m_mapdata_bg[0]);
+        m_mapdata_fg.insert(m_mapdata_fg.begin(), m_mapdata_fg[0]);
 
+        // insert null top row of tiles
+        std::vector<Tile*> nulltiles;
+        nulltiles.resize(width);
+        for(int i = 0; i < width; i++) nulltiles[i] = NULL;
+        m_tiles.insert(m_tiles.begin(), nulltiles);
+        m_tiles_bg.insert(m_tiles_bg.begin(), nulltiles);
+        m_tiles_fg.insert(m_tiles_fg.begin(), nulltiles);
+
+        // set tiles to map data
+        for(int i = 0; i < width; i++) setTile(i, 0, m_mapdata[0][i]);
+        for(int i = 0; i < width; i++) setTileBG(i, 0, m_mapdata_bg[0][i]);
+        for(int i = 0; i < width; i++) setTileFG(i, 0, m_mapdata_fg[0][i]);
+
+        pos_offset = sf::Vector2f(0,32);
+
+    }
+    else return;
+
+    // reposition all map tile sprites
+    for(int i = 0; i < int(m_tiles.size()); i++)
+    {
+        for(int n = 0; n < int(m_tiles[i].size()); n++)
+        {
+            if(m_tiles[i][n])
+            {
+                m_tiles[i][n]->setPosition( sf::Vector2f(n*32, i*32));
+                m_tiles[i][n]->update();
+            }
+
+            if(m_tiles_bg[i][n])
+            {
+                m_tiles_bg[i][n]->setPosition( sf::Vector2f(n*32, i*32));
+                m_tiles_bg[i][n]->update();
+            }
+
+            if(m_tiles_fg[i][n])
+            {
+                m_tiles_fg[i][n]->setPosition( sf::Vector2f(n*32, i*32));
+                m_tiles_fg[i][n]->update();
+            }
 
         }
     }
+
+    // reposition everything on the map
+
+        // reposition player
+        m_jumpy->getPlayer()->setPosition( m_jumpy->getPlayer()->getPosition() + pos_offset);
+        // reposition decorations
+        for(int i = 0; i < int(m_decorations.size()); i++) m_decorations[i]->setPosition( m_decorations[i]->getPosition() + pos_offset);
+        // reposition game objects
+        for(int i = 0; i < int(m_objects.size()); i++) m_objects[i]->setPosition( m_objects[i]->getPosition() + pos_offset);
+
 }
 
 int Level::getTile(int x, int y)
@@ -319,7 +389,7 @@ bool Level::setTile(int x, int y, int tileid)
 
     if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return false;
 
-    if( m_mapdata[y][x] == tileid) return true;
+    //if( m_mapdata[y][x] == tileid) return true;
 
     if( m_tiles[y][x])
     {
@@ -351,7 +421,7 @@ bool Level::setTileBG(int x, int y, int tileid)
 {
     if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return false;
 
-    if( m_mapdata_bg[y][x] == tileid) return true;
+    //if( m_mapdata_bg[y][x] == tileid) return true;
 
     if( m_tiles_bg[y][x])
     {
@@ -383,7 +453,7 @@ bool Level::setTileFG(int x, int y, int tileid)
 {
     if( x < 0 || y < 0 || x >= getWidth() || y >= getHeight()) return false;
 
-    if( m_mapdata_fg[y][x] == tileid) return true;
+    //if( m_mapdata_fg[y][x] == tileid) return true;
 
     if( m_tiles_fg[y][x])
     {

@@ -98,6 +98,12 @@ void GameObj::clearCollisions()
     m_collisions.clear();
 }
 
+void GameObj::setPosition(sf::Vector2f tpos)
+{
+    m_position = tpos;
+    m_sprites[getCurrentSpriteIndex()]->setPosition(tpos);
+}
+
 void GameObj::update()
 {
     // apply acceleration to velocity

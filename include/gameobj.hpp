@@ -94,7 +94,7 @@ public:
 
     // physics
     sf::Vector2f getPosition() { return m_position;}
-    void setPosition(sf::Vector2f tpos) { m_position = tpos;}
+    void setPosition(sf::Vector2f tpos);
     sf::Vector2f getVelocity() { return m_velocity;}
     void setVelocity( sf::Vector2f tvel) { m_velocity = tvel;}
     sf::Vector2f getAcceleration() { return m_acceleration;}
