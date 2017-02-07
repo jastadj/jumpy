@@ -38,9 +38,6 @@ LevelEditor::LevelEditor()
     }
 
 
-
-    SpriteSheet *tss = NULL;
-
     // create tile edit buttons
     std::vector<Tile*> *temptiles = m_jumpy->getTiles();
     for(int i = 0; i < int(temptiles->size()); i++)
@@ -51,18 +48,21 @@ LevelEditor::LevelEditor()
     }
 
     // create tile bg edit buttons
-    tss = m_jumpy->getSpriteSheet(2);
-    for(int i = 0; i < tss->getCount(); i++)
+    temptiles = m_jumpy->getTilesBG();
+    for(int i = 0; i < int(temptiles->size()); i++)
     {
-        m_tilesbg.push_back( tss->createSprite(i));
-
+        sf::Sprite *tsprite = new sf::Sprite();
+        *tsprite = *(*temptiles)[i]->getSprite();
+        m_tilesbg.push_back(tsprite);
     }
 
     // create tile fg edit buttons
-    tss = m_jumpy->getSpriteSheet(6);
-    for(int i = 0; i < tss->getCount(); i++)
+    temptiles = m_jumpy->getTilesFG();
+    for(int i = 0; i < int(temptiles->size()); i++)
     {
-        m_tilesfg.push_back( tss->createSprite(i));
+        sf::Sprite *tsprite = new sf::Sprite();
+        *tsprite = *(*temptiles)[i]->getSprite();
+        m_tilesfg.push_back(tsprite);
 
     }
 
@@ -308,7 +308,8 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
 
                         // create brush sprite
                         if(m_brushsprite) delete m_brushsprite;
-                        m_brushsprite = m_jumpy->getSpriteSheet(1)->createSprite(m_brushid);
+                        m_brushsprite = new sf::Sprite();
+                        *m_brushsprite = *m_tiles[i];
 
                     }
                 }
@@ -331,7 +332,8 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
 
                         // create brush sprite
                         if(m_brushsprite) delete m_brushsprite;
-                        m_brushsprite = m_jumpy->getSpriteSheet(2)->createSprite(m_brushid);
+                        m_brushsprite = new sf::Sprite();
+                        *m_brushsprite = *m_tilesbg[i];
 
                     }
                 }
@@ -354,7 +356,8 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
 
                         // create brush sprite
                         if(m_brushsprite) delete m_brushsprite;
-                        m_brushsprite = m_jumpy->getSpriteSheet(6)->createSprite(m_brushid);
+                        m_brushsprite = new sf::Sprite();
+                        *m_brushsprite = *m_tilesfg[i];
 
                     }
                 }
