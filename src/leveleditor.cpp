@@ -487,7 +487,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                     m_savefilename += ".xml";
                 }
 
-                m_currentlevel->save( std::string(".\\Data\\Levels\\") + m_savefilename);
+                m_currentlevel->save(m_savefilename);
                 m_mode = ED_NONE;
             }
 
