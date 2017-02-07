@@ -40,6 +40,7 @@ private:
     sf::Vector2f m_mouseleft;
     int m_brushid;
     sf::Sprite *m_brushsprite;
+    bool m_mousepainting;
 
     std::vector<SpriteSheet*> m_spritesheets;
 

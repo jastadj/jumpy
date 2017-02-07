@@ -22,6 +22,7 @@ LevelEditor::LevelEditor()
     m_drawmode = ED_NONE;
     m_brushid = 0;
     m_brushsprite = NULL;
+    m_mousepainting = false;
 
     m_screenwidth = m_jumpy->getScreenWidth();
     m_screenheight = m_jumpy->getScreenHeight();
@@ -259,12 +260,6 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
 {
     sf::View *tview = m_jumpy->getView();
 
-    // mouse button pressed
-    if(event->type == sf::Event::MouseButtonPressed)
-    {
-
-
-
         // capture mouse position
         m_mouseleft = sf::Vector2f(sf::Mouse::getPosition(*tscreen));
         std::cout << "Mouse clicked at :" << m_mouseleft.x << "," << m_mouseleft.y << std::endl;
@@ -279,7 +274,68 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
         m_mouseleftg.y = int(m_mouseleftg.y / 32);
         std::cout << "Mouse clicked at :" << m_mouseleftg.x << "," << m_mouseleftg.y << std::endl;
 
+    // check if mouse button is held down and mouse painting is enabled
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        // if mouse painting is enabled
+        if(m_mousepainting)
+        {
+            // if drawing regular tile
+            if(m_mode == ED_TILEDRAW)
+            {
+                // set brush tile to map position
+                m_currentlevel->setTile(m_mouseleftg.x, m_mouseleftg.y, m_brushid);
+            }
+            // ELSE IF DRAWING A TILE
+            else if(m_mode == ED_TILEDRAWBG)
+            {
+                // set brush tile to map position
+                m_currentlevel->setTileBG(m_mouseleftg.x, m_mouseleftg.y, m_brushid);
+            }
+            // ELSE IF DRAWING A TILE
+            else if(m_mode == ED_TILEDRAWFG)
+            {
+                // set brush tile to map position
+                m_currentlevel->setTileFG(m_mouseleftg.x, m_mouseleftg.y, m_brushid);
+            }
+        }
+    }
+    // else if right mouse button is held down
+    else if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+    {
+        // if painting
+        if(m_mousepainting)
+        {
+            // if drawing regular tile
+            if(m_mode == ED_TILEDRAW)
+            {
+                // set brush tile to map position
+                m_currentlevel->setTile(m_mouseleftg.x, m_mouseleftg.y, 0);
+            }
+            // ELSE IF DRAWING A TILE
+            else if(m_mode == ED_TILEDRAWBG)
+            {
+                // set brush tile to map position
+                m_currentlevel->setTileBG(m_mouseleftg.x, m_mouseleftg.y, 0);
+            }
+            // ELSE IF DRAWING A TILE
+            else if(m_mode == ED_TILEDRAWFG)
+            {
+                // set brush tile to map position
+                m_currentlevel->setTileFG(m_mouseleftg.x, m_mouseleftg.y, 0);
+            }
+        }
+    }
+    // else if mouse painting is on but no mouse buttons held down
+    else if(m_mousepainting)
+    {
+        m_mousepainting = false;
+    }
 
+
+    // mouse button pressed
+    if(event->type == sf::Event::MouseButtonPressed)
+    {
 
         // left mouse button pressed
         if(event->mouseButton.button == sf::Mouse::Left)
@@ -379,22 +435,9 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                 }
             }
             // ELSE IF DRAWING A TILE
-            else if(m_mode == ED_TILEDRAW)
+            else if(m_mode == ED_TILEDRAW || m_mode == ED_TILEDRAWBG || m_mode == ED_TILEDRAWFG)
             {
-                // set brush tile to map position
-                m_currentlevel->setTile(m_mouseleftg.x, m_mouseleftg.y, m_brushid);
-            }
-            // ELSE IF DRAWING A TILE
-            else if(m_mode == ED_TILEDRAWBG)
-            {
-                // set brush tile to map position
-                m_currentlevel->setTileBG(m_mouseleftg.x, m_mouseleftg.y, m_brushid);
-            }
-            // ELSE IF DRAWING A TILE
-            else if(m_mode == ED_TILEDRAWFG)
-            {
-                // set brush tile to map position
-                m_currentlevel->setTileFG(m_mouseleftg.x, m_mouseleftg.y, m_brushid);
+                m_mousepainting = true;
             }
 
 
@@ -403,21 +446,10 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
         // if right mouse button clicked
         else if(event->mouseButton.button == sf::Mouse::Right)
         {
-            // if in tile draw mode
-            if(m_mode == ED_TILEDRAW)
+            // IF DRAWING A TILE
+            if(m_mode == ED_TILEDRAW || m_mode == ED_TILEDRAWBG || m_mode == ED_TILEDRAWFG)
             {
-                // erase tile at mouse position
-                m_currentlevel->setTile(m_mouseleftg.x, m_mouseleftg.y, 0);
-            }
-            else if(m_mode == ED_TILEDRAWBG)
-            {
-                // erase tile at mouse position
-                m_currentlevel->setTileBG(m_mouseleftg.x, m_mouseleftg.y, 0);
-            }
-            else if(m_mode == ED_TILEDRAWFG)
-            {
-                // erase tile at mouse position
-                m_currentlevel->setTileFG(m_mouseleftg.x, m_mouseleftg.y, 0);
+                m_mousepainting = true;
             }
         }
     }
