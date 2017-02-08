@@ -30,7 +30,7 @@ LevelEditor::LevelEditor()
     SpriteSheet *newss;
 
     // edit buttons
-    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 4,1);
+    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 5,1);
     newss->setScale(2);
     m_spritesheets.push_back(newss);
     for(int i = 0; i < newss->getCount(); i++)
@@ -357,6 +357,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                             m_savefilename = std::string("");
                             m_mode = ED_SAVE;
                         }
+                        else if(i == 4) m_mode = ED_LOAD;
 
                         std::cout << "SETTING EDIT MODE TO " << m_mode << std::endl;
                     }
