@@ -21,6 +21,8 @@ Jumpy::Jumpy()
     m_current_level = NULL;
     m_meth_ui = NULL;
     m_particle_manager = NULL;
+    m_health_ui = NULL;
+    m_weapon_ui = NULL;
 
     // screen settings
     m_screen_width = 800;
@@ -98,6 +100,8 @@ bool Jumpy::init()
     m_meth_ui = new MethUI();
 
     m_health_ui = new HealthUI();
+
+    m_weapon_ui = new WeaponUI();
 
     // init particle manager
     m_particle_manager = new ParticleManager;
@@ -578,6 +582,7 @@ int Jumpy::mainLoop()
         // draw ui elements
         m_meth_ui->draw(m_screen_width - 200,20, m_screen);
         m_health_ui->draw(m_screen_width - 200,45, m_screen);
+        m_weapon_ui->draw(m_screen_width - 100,m_screen_height - 100, m_screen);
         if(m_dbg_editor) m_dbg_editor->drawUI(m_screen);
 
         std::stringstream debugss;
