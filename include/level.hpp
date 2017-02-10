@@ -18,6 +18,7 @@ private:
     Jumpy *m_jumpy;
 
     std::string m_filename;
+    std::string m_level_name;
 
     bool m_initialized;
 
@@ -36,6 +37,8 @@ private:
 
     std::vector< GameObj*> m_objects;
 
+    sf::Vector2f m_player_start_pos;
+
     bool m_fade_fg;
     sf::Clock m_fg_fade_timer;
 public:
@@ -47,6 +50,7 @@ public:
     ~Level();
 
     std::string getFilename() { return m_filename;}
+    std::string getName() { return m_level_name;}
 
     void fillMap(int tileid);
     void fillMapBG(int tileid);
@@ -57,6 +61,9 @@ public:
 
     int getWidth();
     int getHeight();
+
+    sf::Vector2f getPlayerStartPos() { return m_player_start_pos;}
+    void setPlayerStartPos(sf::Vector2f tpos);
 
     int getTile(int x, int y);
     int getTileBG(int x, int y);

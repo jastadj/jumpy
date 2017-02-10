@@ -327,7 +327,6 @@ void Jumpy::initPlayer()
     if(m_player != NULL) delete m_player;
 
     m_player = new Player;
-    m_player->setPosition( sf::Vector2f(100,100));
 
 }
 
@@ -336,7 +335,9 @@ void Jumpy::initLevel()
     // if a level currently exists, delete it
     if(m_current_level != NULL) delete m_current_level;
 
-    m_current_level = new Level("testlevel.xml");
+    Level *newlevel = new Level("testlevel.xml");
+
+    setCurrentLevel(newlevel);
 /*
     // create a new level
     m_current_level = new Level(25,15);
@@ -410,6 +411,12 @@ void Jumpy::setCurrentLevel(Level *tlevel)
     if(tlevel == NULL) return;
 
     m_current_level = tlevel;
+
+    //init player
+    //initPlayer();
+
+    // set player position to level start position
+    m_player->setPosition( m_current_level->getPlayerStartPos());
 }
 
 

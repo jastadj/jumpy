@@ -1,7 +1,10 @@
 <Methd_Up>
     <Level>
+        <Name>Test Level</Name>
         <Width>25</Width>
         <Height>15</Height>
+        <PlayerStartX>95</PlayerStartX>
+        <PlayerStartY>285.97998</PlayerStartY>
         <Tiles>
             <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>
             <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>

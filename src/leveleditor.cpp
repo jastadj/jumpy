@@ -29,8 +29,11 @@ LevelEditor::LevelEditor()
 
     SpriteSheet *newss;
 
+    m_player_start_spr = m_jumpy->getSpriteSheet(0)->createSprite(0);
+    m_player_start_spr->setColor(sf::Color(255,255,255,100) );
+
     // edit buttons
-    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 5,1);
+    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 6,1);
     newss->setScale(2);
     m_spritesheets.push_back(newss);
     for(int i = 0; i < newss->getCount(); i++)
@@ -76,6 +79,8 @@ LevelEditor::LevelEditor()
 LevelEditor::~LevelEditor()
 {
     if(m_brushsprite) delete m_brushsprite;
+
+    if(m_player_start_spr) delete m_player_start_spr;
 
     // delete sprites
     for(int i = 0; i < int(m_edit_buttons.size()); i++) delete m_edit_buttons[i];
@@ -150,6 +155,10 @@ void LevelEditor::draw(sf::RenderWindow *tscreen)
             tscreen->draw(*m_brushsprite);
         }
     }
+
+    // draw player start position
+    m_player_start_spr->setPosition( m_currentlevel->getPlayerStartPos() );
+    tscreen->draw(*m_player_start_spr);
 
     // draw border tiles
     for(int i = -1; i <= m_currentlevel->getHeight(); i++)
@@ -363,6 +372,12 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                             m_mode = ED_SAVE;
                         }
                         else if(i == 4) m_mode = ED_LOAD;
+                        else if(i == 5)
+                        {
+                            sf::Vector2f tpos = m_jumpy->getPlayer()->getPosition();
+                            std::cout << "Setting new player start pos to " << tpos.x << "," << tpos.y << std::endl;
+                            m_currentlevel->setPlayerStartPos(tpos);
+                        }
 
                         std::cout << "SETTING EDIT MODE TO " << m_mode << std::endl;
                     }
@@ -457,6 +472,8 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                         delete m_jumpy->getCurrentLevel();
                         m_jumpy->setCurrentLevel(new Level( std::string(m_level_text[i].getString()) ));
 
+                        m_currentlevel = m_jumpy->getCurrentLevel();
+
                         m_mode = ED_NONE;
                     }
                 }
@@ -534,11 +551,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
             // return
             else if(event->text.unicode == 13)
             {
-                // if user didn't add extension, go ahead and add it
-                if(m_savefilename.find_first_of(".xml") == std::string::npos)
-                {
-                    m_savefilename += ".xml";
-                }
+                m_savefilename += ".xml";
 
                 m_currentlevel->save(m_savefilename);
                 m_mode = ED_NONE;

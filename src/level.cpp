@@ -74,6 +74,8 @@ Level::~Level()
         delete m_decorations[i];
     }
     m_decorations.clear();
+
+    std::cout << "Deleted level " << m_level_name << std::endl;
 }
 
 bool Level::init(int width, int height)
@@ -170,6 +172,11 @@ bool Level::init(int width, int height)
     delete bgtile3;
 
     return true;
+}
+
+void Level::setPlayerStartPos(sf::Vector2f tpos)
+{
+    m_player_start_pos = tpos + sf::Vector2f(0,-1.f);
 }
 
 int Level::getWidth()
@@ -810,13 +817,27 @@ bool Level::save(std::string filename)
     XMLNode *anode = ldoc.NewElement("Level");
     root->InsertEndChild(anode);
 
+    // level name
+    XMLElement *element = ldoc.NewElement("Name");
+    element->SetText(m_level_name.c_str());
+    anode->InsertEndChild(element);
+
     // tile data
-    XMLElement *element = ldoc.NewElement("Width");
+    element = ldoc.NewElement("Width");
     element->SetText(getWidth());
     anode->InsertEndChild(element);
 
     element = ldoc.NewElement("Height");
     element->SetText(getHeight());
+    anode->InsertEndChild(element);
+
+    // player starting position
+    element = ldoc.NewElement("PlayerStartX");
+    element->SetText(m_player_start_pos.x);
+    anode->InsertEndChild(element);
+
+    element = ldoc.NewElement("PlayerStartY");
+    element->SetText(m_player_start_pos.y);
     anode->InsertEndChild(element);
 
     // tile array node
@@ -942,6 +963,12 @@ bool Level::load(std::string filename)
         return false;
     }
 
+    // level name
+    element = lnode->FirstChildElement("Name");
+    if(element)
+        m_level_name = element->GetText();
+
+    // level dimensions
     element = lnode->FirstChildElement("Width");
     if(!element) { std::cout << "Error loading level, no width!\n"; return false;}
     element->QueryIntText(&width);
@@ -949,6 +976,19 @@ bool Level::load(std::string filename)
     element = lnode->FirstChildElement("Height");
     if(!element) { std::cout << "Error loading level, no height!\n"; return false;}
     element->QueryIntText(&height);
+
+    // player starting position
+    element = lnode->FirstChildElement("PlayerStartX");
+    if(element)
+    {
+        element->QueryFloatText(&m_player_start_pos.x);
+    }
+
+    element = lnode->FirstChildElement("PlayerStartY");
+    if(element)
+    {
+        element->QueryFloatText(&m_player_start_pos.y);
+    }
 
     std::cout << "Loading level with dimensions " << width << "x" << height << std::endl;
 
@@ -1100,6 +1140,8 @@ bool Level::load(std::string filename)
 
 
     }
+
+    std::cout << "Loaded level " << m_level_name << " from file " << filename << std::endl;
 
     return true;
 }

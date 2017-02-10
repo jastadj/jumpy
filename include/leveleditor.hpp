@@ -52,6 +52,8 @@ private:
     std::vector<sf::Sprite*> m_tilesbg;
     std::vector<sf::Sprite*> m_tilesfg;
 
+    sf::Sprite *m_player_start_spr;
+
     sf::RectangleShape *m_coverscreen;
 
     std::string drawSelectLevelFile(sf::RenderWindow *tscreen);
