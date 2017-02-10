@@ -121,6 +121,7 @@ void LevelEditor::update()
     {
         m_edit_buttons[i]->setPosition( m_screenwidth-50, i*34);
     }
+
 }
 
 void LevelEditor::draw(sf::RenderWindow *tscreen)
@@ -253,6 +254,10 @@ void LevelEditor::drawUI(sf::RenderWindow *tscreen)
 
         tscreen->draw(myfile);
     }
+    else if(m_mode == ED_LOAD)
+    {
+        drawSelectLevelFile(tscreen);
+    }
 
 }
 
@@ -262,17 +267,17 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
 
         // capture mouse position
         m_mouseleft = sf::Vector2f(sf::Mouse::getPosition(*tscreen));
-        std::cout << "Mouse clicked at :" << m_mouseleft.x << "," << m_mouseleft.y << std::endl;
+        //std::cout << "Mouse clicked at :" << m_mouseleft.x << "," << m_mouseleft.y << std::endl;
 
         sf::Vector2f m_mouseleftw;
         //m_mouseleftw = tview->getTransform().transformPoint(m_mouseleft);
         m_mouseleftw = tscreen->mapPixelToCoords(sf::Vector2i(m_mouseleft));
-        std::cout << "Mouse clicked at :" << m_mouseleftw.x << "," << m_mouseleftw.y << std::endl;
+        //std::cout << "Mouse clicked at :" << m_mouseleftw.x << "," << m_mouseleftw.y << std::endl;
 
         sf::Vector2i m_mouseleftg = sf::Vector2i(m_mouseleftw);
         m_mouseleftg.x = int(m_mouseleftg.x / 32);
         m_mouseleftg.y = int(m_mouseleftg.y / 32);
-        std::cout << "Mouse clicked at :" << m_mouseleftg.x << "," << m_mouseleftg.y << std::endl;
+        //std::cout << "Mouse clicked at :" << m_mouseleftg.x << "," << m_mouseleftg.y << std::endl;
 
     // check if mouse button is held down and mouse painting is enabled
     if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -440,7 +445,22 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
             {
                 m_mousepainting = true;
             }
+            // ELSE IF SELECTING LEVEL FILE FOR LOADING
+            else if(m_mode == ED_LOAD)
+            {
+                for(int i = 0; i < int(m_level_text.size()); i++)
+                {
+                    if(m_level_text[i].getGlobalBounds().contains(m_mouseleft))
+                    {
+                        std::cout << "debug:loading level " << std::string(m_level_text[i].getString()) << std::endl;
 
+                        delete m_jumpy->getCurrentLevel();
+                        m_jumpy->setCurrentLevel(new Level( std::string(m_level_text[i].getString()) ));
+
+                        m_mode = ED_NONE;
+                    }
+                }
+            }
 
         }
 
@@ -533,8 +553,21 @@ std::string LevelEditor::drawSelectLevelFile(sf::RenderWindow *tscreen)
 {
     tscreen->draw(*m_coverscreen);
 
+    sf::Vector2f mpos = sf::Vector2f(sf::Mouse::getPosition(*tscreen));
+
     std::vector <std::string> levelfiles = getFiles(LEVEL_FILE, ".xml");
 
-    std::vector< sf::Text > leveltext;
+    m_level_text.clear();
+
+    for(int i = 0; i < int(levelfiles.size()); i++)
+    {
+        m_level_text.push_back(sf::Text(levelfiles[i], m_font));
+        m_level_text.back().setPosition(64, i*20);
+
+        if(m_level_text.back().getGlobalBounds().contains(mpos))
+            m_level_text.back().setColor(sf::Color::Yellow);
+
+        tscreen->draw(m_level_text.back());
+    }
 
 }

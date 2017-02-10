@@ -405,7 +405,12 @@ SpriteSheet *Jumpy::getSpriteSheet(int index)
     return m_spritesheets[index];
 }
 
+void Jumpy::setCurrentLevel(Level *tlevel)
+{
+    if(tlevel == NULL) return;
 
+    m_current_level = tlevel;
+}
 
 
 

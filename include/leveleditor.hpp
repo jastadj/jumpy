@@ -11,6 +11,7 @@ class Player;
 
 enum EDITMODE{ ED_NONE,
                ED_SAVE,
+               ED_LOAD,
                ED_TILE,
                ED_TILEDRAW,
                ED_TILEBG,
@@ -29,6 +30,7 @@ private:
     sf::Font m_font;
     sf::Text m_saveastext;
     sf::Text m_filenametxt;
+    std::vector<sf::Text> m_level_text;
     std::string m_savefilename;
 
     int m_screenwidth;

@@ -117,6 +117,8 @@ public:
     int getScreenZoom() { return m_zoom;}
     sf::View *getView() { return &m_camera;}
 
+    void setCurrentLevel(Level *tlevel);
+
     SpriteSheet *getSpriteSheet(int index);
     std::vector<Animation> *getAnimations() { return &m_animations;}
     std::vector<Tile*> *getTiles() { return &m_tiles;}
