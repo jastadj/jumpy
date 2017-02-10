@@ -1,0 +1,28 @@
+<Methd_Up>
+	<Tiles>
+		<AddSpriteSheet>
+			<Filename>tiles001.png</Filename>
+			<Width>4</Width>
+			<Height>4</Height>
+		</AddSpriteSheet>
+		<AddSpriteSheet>
+			<Filename>gasstationbld1.png</Filename>
+			<Width>8</Width>
+			<Height>4</Height>
+		</AddSpriteSheet>		
+	</Tiles>
+	<BackgroundTiles>
+		<AddSpriteSheet>
+			<Filename>tiles001bg.png</Filename>
+			<Width>4</Width>
+			<Height>4</Height>
+		</AddSpriteSheet>	
+	</BackgroundTiles>
+	<ForegroundTiles>
+		<AddSpriteSheet>
+			<Filename>tiles001fg.png</Filename>
+			<Width>4</Width>
+			<Height>4</Height>
+		</AddSpriteSheet>
+	</ForegroundTiles>
+</Methd_Up>

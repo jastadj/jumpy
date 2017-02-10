@@ -2,13 +2,75 @@
 
 SpriteSheet::SpriteSheet(std::string filename, int tiles_x, int tiles_y)
 {
+    m_initialized = false;
+    m_initialized = initSpriteSheet(filename, tiles_x, tiles_y);
+}
+
+SpriteSheet::SpriteSheet(tinyxml2::XMLNode *tnode)
+{
+    m_initialized = false;
+
+    tinyxml2::XMLElement *element;
+
+    std::string filename;
+    int width = 1;
+    int height = 1;
+
+    element = tnode->FirstChildElement("Filename");
+    if(element)
+    {
+        filename = std::string(SPRITE_SHEET_PATH) + std::string(element->GetText());
+    }
+    else
+    {
+        std::cout << "Error loading sprite sheet, no filename provided in xml!\n";
+        delete this;
+        return;
+    }
+
+    element->FirstChildElement("Width");
+    if(element)
+    {
+        element->QueryIntText(&width);
+    }
+
+    element->FirstChildElement("Height");
+    if(element)
+    {
+        element->QueryIntText(&height);
+    }
+
+    m_initialized = initSpriteSheet(filename, width, height);
+}
+
+SpriteSheet::~SpriteSheet()
+{
+
+}
+
+bool SpriteSheet::initSpriteSheet(std::string filename, int tiles_x, int tiles_y)
+{
     int tile_width;
     int tile_height;
 
     m_scale = 1;
 
+    if(m_initialized)
+    {
+        std::cout << "Sprite sheet has already been initialized!\n";
+        return m_initialized;
+    }
+
     // load image
-    m_image.loadFromFile(filename);
+    if(m_image.loadFromFile(filename))
+    {
+        std::cout << "Created sprite sheet image from:" << filename << std::endl;
+    }
+    else
+    {
+        std::cout << "Error creating sprite sheet from:" << filename << std::endl;
+        return m_initialized;
+    }
 
     // create texture from image
     m_texture.loadFromImage(m_image);
@@ -38,11 +100,10 @@ SpriteSheet::SpriteSheet(std::string filename, int tiles_x, int tiles_y)
             m_clips_flipped.push_back( m_clips[n] );
         }
     }
-}
 
-SpriteSheet::~SpriteSheet()
-{
+    m_filename = filename;
 
+    return true;
 }
 
 int SpriteSheet::getCount()

@@ -3,6 +3,10 @@
 
 #include "gameobj.hpp"
 
+#define TILES_PATH ".\\Data\\Art\\"
+
+bool initTiles();
+
 class Tile: public GameObj
 {
 protected:

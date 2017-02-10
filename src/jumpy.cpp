@@ -81,7 +81,7 @@ bool Jumpy::init()
         std::cout << "Error initializing animations!\n";
     }
 
-    // init tiles
+    // init tiles, called from tile.hpp
     if(!initTiles())
     {
         std::cout << "Error initializing tiles!\n";
@@ -123,6 +123,11 @@ bool Jumpy::initScreen()
     return true;
 }
 
+void Jumpy::addSpriteSheet(SpriteSheet *tsheet)
+{
+    if(tsheet) m_spritesheets.push_back(tsheet);
+}
+
 bool Jumpy::initResources()
 {
     // create player spritesheet - 0
@@ -130,12 +135,12 @@ bool Jumpy::initResources()
     m_spritesheets.push_back(newsheet);
 
     // create a tile spritesheet - 1
-    newsheet = new SpriteSheet(".\\Data\\Art\\tiles001.png", 4, 4);
-    m_spritesheets.push_back(newsheet);
+    //newsheet = new SpriteSheet(".\\Data\\Art\\tiles001.png", 4, 4);
+    //m_spritesheets.push_back(newsheet);
 
     // create tile background spritesheet - 2
-    newsheet = new SpriteSheet(".\\Data\\Art\\tiles001bg.png", 4, 4);
-    m_spritesheets.push_back(newsheet);
+    //newsheet = new SpriteSheet(".\\Data\\Art\\tiles001bg.png", 4, 4);
+    //m_spritesheets.push_back(newsheet);
 
     // create meth spritesheet - 3
     newsheet = new SpriteSheet(".\\Data\\Art\\meth.png", 1, 1);
@@ -150,12 +155,12 @@ bool Jumpy::initResources()
     m_spritesheets.push_back(newsheet);
 
     // create foreground tiles spritesheet - 6
-    newsheet = new SpriteSheet(".\\Data\\Art\\tiles001fg.png", 4, 4);
-    m_spritesheets.push_back(newsheet);
+    //newsheet = new SpriteSheet(".\\Data\\Art\\tiles001fg.png", 4, 4);
+    //m_spritesheets.push_back(newsheet);
 
     // create foreground tiles spritesheet - 7
-    newsheet = new SpriteSheet(".\\Data\\Art\\gasstationbld1.png", 8, 4);
-    m_spritesheets.push_back(newsheet);
+    //newsheet = new SpriteSheet(".\\Data\\Art\\gasstationbld1.png", 8, 4);
+    //m_spritesheets.push_back(newsheet);
 
     // check sprite sheets are valid
     for(int i = 0; i < int(m_spritesheets.size()); i++)
@@ -259,10 +264,9 @@ bool Jumpy::initAnimations()
     return true;
 }
 
+/*
 bool Jumpy::initTiles()
 {
-
-
     // create tiles
     for(int i = 0; i < m_spritesheets[1]->getCount(); i++)
     {
@@ -313,6 +317,7 @@ bool Jumpy::initTiles()
 
     return true;
 }
+*/
 
 bool Jumpy::initDecorations()
 {

@@ -63,7 +63,7 @@ private:
     bool initResources();
     bool initSounds();
     bool initAnimations();
-    bool initTiles();
+    //bool initTiles();
     bool initDecorations();
 
     // init newgame
@@ -120,6 +120,7 @@ public:
     void setCurrentLevel(Level *tlevel);
 
     SpriteSheet *getSpriteSheet(int index);
+    void addSpriteSheet(SpriteSheet *tsheet);
     std::vector<Animation> *getAnimations() { return &m_animations;}
     std::vector<Tile*> *getTiles() { return &m_tiles;}
     std::vector<Tile*> *getTilesBG() { return &m_tiles_bg;}
