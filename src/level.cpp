@@ -1119,7 +1119,7 @@ bool Level::load(std::string filename)
                 dd = onode->FirstChildElement("Y");
                 dd->QueryFloatText(&dy);
 
-                GameObj *newobj = m_jumpy->createObject( static_cast<GAMEOBJTYPES>(di) );
+                GameObj *newobj = m_jumpy->createObject( GAMEOBJTYPES(di) );
 
                 if(!newobj)
                 {
