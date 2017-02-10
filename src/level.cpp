@@ -721,23 +721,6 @@ bool Level::addObject(GameObj *tobj)
     m_objects.push_back(tobj);
 }
 
-void Level::addMeth(int val, sf::Vector2f tpos)
-{
-    Meth *newmeth = new Meth(val);
-    newmeth->setPosition( tpos );
-    newmeth->update();
-
-    addObject(newmeth);
-}
-
-void Level::addMethHead(sf::Vector2f tpos)
-{
-    MethHead *newmethhead = new MethHead();
-    newmethhead->setPosition( tpos);
-
-    addObject(newmethhead);
-}
-
 bool Level::deleteObject( GameObj *tobj)
 {
     if(tobj == NULL)
@@ -767,6 +750,23 @@ void Level::addDecoration(int dindex, sf::Vector2f dpos)
     newdec->update();
     newdec->setID(dindex);
     m_decorations.push_back(newdec);
+}
+
+bool Level::deleteDecoration(Decoration *tdec)
+{
+    if(tdec == NULL) return false;
+
+    for(int i = int(m_decorations.size())-1; i >= 0; i--)
+    {
+        if( m_decorations[i] == tdec)
+        {
+            delete m_decorations[i];
+            m_decorations.erase( m_decorations.begin() + i);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Level::drawObjects(sf::RenderTarget *tscreen)
@@ -1105,13 +1105,13 @@ bool Level::load(std::string filename)
                 addDecoration(decid, sf::Vector2f(dx, dy));
 
             }
-            else if(objtype == "Meth")
+            else if(objtype == "Obj")
             {
                 int di = 0;
                 float dx = 0;
                 float dy = 0;
 
-                XMLElement *dd = onode->FirstChildElement("Value");
+                XMLElement *dd = onode->FirstChildElement("Type");
                 dd->QueryIntText(&di);
 
                 dd = onode->FirstChildElement("X");
@@ -1119,22 +1119,18 @@ bool Level::load(std::string filename)
                 dd = onode->FirstChildElement("Y");
                 dd->QueryFloatText(&dy);
 
-                addMeth(di, sf::Vector2f(dx,dy));
+                GameObj *newobj = m_jumpy->createObject( static_cast<GAMEOBJTYPES>(di) );
+
+                if(!newobj)
+                {
+                    std::cout << "Error creating game object type " << di << std::endl;
+                    return false;
+                }
+
+                newobj->setPosition(sf::Vector2f(dx, dy));
+                addObject(newobj);
             }
-            else if(objtype == "MethHead")
-            {
-                float dx = 0;
-                float dy = 0;
 
-                XMLElement *dd;
-
-                dd = onode->FirstChildElement("X");
-                dd->QueryFloatText(&dx);
-                dd = onode->FirstChildElement("Y");
-                dd->QueryFloatText(&dy);
-
-                addMethHead(sf::Vector2f(dx,dy));
-            }
             onode = onode->NextSiblingElement();
         }
 

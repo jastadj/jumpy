@@ -11,8 +11,7 @@ public:
     MethHead();
     ~MethHead();
 
-    int getType() { return OBJ_ACTOR;}
-    XMLNode *saveToNode(XMLDocument *tdoc);
+    int getType() { return OBJ_METHHEAD;}
 
     void update();
 };

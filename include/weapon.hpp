@@ -27,7 +27,6 @@ public:
     Weapon(std::string nname);
     ~Weapon();
     int getType() { return OBJ_WEAPON;}
-    XMLNode *saveToNode(XMLDocument *tdoc) {return NULL;}
 
     // getters
     int getCurrentClip() { return m_ammo_current_clip;}

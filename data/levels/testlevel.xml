@@ -62,15 +62,16 @@
                 <X>400</X>
                 <Y>150</Y>
             </Decoration>
-            <Meth>
-                <Value>500</Value>
+            <Obj>
+                <Type>3</Type>
                 <X>400</X>
                 <Y>288</Y>
-            </Meth>
-            <MethHead>
+            </Obj>
+            <Obj>
+                <Type>6</Type>
                 <X>350</X>
-                <Y>286.97995</Y>
-            </MethHead>
+                <Y>287</Y>
+            </Obj>
         </Objects>
     </Level>
 </Methd_Up>

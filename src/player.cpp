@@ -136,7 +136,7 @@ void Player::shoot()
         {
             std::cout << "Player shot " << hitobjs[0]->getName() << std::endl;
 
-            if(hitobjs[0]->getType() == OBJ_ACTOR)
+            if(hitobjs[0]->getType() == OBJ_METHHEAD)
             {
                 Actor *pa;
                 pa = dynamic_cast<Actor*>(hitobjs[0]);
@@ -292,7 +292,7 @@ void Player::update()
     // if there are collisions to handle
     for(int i = 0; i < int(m_collisions.size()); i++)
     {
-        if(m_collisions[i]->getType() == OBJ_METH)
+        if(m_collisions[i]->getType() >= OBJ_METH_SMALL)
         {
             Meth *methobj;
             methobj = dynamic_cast<Meth*>(m_collisions[i]);

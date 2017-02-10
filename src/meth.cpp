@@ -2,14 +2,29 @@
 
 #include "jumpy.hpp"
 
-Meth::Meth(int methval)
+Meth::Meth(int nmethtype)
 {
     SpriteSheet *ssheet = m_jumpy->getSpriteSheet(3);
     addSprite( ssheet->createSprite(0) );
 
     m_bounding_boxes.push_back( sf::FloatRect(14,14,4,4));
 
-    m_value = methval;
+    switch(nmethtype)
+    {
+    case OBJ_METH_SMALL:
+        m_methtype = OBJ_METH_SMALL;
+        break;
+    case OBJ_METH_MEDIUM:
+        m_methtype = OBJ_METH_MEDIUM;
+        break;
+    case OBJ_METH_LARGE:
+        m_methtype = OBJ_METH_LARGE;
+        break;
+    default:
+        m_methtype = OBJ_METH_SMALL;
+        std::cout << "Error creating meth, methtype " << nmethtype << " is unknown.  Defaulting to small.\n";
+        break;
+    }
 
     setName("meth");
 }
@@ -19,26 +34,24 @@ Meth::~Meth()
 
 }
 
-XMLNode *Meth::saveToNode(XMLDocument *tdoc)
+int Meth::getMethValue()
 {
+    switch(m_methtype)
+    {
 
-    if(!tdoc) return NULL;
+    case OBJ_METH_MEDIUM:
+        return 500;
+        break;
+    case OBJ_METH_LARGE:
+        return 250;
+        break;
+    case OBJ_METH_SMALL:
+    default:
+        break;
+    }
 
-    XMLNode *anode = tdoc->NewElement("Meth");
-
-    XMLElement *element = tdoc->NewElement("Value");
-    element->SetText(m_value);
-    anode->InsertEndChild(element);
-
-    element = tdoc->NewElement("X");
-    element->SetText(m_position.x);
-    anode->InsertEndChild(element);
-
-    element = tdoc->NewElement("Y");
-    element->SetText( m_position.y);
-    anode->InsertEndChild(element);
-
-    return anode;
+    // default or small meth type
+    return 100;
 }
 
 void Meth::update()

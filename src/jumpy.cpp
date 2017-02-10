@@ -3,6 +3,8 @@
 #include "spritesheet.hpp"
 #include "level.hpp"
 #include "tile.hpp"
+#include "meth.hpp"
+#include "methhead.hpp"
 #include "particle.hpp"
 #include "decoration.hpp"
 
@@ -713,6 +715,27 @@ void Jumpy::update()
     m_current_level->update();
     m_particle_manager->update();
     if(m_dbg_editor) m_dbg_editor->update();
+}
+
+GameObj *Jumpy::createObject(GAMEOBJTYPES tobj)
+{
+    GameObj *newobj = NULL;
+
+    switch(tobj)
+    {
+    case OBJ_METH_SMALL:
+    case OBJ_METH_MEDIUM:
+    case OBJ_METH_LARGE:
+        newobj = new Meth(tobj);
+        break;
+    case OBJ_METHHEAD:
+        newobj = new MethHead();
+        break;
+    default:
+        break;
+    }
+
+    return newobj;
 }
 
 bool Jumpy::playSound(int soundindex)

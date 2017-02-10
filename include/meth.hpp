@@ -7,18 +7,17 @@ class Meth:public GameObj
 {
 private:
 
-    int m_value;
+    int m_methtype;
 
 public:
-    Meth(int methval);
+    Meth(int nmethtype);
     ~Meth();
 
-    int getType() { return OBJ_METH;}
-    XMLNode *saveToNode(XMLDocument *tdoc);
+    int getType() { return m_methtype;}
 
     void addCollision(GameObj *tobj) {};
 
-    int getMethValue() { return m_value;}
+    int getMethValue();
 
     void update();
 

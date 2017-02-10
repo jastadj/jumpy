@@ -18,7 +18,6 @@ public:
     Player();
     ~Player();
     int getType() { return OBJ_PLAYER;}
-    XMLNode *saveToNode(XMLDocument *tdoc) { return NULL;}
 
     void addMeth(int val);
     int getMeth() const { return m_current_meth;}

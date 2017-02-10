@@ -28,7 +28,6 @@ public:
     ~Actor();
 
     virtual int getType()=0;
-    virtual XMLNode *saveToNode(XMLDocument *tdoc)=0;
 
     void doMove(int movedir);
     bool onLadder();

@@ -22,7 +22,16 @@ using namespace tinyxml2;
 // forward declarations
 class Jumpy;
 
-enum GAMEOBJTYPES{OBJ_PLAYER, OBJ_TILE, OBJ_TILE_LADDER, OBJ_METH, OBJ_ACTOR, OBJ_DECORATION, OBJ_WEAPON};
+enum GAMEOBJTYPES{
+    OBJ_PLAYER,
+    OBJ_TILE,
+    OBJ_TILE_LADDER,
+    OBJ_METH_SMALL,
+    OBJ_METH_MEDIUM,
+    OBJ_METH_LARGE,
+    OBJ_METHHEAD,
+    OBJ_DECORATION,
+    OBJ_WEAPON};
 
 enum MOVETYPE{MOVE_NONE, MOVE_RIGHT, MOVE_LEFT, MOVE_UP, MOVE_DOWN};
 
@@ -61,7 +70,7 @@ public:
     GameObj();
     virtual ~GameObj();
     virtual int getType()=0;
-    virtual XMLNode *saveToNode(XMLDocument *tdoc)=0;
+    virtual XMLNode *saveToNode(XMLDocument *tdoc);
 
     std::string getName() { return m_name;}
     void setName(std::string nname) { m_name = nname;}

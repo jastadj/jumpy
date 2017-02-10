@@ -115,3 +115,25 @@ void GameObj::update()
     // set current sprites to obj position
     m_sprites[ getCurrentSpriteIndex() ]->setPosition(m_position);
 }
+
+XMLNode *GameObj::saveToNode(XMLDocument *tdoc)
+{
+
+    if(!tdoc) return NULL;
+
+    XMLNode *anode = tdoc->NewElement("Obj");
+
+    XMLElement *element = tdoc->NewElement("Type");
+    element->SetText(getType());
+    anode->InsertEndChild(element);
+
+    element = tdoc->NewElement("X");
+    element->SetText(int(m_position.x));
+    anode->InsertEndChild(element);
+
+    element = tdoc->NewElement("Y");
+    element->SetText( int(m_position.y));
+    anode->InsertEndChild(element);
+
+    return anode;
+}

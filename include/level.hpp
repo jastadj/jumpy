@@ -83,9 +83,9 @@ public:
 
     bool addObject( GameObj *tobj);
     bool deleteObject( GameObj *tobj);
-    void addMeth(int val, sf::Vector2f tpos);
-    void addMethHead(sf::Vector2f tpos);
+
     void addDecoration(int dindex, sf::Vector2f dpos);
+    bool deleteDecoration(Decoration *tdec);
 
     sf::Sprite *getSkyBox() { return &m_skybox;}
 

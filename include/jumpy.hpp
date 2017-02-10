@@ -11,6 +11,7 @@
 
 //#include "player.hpp"
 //#include "level.hpp"
+#include "gameobj.hpp"
 
 #include "methui.hpp"
 #include "heathui.hpp"
@@ -129,6 +130,8 @@ public:
 
     Level *getCurrentLevel() { return m_current_level;}
     Player *getPlayer() { return m_player;}
+
+    GameObj *createObject(GAMEOBJTYPES tobj);
 
     ParticleManager *getParticleManager() { return m_particle_manager;}
 
