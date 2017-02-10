@@ -1,0 +1,13 @@
+<Methd_Up>
+	<Decorations>
+		<AddSpriteSheet>
+			<Filename>inddryer.png</Filename>
+			<Width>1</Width>
+			<Height>1</Height>
+		</AddSpriteSheet>	
+        <Decoration>
+            <SpriteSheetSource>inddryer.png</SpriteSheetSource>
+            <SpriteSheetIndex>0</SpriteSheetIndex>
+        </Decoration>
+	</Decorations>
+</Methd_Up>

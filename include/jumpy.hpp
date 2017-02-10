@@ -64,7 +64,7 @@ private:
     bool initSounds();
     bool initAnimations();
     //bool initTiles();
-    bool initDecorations();
+    //bool initDecorations();
 
     // init newgame
     void initPlayer();

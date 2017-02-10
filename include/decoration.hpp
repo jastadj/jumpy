@@ -3,6 +3,10 @@
 
 #include "tile.hpp"
 
+#define DECORATIONS_PATH ".\\Data\\Art\\"
+
+bool initDecorations();
+
 class Decoration: public GameObj
 {
 protected:

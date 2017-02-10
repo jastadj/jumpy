@@ -87,7 +87,7 @@ bool Jumpy::init()
         std::cout << "Error initializing tiles!\n";
     }
 
-    // init decorations
+    // init decorations, called from decoration.hpp
     if(!initDecorations())
     {
         std::cout << "Error initializing decorations!\n";
@@ -151,8 +151,8 @@ bool Jumpy::initResources()
     m_spritesheets.push_back(newsheet);
 
     // create dryer spritesheet - 5
-    newsheet = new SpriteSheet(".\\Data\\Art\\inddryer.png", 1, 1);
-    m_spritesheets.push_back(newsheet);
+    //newsheet = new SpriteSheet(".\\Data\\Art\\inddryer.png", 1, 1);
+    //m_spritesheets.push_back(newsheet);
 
     // create foreground tiles spritesheet - 6
     //newsheet = new SpriteSheet(".\\Data\\Art\\tiles001fg.png", 4, 4);
@@ -319,12 +319,14 @@ bool Jumpy::initTiles()
 }
 */
 
+/*
 bool Jumpy::initDecorations()
 {
     Decoration *newdec = new Decoration( m_spritesheets[5]->createSprite(0));
     m_decorations.push_back(newdec);
     return true;
 }
+*/
 
 
 void Jumpy::initPlayer()
