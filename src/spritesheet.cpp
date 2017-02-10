@@ -28,13 +28,13 @@ SpriteSheet::SpriteSheet(tinyxml2::XMLNode *tnode)
         return;
     }
 
-    element->FirstChildElement("Width");
+    element = tnode->FirstChildElement("Width");
     if(element)
     {
         element->QueryIntText(&width);
     }
 
-    element->FirstChildElement("Height");
+    element = tnode->FirstChildElement("Height");
     if(element)
     {
         element->QueryIntText(&height);
@@ -100,6 +100,8 @@ bool SpriteSheet::initSpriteSheet(std::string filename, int tiles_x, int tiles_y
             m_clips_flipped.push_back( m_clips[n] );
         }
     }
+
+    //std::cout << "Sprite sheet tile count = " << getCount() << std::endl;
 
     m_filename = filename;
 

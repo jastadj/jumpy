@@ -32,7 +32,7 @@ public:
     SpriteSheet(tinyxml2::XMLNode *tnode);
     ~SpriteSheet();
 
-    bool initSpriteSheet(std::string filename, int tiles_x = 1, int tiles_y = 1);
+    bool initSpriteSheet(std::string filename, int tiles_x, int tiles_y);
 
     sf::Sprite *createSprite(int index, bool flipped = false);
 
