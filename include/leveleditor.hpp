@@ -17,7 +17,9 @@ enum EDITMODE{ ED_NONE,
                ED_TILEBG,
                ED_TILEDRAWBG,
                ED_TILEFG,
-               ED_TILEDRAWFG};
+               ED_TILEDRAWFG,
+               ED_DECO,
+               ED_DECODRAW};
 
 class LevelEditor
 {
@@ -52,11 +54,13 @@ private:
     std::vector<sf::Sprite*> m_tilesbg;
     std::vector<sf::Sprite*> m_tilesfg;
 
+    std::vector<sf::Sprite*> m_decorations;
+
     sf::Sprite *m_player_start_spr;
 
     sf::RectangleShape *m_coverscreen;
 
-    std::string drawSelectLevelFile(sf::RenderWindow *tscreen);
+    void drawSelectLevelFile(sf::RenderWindow *tscreen);
 
 public:
     LevelEditor();

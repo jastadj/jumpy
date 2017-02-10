@@ -6,6 +6,7 @@
 #include "player.hpp"
 
 #include "tile.hpp"
+#include "decoration.hpp"
 
 #include "tools.hpp"
 
@@ -33,7 +34,7 @@ LevelEditor::LevelEditor()
     m_player_start_spr->setColor(sf::Color(255,255,255,100) );
 
     // edit buttons
-    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 6,1);
+    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 7,1);
     newss->setScale(2);
     m_spritesheets.push_back(newss);
     for(int i = 0; i < newss->getCount(); i++)
@@ -70,6 +71,15 @@ LevelEditor::LevelEditor()
 
     }
 
+    // create sprites for decoration
+    std::vector<Decoration*> *tdec = m_jumpy->getDecorations();
+    for(int i = 0; i < int(tdec->size()); i++)
+    {
+        sf::Sprite *newsprite = new sf::Sprite;
+        *newsprite = *(*tdec)[i]->getSprite();
+        m_decorations.push_back( newsprite );
+    }
+
     m_coverscreen = new sf::RectangleShape(sf::Vector2f(m_screenwidth, m_screenheight));
     m_coverscreen->setFillColor(sf::Color(0,0,200,230));
 
@@ -103,6 +113,13 @@ LevelEditor::~LevelEditor()
         delete m_tilesfg[i];
     }
     m_tilesfg.clear();
+
+    // delete decorations
+    for(int i = 0; i < int(m_decorations.size()); i++)
+    {
+        delete m_decorations[i];
+    }
+    m_decorations.clear();
 
     // delete sprite sheets
     for(int i = 0; i < int(m_spritesheets.size()); i++) delete m_spritesheets[i];
@@ -152,6 +169,14 @@ void LevelEditor::draw(sf::RenderWindow *tscreen)
         if(m_brushsprite)
         {
             m_brushsprite->setPosition(m_mouseleftg.x*32, m_mouseleftg.y*32);
+            tscreen->draw(*m_brushsprite);
+        }
+    }
+    else if(m_mode == ED_DECODRAW)
+    {
+        if(m_brushsprite)
+        {
+            m_brushsprite->setPosition(m_mouseleftw);
             tscreen->draw(*m_brushsprite);
         }
     }
@@ -267,6 +292,35 @@ void LevelEditor::drawUI(sf::RenderWindow *tscreen)
     {
         drawSelectLevelFile(tscreen);
     }
+    // if edit mode, draw cover screen
+    if(m_mode == ED_DECO)
+    {
+        tscreen->draw(*m_coverscreen);
+
+        // adjust sprite positions and size
+        for(int i = 0; i < int(m_decorations.size()); i++)
+        {
+            // find largest dimension of sprite
+            int largestdim = (int)m_decorations[i]->getLocalBounds().width;
+            if( (int)m_decorations[i]->getLocalBounds().height > largestdim)
+                largestdim = (int)m_decorations[i]->getLocalBounds().height;
+
+            // determine scale factor to get sprite to fit in a 32x32
+            float scalefactor = 32.f / (float)largestdim;
+
+            // adjust scale
+            m_decorations[i]->setScale(scalefactor, scalefactor);
+
+            // set position
+            m_decorations[i]->setPosition(34*((i/8)+i%8), 34*(i/8) );
+        }
+
+        // draw tiles
+        for(int i = 0; i < int(m_decorations.size()); i++)
+        {
+            tscreen->draw( *m_decorations[i]);
+        }
+    }
 
 }
 
@@ -378,6 +432,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                             std::cout << "Setting new player start pos to " << tpos.x << "," << tpos.y << std::endl;
                             m_currentlevel->setPlayerStartPos(tpos);
                         }
+                        else if(i == 6) m_mode = ED_DECO;
 
                         std::cout << "SETTING EDIT MODE TO " << m_mode << std::endl;
                     }
@@ -478,6 +533,38 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                     }
                 }
             }
+            // ELSE IF SELECTING DECORATION FOR PAINTING
+            else if(m_mode == ED_DECO)
+            {
+                // check all the tiles for mouse click
+                for(int i = 0; i < int(m_decorations.size()); i++)
+                {
+                    // if a tile was clicked
+                    if(m_decorations[i]->getGlobalBounds().contains(m_mouseleft))
+                    {
+                        // set brush id
+                        m_brushid = i;
+
+                        // set draw mode
+                        m_drawmode = ED_DECODRAW;
+                        m_mode = ED_DECODRAW;
+
+                        // create brush sprite
+                        if(m_brushsprite) delete m_brushsprite;
+                        m_brushsprite = new sf::Sprite();
+                        *m_brushsprite = *(*m_jumpy->getDecorations())[i]->getSprite();
+
+                    }
+                }
+            }
+            // ELSE IF PAINTING DECORATION ON MAP
+            else if(m_mode == ED_DECODRAW)
+            {
+                if(m_brushsprite)
+                {
+                    m_currentlevel->addDecoration(m_brushid, m_brushsprite->getPosition());
+                }
+            }
 
         }
 
@@ -562,7 +649,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
     }
 }
 
-std::string LevelEditor::drawSelectLevelFile(sf::RenderWindow *tscreen)
+void LevelEditor::drawSelectLevelFile(sf::RenderWindow *tscreen)
 {
     tscreen->draw(*m_coverscreen);
 
