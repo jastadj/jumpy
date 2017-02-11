@@ -9,7 +9,13 @@
 			<Filename>gasstationbld1.png</Filename>
 			<Width>8</Width>
 			<Height>4</Height>
-		</AddSpriteSheet>		
+		</AddSpriteSheet>
+		<AnimatedTile>
+			<Tile>3</Tile>
+			<FrameTime>300</FrameTime>
+			<AddSprite>4</AddSprite>
+			<FrameTime>300</FrameTime>
+		</AnimatedTile>
 	</Tiles>
 	<BackgroundTiles>
 		<AddSpriteSheet>

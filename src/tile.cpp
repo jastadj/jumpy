@@ -125,6 +125,63 @@ bool initTiles()
 
         }
 
+        // add animated tiles
+        anode = tnode[i]->FirstChildElement("AnimatedTile");
+
+        // while valid animated node
+        while(anode)
+        {
+            tinyxml2::XMLNode *animnode;
+
+            int tilenum = 0;
+
+            // get first element, must be tile #
+            animnode = anode->FirstChild();
+            if(std::string(animnode->Value()) == "Tile")
+            {
+                tinyxml2::XMLElement *tempel = animnode->ToElement();
+
+                if(tempel)
+                {
+                    tempel->QueryIntText(&tilenum);
+                }
+                else
+                {
+                    std::cout << "Error getting tile element for tile anim!\n";
+                    return false;
+                }
+            }
+            else
+            {
+                std::cout << "Error in animated tile, tile # not provided first!\n";
+                return false;
+            }
+
+            // set animnode to next sibling after tile id num
+            animnode = animnode->NextSibling();
+
+            // get remaining animated
+            while(animnode)
+            {
+                if(animnode->Value() == "FrameTime")
+                {
+
+                }
+                else if(animnode->Value() == "AddSprite")
+                {
+
+                }
+
+                // advance to next sibling node
+                animnode = animnode->NextSibling();
+            }
+
+            anode = anode->NextSiblingElement("AnimatedTile");
+        }
+
+
+        //if(testnode) std::cout << "first child of animated tile = " << testnode->ToText() << std::endl;
+
     }
 
     m_tiles_initialized = true;
