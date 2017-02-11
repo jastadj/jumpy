@@ -4,7 +4,7 @@
 
 MethHead::MethHead()
 {
-    SpriteSheet *ssheet = m_jumpy->getSpriteSheet(4);
+    SpriteSheet *ssheet = m_jumpy->getSpriteSheet(2);
 
     setName("Meth Head");
 

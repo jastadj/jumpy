@@ -4,7 +4,7 @@
 
 Meth::Meth(int nmethtype)
 {
-    SpriteSheet *ssheet = m_jumpy->getSpriteSheet(3);
+    SpriteSheet *ssheet = m_jumpy->getSpriteSheet(1);
     addSprite( ssheet->createSprite(0) );
 
     m_bounding_boxes.push_back( sf::FloatRect(14,14,4,4));
