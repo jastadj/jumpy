@@ -97,7 +97,7 @@ bool initDecorations()
             std::cout << "No sprite sheet source provided for decoration in file:" << tfile << std::endl;
             return false;
         }
-        ssfilename = std::string( element->GetText());
+        ssfilename = std::string(DECORATIONS_PATH) + std::string( element->GetText());
 
         // get sprite sheet index
         element = anode->FirstChildElement("SpriteSheetIndex");
@@ -109,6 +109,7 @@ bool initDecorations()
         // find target sprite sheet
         for(int i = 0; i < int(tsheets.size()); i++)
         {
+            std::cout << "tsheet filename:" << tsheets[i]->getFilename() << " , ssfilename:" << ssfilename << std::endl;
             if( tsheets[i]->getFilename() == ssfilename)
             {
                 Decoration *newdec = new Decoration(tsheets[i]->createSprite(tindex));
@@ -120,6 +121,7 @@ bool initDecorations()
         anode = anode->NextSiblingElement("Decoration");
     }
 
+    std::cout << "Loaded " << tlist->size() << " decorations.\n";
 
     m_decorations_initialized = true;
     return m_decorations_initialized;
