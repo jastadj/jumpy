@@ -292,7 +292,7 @@ void Player::update()
     // if there are collisions to handle
     for(int i = 0; i < int(m_collisions.size()); i++)
     {
-        if(m_collisions[i]->getType() >= OBJ_METH_SMALL)
+        if(m_collisions[i]->getType() >= OBJ_METH_SMALL && m_collisions[i]->getType() <= OBJ_METH_LARGE)
         {
             Meth *methobj;
             methobj = dynamic_cast<Meth*>(m_collisions[i]);
