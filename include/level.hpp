@@ -86,6 +86,7 @@ public:
 
     void addDecoration(int dindex, sf::Vector2f dpos);
     bool deleteDecoration(Decoration *tdec);
+    std::vector<Decoration*> *getDecorations() { return &m_decorations;}
 
     sf::Sprite *getSkyBox() { return &m_skybox;}
 

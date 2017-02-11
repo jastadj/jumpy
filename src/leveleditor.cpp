@@ -576,6 +576,19 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
             {
                 m_mousepainting = true;
             }
+            // IF DRAWING DECORATION
+            else if(m_mode == ED_DECODRAW)
+            {
+                std::vector<Decoration*> *dlist = m_currentlevel->getDecorations();
+
+                for(int i = 0; i < int(dlist->size()); i++)
+                {
+                    if( (*dlist)[i]->getSprite()->getGlobalBounds().contains(m_mouseleftw) )
+                    {
+                        m_currentlevel->deleteDecoration( (*dlist)[i]);
+                    }
+                }
+            }
         }
     }
     // key pressed
