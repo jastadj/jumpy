@@ -22,7 +22,10 @@
 			<Filename>tiles001bg.png</Filename>
 			<Width>4</Width>
 			<Height>4</Height>
-		</AddSpriteSheet>	
+		</AddSpriteSheet>
+		<Ladder>
+			<Tile>8</Tile>
+		</Ladder>
 	</BackgroundTiles>
 	<ForegroundTiles>
 		<AddSpriteSheet>

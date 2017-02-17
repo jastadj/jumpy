@@ -195,6 +195,46 @@ bool initTiles()
             anode = anode->NextSiblingElement("AnimatedTile");
         }
 
+        // add ladders
+        anode = tnode[i]->FirstChildElement("Ladder");
+
+        // while valid ladder tag
+        while(anode)
+        {
+            tinyxml2::XMLNode *laddernode;
+
+            int tilenum = 0;
+
+            // get first element, must be tile #
+            laddernode = anode->FirstChild();
+            if(std::string(laddernode->Value()) == "Tile")
+            {
+                laddernode->ToElement()->QueryIntText(&tilenum);
+            }
+            else
+            {
+                std::cout << "Error in ladder tile, tile # not provided first!\n";
+                return false;
+            }
+
+            // get tile
+            Tile *temptile = (*ttiles)[tilenum];
+
+            // copy sprite from tile
+            sf::Sprite *newsprite = new sf::Sprite();
+            *newsprite = *temptile->getSprite();
+
+            // create ladder
+            Ladder *tladder = new Ladder(newsprite);
+
+            // delete tile
+            delete (*ttiles)[tilenum];
+
+            // replace with ladder
+            (*ttiles)[tilenum] = tladder;
+
+            anode = anode->NextSiblingElement("Ladder");
+        }
 
         //if(testnode) std::cout << "first child of animated tile = " << testnode->ToText() << std::endl;
 
