@@ -64,6 +64,7 @@
 		<Unit filename="include/particle.hpp" />
 		<Unit filename="include/player.hpp" />
 		<Unit filename="include/spritesheet.hpp" />
+		<Unit filename="include/teleporter.hpp" />
 		<Unit filename="include/tile.hpp" />
 		<Unit filename="include/tools.hpp" />
 		<Unit filename="include/weapon.hpp" />
@@ -83,6 +84,7 @@
 		<Unit filename="src/particle.cpp" />
 		<Unit filename="src/player.cpp" />
 		<Unit filename="src/spritesheet.cpp" />
+		<Unit filename="src/teleporter.cpp" />
 		<Unit filename="src/tile.cpp" />
 		<Unit filename="src/tools.cpp" />
 		<Unit filename="src/weapon.cpp" />
