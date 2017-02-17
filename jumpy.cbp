@@ -69,6 +69,7 @@
 		<Unit filename="include/tools.hpp" />
 		<Unit filename="include/weapon.hpp" />
 		<Unit filename="include/weaponui.hpp" />
+		<Unit filename="include/zone.hpp" />
 		<Unit filename="src/actor.cpp" />
 		<Unit filename="src/animation.cpp" />
 		<Unit filename="src/decoration.cpp" />
@@ -84,11 +85,11 @@
 		<Unit filename="src/particle.cpp" />
 		<Unit filename="src/player.cpp" />
 		<Unit filename="src/spritesheet.cpp" />
-		<Unit filename="src/teleporter.cpp" />
 		<Unit filename="src/tile.cpp" />
 		<Unit filename="src/tools.cpp" />
 		<Unit filename="src/weapon.cpp" />
 		<Unit filename="src/weaponui.cpp" />
+		<Unit filename="src/zone.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

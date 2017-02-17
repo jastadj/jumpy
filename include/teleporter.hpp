@@ -1,13 +1,17 @@
 #ifndef CLASS_TELEPORTER
 #define CLASS_TELEPORTER
 
-class Teleporter
-{
-private:
+#include <SFML\Graphics.hpp>
+#include <string>
 
-public:
-    Teleporter();
-    ~Teleporter();
+struct Teleporter
+{
+    // origin
+    sf::FloatRect m_area_rect;
+
+    // destination
+    std::string m_dest_level_name;
+    sf::Vector2f m_dest_pos;
 
 };
 

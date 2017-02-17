@@ -4,6 +4,8 @@
 #include <vector>
 #include <SFML\Graphics.hpp>
 
+#include "teleporter.hpp"
+
 #define LEVEL_FILE ".\\Data\\Levels\\"
 
 // forward declarations
@@ -16,6 +18,9 @@ class Level
 private:
 
     Jumpy *m_jumpy;
+
+    bool load(std::string filename);
+    bool init(int width, int height);
 
     std::string m_filename;
     std::string m_level_name;
@@ -44,9 +49,7 @@ private:
 public:
     Level(int width = 10, int height = 10);
     Level(std::string filename);
-    bool init(int width, int height);
     bool save(std::string filename);
-    bool load(std::string filename);
     ~Level();
 
     std::string getFilename() { return m_filename;}

@@ -7,6 +7,7 @@
 #include "methhead.hpp"
 #include "particle.hpp"
 #include "decoration.hpp"
+#include "zone.hpp"
 
 #include <sstream>
 
@@ -21,10 +22,12 @@ Jumpy::Jumpy()
     // init pointers
     m_player = NULL;
     m_current_level = NULL;
+    m_zone = NULL;
     m_meth_ui = NULL;
     m_particle_manager = NULL;
     m_health_ui = NULL;
     m_weapon_ui = NULL;
+
 
     // screen settings
     m_screen_width = 800;
@@ -50,8 +53,8 @@ void Jumpy::start()
     // init player
     initPlayer();
 
-    // init level
-    initLevel();
+    // init zone / levels
+    initZone("testzone.xml");
 
     // start main loop
     mainLoop();
@@ -339,56 +342,34 @@ void Jumpy::initPlayer()
 
 }
 
-void Jumpy::initLevel()
+void Jumpy::initZone(std::string zonefile)
 {
-    // if a level currently exists, delete it
-    if(m_current_level != NULL) delete m_current_level;
+    // reset current level
+    m_current_level = NULL;
 
-    Level *newlevel = new Level("testlevel.xml");
-
-    setCurrentLevel(newlevel);
-/*
-    // create a new level
-    m_current_level = new Level(25,15);
-
-    // debug output
-    std::cout << "map height = " << m_current_level->getHeight() << std::endl;
-    std::cout << "map width = " << m_current_level->getWidth() << std::endl;
-
-    // testing - some level data
-    for(int n = 0; n < m_current_level->getWidth(); n++)
+    // if zone exists, delete it
+    if(m_zone)
     {
-        m_current_level->setTile(n,m_current_level->getHeight()-5 , 1);
-    }
-    for(int i = m_current_level->getHeight()-4; i < m_current_level->getHeight(); i++)
-    {
-        for(int n = 0; n < m_current_level->getWidth(); n++)
-        {
-            m_current_level->setTile(n, i, 2);
-        }
+        delete m_zone;
+        m_zone = NULL;
     }
 
-    // place animated tile
-    m_current_level->setTile(0, m_current_level->getHeight()-6, 3);
+    m_zone = new Zone(zonefile);
 
-    m_current_level->addMeth(400,288, 500);
-    m_current_level->addMethHead(350,200);
-    m_current_level->addDecoration(0, sf::Vector2f(400,150) );
 
-    // test bg tile
-    for(int i = 0; i < m_current_level->getWidth(); i++)
+    // if zone has 0 levels, error
+    if( m_zone->getCount() <= 0)
     {
-        if( i%2) m_current_level->setTileBG(i, 9, 6);
-        else m_current_level->setTileBG(i, 9, 7);
+        std::cout << "Error!  Zone loaded has no levels!\n";
+        return;
     }
-    m_current_level->setTileBG(5, 9, 5);
 
-    // save level test
-    m_current_level->save("testlevel.xml");
+    // set current level to first level in zone level list
+    m_current_level = (*m_zone->getLevels())[0];
 
-    // generate map
-    //m_current_level->generate();
-    */
+    // set player position to current level player start position
+    m_player->setPosition( m_current_level->getPlayerStartPos());
+
 }
 
 bool Jumpy::loadSound(std::string filename)

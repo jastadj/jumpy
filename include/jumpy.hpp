@@ -26,6 +26,7 @@ class ParticleManager;
 class Decoration;
 class Animation;
 class LevelEditor;
+class Zone;
 
 class Jumpy
 {
@@ -69,7 +70,7 @@ private:
 
     // init newgame
     void initPlayer();
-    void initLevel();
+    void initZone(std::string zonefile);
 
 
     // player
@@ -90,6 +91,7 @@ private:
     WeaponUI *m_weapon_ui;
 
     // levels
+    Zone *m_zone;
     Level *m_current_level;
 
     // main loop logic
