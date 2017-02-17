@@ -24,6 +24,10 @@ public:
     int getCount() { return int(m_levels.size());}
 
     std::vector<Level*> *getLevels() { return &m_levels;}
+    Level *getLevelWithName(std::string tname);
+    Level *getLevelWithFilename(std::string tname);
+
+    void show();
 
 };
 #endif // CLASS_ZONE

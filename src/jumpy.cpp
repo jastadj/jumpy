@@ -370,6 +370,8 @@ void Jumpy::initZone(std::string zonefile)
     // set player position to current level player start position
     m_player->setPosition( m_current_level->getPlayerStartPos());
 
+    // show debug info for current zone
+    m_zone->show();
 }
 
 bool Jumpy::loadSound(std::string filename)
