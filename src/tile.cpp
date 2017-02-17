@@ -128,7 +128,7 @@ bool initTiles()
         // add animated tiles
         anode = tnode[i]->FirstChildElement("AnimatedTile");
 
-        // while valid animated node
+        // while valid animated tile node
         while(anode)
         {
             tinyxml2::XMLNode *animnode;
@@ -139,17 +139,7 @@ bool initTiles()
             animnode = anode->FirstChild();
             if(std::string(animnode->Value()) == "Tile")
             {
-                tinyxml2::XMLElement *tempel = animnode->ToElement();
-
-                if(tempel)
-                {
-                    tempel->QueryIntText(&tilenum);
-                }
-                else
-                {
-                    std::cout << "Error getting tile element for tile anim!\n";
-                    return false;
-                }
+                animnode->ToElement()->QueryIntText(&tilenum);
             }
             else
             {
@@ -160,21 +150,47 @@ bool initTiles()
             // set animnode to next sibling after tile id num
             animnode = animnode->NextSibling();
 
-            // get remaining animated
+            // go through remaining animated tags
             while(animnode)
             {
-                if(animnode->Value() == "FrameTime")
+                if(std::string(animnode->Value()) == "FrameTime")
                 {
+                    // get frame time value
+                    int frametime = 0;
+                    animnode->ToElement()->QueryIntText(&frametime);
+
+                    // set current animation frames time
+                    (*ttiles)[tilenum]->getCurrentAnimation()->getCurrentAnimationFrame()->m_time = frametime;
 
                 }
-                else if(animnode->Value() == "AddSprite")
+                else if(std::string(animnode->Value()) == "AddSprite")
                 {
+                    // get sprite frame to add to animation
+                    int spriteframe = 0;
+                    animnode->ToElement()->QueryIntText(&spriteframe);
 
+                    // copy sprite from tile
+                    sf::Sprite *newspriteframe = new sf::Sprite();
+                    *newspriteframe = *(*ttiles)[spriteframe]->getSprite();
+                    // add sprite to tile
+                    (*ttiles)[tilenum]->addSprite( newspriteframe );
+
+                    // add animation frame index of new sprite
+                    (*ttiles)[tilenum]->getCurrentAnimation()->addAnimationFrame( (*ttiles)[tilenum]->getCurrentAnimation()->frameCount() );
+
+                    // set current animation frame index to newest frame
+                    (*ttiles)[tilenum]->getCurrentAnimation()->setCurrentFrameIndex((*ttiles)[tilenum]->getCurrentAnimation()->frameCount()-1);
                 }
 
                 // advance to next sibling node
                 animnode = animnode->NextSibling();
             }
+
+            // set tile to animated
+            (*ttiles)[tilenum]->setAnimated(true);
+
+            // reset current frame to 0
+            (*ttiles)[tilenum]->getCurrentAnimation()->setCurrentFrameIndex(0);
 
             anode = anode->NextSiblingElement("AnimatedTile");
         }

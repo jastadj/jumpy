@@ -43,7 +43,7 @@ public:
 
     int getCurrentAnimationSpriteIndex();
 
-    void addAnimationFrame(int spriteindex, int ttime);
+    void addAnimationFrame(int spriteindex, int ttime = 50);
 
     void update();
 
