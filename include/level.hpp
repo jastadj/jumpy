@@ -97,6 +97,7 @@ public:
     void drawDecorations(sf::RenderTarget *tscreen);
     void update();
 
+    void show();
 
 };
 #endif // CLASS_LEVEL

@@ -411,6 +411,8 @@ void Jumpy::setCurrentLevel(Level *tlevel)
 
     // set player position to level start position
     m_player->setPosition( m_current_level->getPlayerStartPos());
+
+    m_current_level->show();
 }
 
 

@@ -3,6 +3,7 @@
 #include "jumpy.hpp"
 #include "spritesheet.hpp"
 #include "button.hpp"
+#include "zone.hpp"
 #include "level.hpp"
 #include "player.hpp"
 
@@ -35,7 +36,7 @@ LevelEditor::LevelEditor()
     m_player_start_spr->setColor(sf::Color(255,255,255,100) );
 
     // edit buttons
-    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 7,1);
+    newss = new SpriteSheet(".\\Data\\Art\\editbut.png", 8,1);
     newss->setScale(2);
     m_spritesheets.push_back(newss);
     for(int i = 0; i < newss->getCount(); i++)
@@ -293,10 +294,11 @@ void LevelEditor::drawUI(sf::RenderWindow *tscreen)
     }
     else if(m_mode == ED_LOAD)
     {
-        drawSelectLevelFile(tscreen);
+        std::vector <std::string> levelfiles = getFiles(LEVEL_FILE, ".xml");
+        drawSelectLevelFile(tscreen, levelfiles, "Select level to load...");
     }
     // if edit mode, draw cover screen
-    if(m_mode == ED_DECO)
+    else if(m_mode == ED_DECO)
     {
         tscreen->draw(*m_coverscreen);
 
@@ -323,6 +325,20 @@ void LevelEditor::drawUI(sf::RenderWindow *tscreen)
         {
             tscreen->draw( *m_decorations[i]);
         }
+    }
+    else if( m_mode == ED_DOOR)
+    {
+        //tscreen->draw(*m_coverscreen);
+
+        std::vector<Level*> *levels = m_jumpy->getCurrentZone()->getLevels();
+        std::vector<std::string> zonelevels;
+
+        for(int i = 0; i < int(levels->size()); i++)
+        {
+            zonelevels.push_back( (*levels)[i]->getName());
+        }
+
+        drawSelectLevelFile(tscreen, zonelevels, "Select level to teleport to...");
     }
 
 }
@@ -436,6 +452,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                             m_currentlevel->setPlayerStartPos(tpos);
                         }
                         else if(i == 6) m_mode = ED_DECO;
+                        else if(i == 7) m_mode = ED_DOOR;
 
                         std::cout << "SETTING EDIT MODE TO " << m_mode << std::endl;
                     }
@@ -568,6 +585,28 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                     m_currentlevel->addDecoration(m_brushid, m_brushsprite->getPosition());
                 }
             }
+            // ELSE IF SELECTING LEVEL FOR TELEPORTING TO
+            else if(m_mode == ED_DOOR)
+            {
+                for(int i = 0; i < int(m_level_text.size()); i++)
+                {
+                    if(m_level_text[i].getGlobalBounds().contains(m_mouseleft))
+                    {
+                        std::cout << "debug:teleporting to level " << std::string(m_level_text[i].getString()) << std::endl;
+
+                        Zone *tzone = m_jumpy->getCurrentZone();
+                        Level *tlevel = tzone->getLevelWithName(m_level_text[i].getString());
+                        if(tlevel)
+                        {
+                            m_jumpy->setCurrentLevel( tlevel);
+                            m_currentlevel = tlevel;
+                        }
+
+
+                        m_mode = ED_NONE;
+                    }
+                }
+            }
 
         }
 
@@ -665,20 +704,22 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
     }
 }
 
-void LevelEditor::drawSelectLevelFile(sf::RenderWindow *tscreen)
+void LevelEditor::drawSelectLevelFile(sf::RenderWindow *tscreen, std::vector<std::string> strings, std::string msg)
 {
     tscreen->draw(*m_coverscreen);
 
     sf::Vector2f mpos = sf::Vector2f(sf::Mouse::getPosition(*tscreen));
 
-    std::vector <std::string> levelfiles = getFiles(LEVEL_FILE, ".xml");
-
     m_level_text.clear();
 
-    for(int i = 0; i < int(levelfiles.size()); i++)
+    // draw message string
+    sf::Text msgtext(msg.c_str(), m_font);
+    tscreen->draw(msgtext);
+
+    for(int i = 0; i < int(strings.size()); i++)
     {
-        m_level_text.push_back(sf::Text(levelfiles[i], m_font));
-        m_level_text.back().setPosition(64, i*20);
+        m_level_text.push_back(sf::Text(strings[i], m_font));
+        m_level_text.back().setPosition(64, i*24 + 64);
 
         if(m_level_text.back().getGlobalBounds().contains(mpos))
             m_level_text.back().setColor(sf::Color::Yellow);

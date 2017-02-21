@@ -129,6 +129,7 @@ public:
     std::vector<Decoration*> *getDecorations() { return &m_decorations;}
 
     Level *getCurrentLevel() { return m_current_level;}
+    Zone *getCurrentZone() { return m_zone;}
     Player *getPlayer() { return m_player;}
 
     GameObj *createObject(GAMEOBJTYPES tobj);

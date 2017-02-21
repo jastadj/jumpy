@@ -1141,3 +1141,15 @@ bool Level::load(std::string filename)
 
     return true;
 }
+
+void Level::show()
+{
+    std::cout << "LEVEL:\n";
+    std::cout << "------\n";
+    std::cout << "Name:" << getName() << std::endl;
+    std::cout << "Filename:" << getFilename() << std::endl;
+    std::cout << "Width:" << getWidth() << std::endl;
+    std::cout << "Height:" << getHeight() << std::endl;
+    std::cout << "PlayerStartPos:" << m_player_start_pos.x << "," << m_player_start_pos.y << std::endl;
+
+}

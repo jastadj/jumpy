@@ -20,7 +20,8 @@ enum EDITMODE{ ED_NONE,
                ED_TILEFG,
                ED_TILEDRAWFG,
                ED_DECO,
-               ED_DECODRAW};
+               ED_DECODRAW,
+               ED_DOOR};
 
 class LevelEditor
 {
@@ -61,7 +62,7 @@ private:
 
     sf::RectangleShape *m_coverscreen;
 
-    void drawSelectLevelFile(sf::RenderWindow *tscreen);
+    void drawSelectLevelFile(sf::RenderWindow *tscreen, std::vector<std::string> strings, std::string msg);
 
 public:
     LevelEditor();
