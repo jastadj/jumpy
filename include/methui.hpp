@@ -3,23 +3,21 @@
 
 #include <SFML\Graphics.hpp>
 
-class Jumpy;
+#include "gui.hpp"
 
-class MethUI
+class MethUI: public GUI
 {
 private:
 
-    sf::Texture m_methuitxt;
-    sf::Sprite m_methuispr;
-
     sf::RectangleShape m_methbar;
-
-    Jumpy *m_jumpy;
 
 public:
     MethUI();
     ~MethUI();
 
-    void draw(int x, int y, sf::RenderTarget *tscreen);
+    GUITYPE getType() { return GUI_METHUI;}
+
+    void draw(sf::RenderTarget *tscreen);
+    void update();
 };
 #endif // CLASS_METHUI

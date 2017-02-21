@@ -8,6 +8,7 @@ class Jumpy;
 class SpriteSheet;
 class Level;
 class Player;
+class Button;
 
 enum EDITMODE{ ED_NONE,
                ED_SAVE,
@@ -48,7 +49,7 @@ private:
 
     std::vector<SpriteSheet*> m_spritesheets;
 
-    std::vector<sf::Sprite*> m_edit_buttons;
+    std::vector<Button*> m_edit_buttons;
 
     std::vector<sf::Sprite*> m_tiles;
     std::vector<sf::Sprite*> m_tilesbg;

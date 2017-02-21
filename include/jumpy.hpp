@@ -85,9 +85,7 @@ private:
 
     // UI elements
     MethUI *m_meth_ui;
-
     HealthUI *m_health_ui;
-
     WeaponUI *m_weapon_ui;
 
     // levels

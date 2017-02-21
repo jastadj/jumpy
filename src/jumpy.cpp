@@ -103,8 +103,10 @@ bool Jumpy::init()
 
     // init ui elements
     m_meth_ui = new MethUI();
+    m_meth_ui->setPosition( m_screen_width - 200,20);
 
     m_health_ui = new HealthUI();
+    m_health_ui->setPosition(m_screen_width - 200, 45);
 
     m_weapon_ui = new WeaponUI();
 
@@ -584,8 +586,8 @@ int Jumpy::mainLoop()
         // draw debug test
 
         // draw ui elements
-        m_meth_ui->draw(m_screen_width - 200,20, m_screen);
-        m_health_ui->draw(m_screen_width - 200,45, m_screen);
+        m_meth_ui->draw(m_screen);
+        m_health_ui->draw(m_screen);
         m_weapon_ui->draw(m_screen_width - 100,m_screen_height - 100, m_screen);
         if(m_dbg_editor) m_dbg_editor->drawUI(m_screen);
 
@@ -698,6 +700,10 @@ void Jumpy::update()
     m_current_level->update();
     m_particle_manager->update();
     if(m_dbg_editor) m_dbg_editor->update();
+
+    // update ui elements
+    m_health_ui->update();
+    m_meth_ui->update();
 }
 
 GameObj *Jumpy::createObject(GAMEOBJTYPES tobj)

@@ -2,6 +2,7 @@
 
 #include "jumpy.hpp"
 #include "spritesheet.hpp"
+#include "button.hpp"
 #include "level.hpp"
 #include "player.hpp"
 
@@ -39,7 +40,7 @@ LevelEditor::LevelEditor()
     m_spritesheets.push_back(newss);
     for(int i = 0; i < newss->getCount(); i++)
     {
-        m_edit_buttons.push_back(newss->createSprite(i));
+        m_edit_buttons.push_back( new Button(newss->createSprite(i)) );
     }
 
 
@@ -142,6 +143,7 @@ void LevelEditor::update()
     for(int i = 0; i < int(m_edit_buttons.size()); i++)
     {
         m_edit_buttons[i]->setPosition( m_screenwidth-50, i*34);
+        m_edit_buttons[i]->update();
     }
 
 }
@@ -207,7 +209,8 @@ void LevelEditor::drawUI(sf::RenderWindow *tscreen)
 {
     for(int i = 0; i < int(m_edit_buttons.size()); i++)
     {
-        tscreen->draw( *m_edit_buttons[i]);
+        //tscreen->draw( *m_edit_buttons[i]);
+        m_edit_buttons[i]->draw(tscreen);
     }
 
     // if edit mode, draw cover screen
@@ -415,7 +418,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                 // if edit button clicked
                 for(int i = 0; i < int(m_edit_buttons.size()); i++)
                 {
-                    if(m_edit_buttons[i]->getGlobalBounds().contains(m_mouseleft))
+                    if(m_edit_buttons[i]->pressed(m_mouseleft))
                     {
                         if(i == 0) m_mode = ED_TILE;
                         else if(i == 1) m_mode = ED_TILEBG;

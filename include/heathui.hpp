@@ -3,24 +3,23 @@
 
 #include <SFML\Graphics.hpp>
 
+#include "gui.hpp"
+
 class Jumpy;
 
-class HealthUI
+class HealthUI: public GUI
 {
 private:
 
-    sf::Texture m_healthuitxt;
-    sf::Sprite m_healthuispr;
-
     sf::RectangleShape m_healthbar;
-
-    Jumpy *m_jumpy;
 
 public:
     HealthUI();
     ~HealthUI();
+    GUITYPE getType() { return GUI_HEALTHUI;}
 
-    void draw(int x, int y, sf::RenderTarget *tscreen);
+    void draw(sf::RenderTarget *tscreen);
+    void update();
 };
 
 

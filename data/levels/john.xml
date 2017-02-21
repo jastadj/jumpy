@@ -3,8 +3,8 @@
         <Name>Test Level</Name>
         <Width>25</Width>
         <Height>15</Height>
-        <PlayerStartX>240</PlayerStartX>
-        <PlayerStartY>175.99994</PlayerStartY>
+        <PlayerStartX>290</PlayerStartX>
+        <PlayerStartY>260.99994</PlayerStartY>
         <Tiles>
             <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>
             <Row>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</Row>
@@ -62,20 +62,16 @@
                 <X>400</X>
                 <Y>150</Y>
             </Decoration>
-            <Decoration>
-                <ID>0</ID>
-                <X>48.499989</X>
-                <Y>191.99994</Y>
-            </Decoration>
-            <Meth>
-                <Value>500</Value>
+            <Obj>
+                <Type>3</Type>
                 <X>400</X>
                 <Y>288</Y>
-            </Meth>
-            <MethHead>
+            </Obj>
+            <Obj>
+                <Type>6</Type>
                 <X>350</X>
-                <Y>286.97995</Y>
-            </MethHead>
+                <Y>287</Y>
+            </Obj>
         </Objects>
     </Level>
 </Methd_Up>
