@@ -41,7 +41,7 @@ LevelEditor::LevelEditor()
     m_spritesheets.push_back(newss);
     for(int i = 0; i < newss->getCount(); i++)
     {
-        m_edit_buttons.push_back( new Button(newss->createSprite(i)) );
+        m_edit_buttons.push_back( new ButtonGraphic(newss->createSprite(i)) );
     }
 
 
@@ -434,7 +434,9 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                 // if edit button clicked
                 for(int i = 0; i < int(m_edit_buttons.size()); i++)
                 {
-                    if(m_edit_buttons[i]->pressed(m_mouseleft))
+                    m_edit_buttons[i]->processMousePressEvent(event);
+
+                    if(m_edit_buttons[i]->getState() == BUTTON_RELEASED)
                     {
                         if(i == 0) m_mode = ED_TILE;
                         else if(i == 1) m_mode = ED_TILEBG;

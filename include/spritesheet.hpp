@@ -34,7 +34,7 @@ public:
 
     bool initSpriteSheet(std::string filename, int tiles_x, int tiles_y);
 
-    sf::Sprite *createSprite(int index, bool flipped = false);
+    sf::Sprite *createSprite(int index = 0, bool flipped = false);
 
     void setScale(int tscale);
 

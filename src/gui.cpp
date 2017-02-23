@@ -17,13 +17,6 @@ GUI::~GUI()
         delete m_sprites[i];
     }
     m_sprites.clear();
-
-    // delete textures
-    for(int i = 0; i < int(m_textures.size()); i++)
-    {
-        delete m_textures[i];
-    }
-    m_textures.clear();
 }
 
 void GUI::setPosition(sf::Vector2f tpos)
@@ -35,9 +28,14 @@ void GUI::setPosition(int x, int y)
     setPosition(sf::Vector2f( float(x),float(y)) );
 }
 
+void GUI::processMousePressEvent(sf::Event *event)
+{
+
+}
+
 void GUI::update()
 {
-    m_sprites[m_current_sprite]->setPosition( m_position);
+    //m_sprites[m_current_sprite]->setPosition( m_position);
 }
 
 void GUI::draw(sf::RenderTarget *tscreen)

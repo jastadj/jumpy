@@ -16,6 +16,7 @@ public:
     ~MethUI();
 
     GUITYPE getType() { return GUI_METHUI;}
+    bool mouseOver() { return false;}
 
     void draw(sf::RenderTarget *tscreen);
     void update();

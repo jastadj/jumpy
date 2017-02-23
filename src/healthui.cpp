@@ -6,15 +6,9 @@
 HealthUI::HealthUI()
 {
 
-    // create health ui texture
-    sf::Texture *newtxt = new sf::Texture;
-    newtxt->loadFromFile(".\\Data\\Art\\healthui.png");
-    m_textures.push_back(newtxt);
-
     // create sprites from textures
-    sf::Sprite *newspr = new sf::Sprite(*m_textures[0]);
+    sf::Sprite *newspr = m_jumpy->getSpriteSheet(3)->createSprite();
     m_sprites.push_back(newspr);
-
 
     m_healthbar = sf::RectangleShape( sf::Vector2f(106-44, 20-10));
     m_healthbar.setFillColor( sf::Color(255, 0, 0) );

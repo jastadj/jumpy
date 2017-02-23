@@ -6,7 +6,7 @@
 // forward dec
 class Jumpy;
 
-enum GUITYPE{ GUI_NONE, GUI_METHUI, GUI_HEALTHUI, GUI_BUTTON, GUI_TOTAL};
+enum GUITYPE{ GUI_NONE, GUI_METHUI, GUI_HEALTHUI, GUI_BUTTON_GRAPHIC, GUI_TOTAL};
 
 class GUI
 {
@@ -14,7 +14,6 @@ protected:
 
     Jumpy *m_jumpy;
 
-    std::vector<sf::Texture*> m_textures;
     std::vector<sf::Sprite*> m_sprites;
 
     int m_current_sprite;
@@ -25,7 +24,9 @@ public:
     virtual ~GUI();
 
     virtual GUITYPE getType()=0;
+    virtual bool mouseOver()=0;
 
+    virtual void processMousePressEvent(sf::Event *event);
     virtual void draw(sf::RenderTarget *tscreen);
     virtual void update();
 

@@ -17,6 +17,7 @@ public:
     HealthUI();
     ~HealthUI();
     GUITYPE getType() { return GUI_HEALTHUI;}
+    bool mouseOver() { return false;}
 
     void draw(sf::RenderTarget *tscreen);
     void update();

@@ -141,33 +141,21 @@ bool Jumpy::initResources()
     SpriteSheet *newsheet = new SpriteSheet(".\\Data\\Art\\jumpyman.png", 27, 1);
     m_spritesheets.push_back(newsheet);
 
-    // create a tile spritesheet - 1
-    //newsheet = new SpriteSheet(".\\Data\\Art\\tiles001.png", 4, 4);
-    //m_spritesheets.push_back(newsheet);
-
-    // create tile background spritesheet - 2
-    //newsheet = new SpriteSheet(".\\Data\\Art\\tiles001bg.png", 4, 4);
-    //m_spritesheets.push_back(newsheet);
-
-    // create meth spritesheet - 3
+    // create meth spritesheet - 1
     newsheet = new SpriteSheet(".\\Data\\Art\\meth.png", 1, 1);
     m_spritesheets.push_back(newsheet);
 
-    // create methhead spritesheet - 4
+    // create methhead spritesheet - 2
     newsheet = new SpriteSheet(".\\Data\\Art\\methhead.png", 9, 1);
     m_spritesheets.push_back(newsheet);
 
-    // create dryer spritesheet - 5
-    //newsheet = new SpriteSheet(".\\Data\\Art\\inddryer.png", 1, 1);
-    //m_spritesheets.push_back(newsheet);
+    // create sprite sheet for health ui - 3
+    newsheet = new SpriteSheet(".\\Data\\Art\\healthui.png");
+    m_spritesheets.push_back(newsheet);
 
-    // create foreground tiles spritesheet - 6
-    //newsheet = new SpriteSheet(".\\Data\\Art\\tiles001fg.png", 4, 4);
-    //m_spritesheets.push_back(newsheet);
-
-    // create foreground tiles spritesheet - 7
-    //newsheet = new SpriteSheet(".\\Data\\Art\\gasstationbld1.png", 8, 4);
-    //m_spritesheets.push_back(newsheet);
+    // create sprite sheet for meth ui - 4
+    newsheet = new SpriteSheet(".\\Data\\Art\\methui.png");
+    m_spritesheets.push_back(newsheet);
 
     // check sprite sheets are valid
     for(int i = 0; i < int(m_spritesheets.size()); i++)
@@ -415,7 +403,10 @@ void Jumpy::setCurrentLevel(Level *tlevel)
     m_current_level->show();
 }
 
-
+sf::Vector2f Jumpy::getMousePos()
+{
+    return sf::Vector2f( sf::Mouse::getPosition(*m_screen));
+}
 
 int Jumpy::mainLoop()
 {

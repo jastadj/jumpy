@@ -4,13 +4,8 @@
 
 MethUI::MethUI()
 {
-    // create meth ui texture
-    sf::Texture *newtxt = new sf::Texture;
-    newtxt->loadFromFile(".\\Data\\Art\\methui.png");
-    m_textures.push_back(newtxt);
-
     // create sprites from textures
-    sf::Sprite *newspr = new sf::Sprite(*m_textures[0]);
+    sf::Sprite *newspr = m_jumpy->getSpriteSheet(4)->createSprite();
     m_sprites.push_back(newspr);
 
     m_methbar = sf::RectangleShape( sf::Vector2f(115-44, 19-10));
