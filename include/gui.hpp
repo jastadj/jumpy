@@ -6,7 +6,12 @@
 // forward dec
 class Jumpy;
 
-enum GUITYPE{ GUI_NONE, GUI_METHUI, GUI_HEALTHUI, GUI_BUTTON_GRAPHIC, GUI_TOTAL};
+enum GUITYPE{ GUI_NONE,
+              GUI_METHUI,
+              GUI_HEALTHUI,
+              GUI_BUTTON_GRAPHIC,
+              GUI_BUTTON_TYPE1,
+              GUI_TOTAL};
 
 class GUI
 {

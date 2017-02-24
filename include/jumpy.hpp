@@ -46,6 +46,7 @@ private:
     sf::View m_skycamera;
 
     // resources
+    sf::Font m_font;
     std::vector<SpriteSheet*> m_spritesheets;
     std::vector<Animation> m_animations;
     std::vector<sf::SoundBuffer*> m_sounds;
@@ -117,6 +118,8 @@ public:
     int getScreenHeight() { return m_screen_height;}
     int getScreenZoom() { return m_zoom;}
     sf::View *getView() { return &m_camera;}
+
+    sf::Font *getFont() { return &m_font;}
 
     void setCurrentLevel(Level *tlevel);
 

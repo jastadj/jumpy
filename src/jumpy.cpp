@@ -137,6 +137,9 @@ void Jumpy::addSpriteSheet(SpriteSheet *tsheet)
 
 bool Jumpy::initResources()
 {
+    // load default font
+    m_font.loadFromFile(".\\Data\\font.ttf");
+
     // create player spritesheet - 0
     SpriteSheet *newsheet = new SpriteSheet(".\\Data\\Art\\jumpyman.png", 27, 1);
     m_spritesheets.push_back(newsheet);
@@ -419,9 +422,7 @@ int Jumpy::mainLoop()
     int fps = 0;
 
     // testing
-    sf::Font font;
-    font.loadFromFile(".\\Data\\font.ttf");
-    sf::Text debugtext("test", font, 12);
+    sf::Text debugtext("test", m_font, 12);
     debugtext.setFillColor( sf::Color::Red);
 
     // camera

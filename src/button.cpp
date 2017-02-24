@@ -36,7 +36,7 @@ ButtonGraphic::ButtonGraphic(sf::Sprite *tsprite)
 
 ButtonGraphic::~ButtonGraphic()
 {
-
+    // sprites are destroyed in gui destructor
 }
 
 void ButtonGraphic::setButtonSprite(sf::Sprite *tsprite)
@@ -143,4 +143,83 @@ void ButtonGraphic::draw(sf::RenderTarget *tscreen)
     {
         tscreen->draw(*m_sprites[m_current_sprite]);
     }
+}
+
+////////////////////////////////////////////////////////////
+// BUTTON TYPE 1 CLASS (rectangle shape and text)
+
+ButtonType1::ButtonType1(std::string nstring)
+{
+    // set default margins around text
+    m_margins = 8;
+
+    // create slots for shapes and text
+    m_button_shapes.resize(3);
+    m_button_texts.resize(3);
+
+    // 0 = normal button
+    // 1 = pressed button
+    // 2 = hover button
+
+    // create initial shape and text
+    m_button_shapes[0] =  new sf::RectangleShape(sf::Vector2f(32,32) );
+    m_button_shapes[0]->setFillColor( sf::Color(91,110,225));
+    m_button_shapes[0]->setOutlineThickness(2);
+    m_button_shapes[0]->setOutlineColor( sf::Color(128,128,128));
+    m_button_shapes[1] = NULL;
+    m_button_shapes[2] = NULL;
+
+    m_button_texts[0] = new sf::Text(nstring.c_str(), *m_jumpy->getFont(), 12);
+    m_button_texts[1] = NULL;
+    m_button_texts[2] = NULL;
+
+    generateButton();
+
+}
+
+ButtonType1::~ButtonType1()
+{
+
+}
+
+void ButtonType1::generateButton()
+{
+
+    // note : margins use first text object as source for dimensions
+
+    // get rect of text 0
+    sf::FloatRect textrect = m_button_texts[0]->getLocalBounds();
+    sf::Vector2f textdim( textrect.width, textrect.height);
+
+    // resize button shape to text rect with margins
+    for(int i = 0; i < int(m_button_shapes.size()); i++)
+    {
+        // if valid button shape
+        if(m_button_shapes[i])
+        {
+            // resize button shape to text dimensions plus margins
+            m_button_shapes[i]->setSize( textdim + sf::Vector2f(m_margins*2, m_margins*2));
+        }
+    }
+
+}
+
+bool ButtonType1::mouseOver()
+{
+
+}
+
+void ButtonType1::processMousePressEvent(sf::Event *tevent)
+{
+
+}
+
+void ButtonType1::update()
+{
+
+}
+
+void ButtonType1::draw(sf::RenderTarget *tscreen)
+{
+
 }
