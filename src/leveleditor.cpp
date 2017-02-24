@@ -436,7 +436,7 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
                 {
                     m_edit_buttons[i]->processMousePressEvent(event);
 
-                    if(m_edit_buttons[i]->getState() == BUTTON_RELEASED)
+                    if(m_edit_buttons[i]->getState() == BUTTON_PRESSED)
                     {
                         if(i == 0) m_mode = ED_TILE;
                         else if(i == 1) m_mode = ED_TILEBG;
