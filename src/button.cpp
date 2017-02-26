@@ -248,7 +248,7 @@ void ButtonType1::generateButton()
 
 bool ButtonType1::mouseOver()
 {
-    if(m_button_shapes[0]->getGlobalBounds().contains( m_jumpy->getMousePos())) return true;
+    if(m_button_shapes[m_current_sprite]->getGlobalBounds().contains( m_jumpy->getMousePos())) return true;
 
     return false;
 }
@@ -264,12 +264,12 @@ void ButtonType1::update()
 {
     Button::update();
 
-    m_button_shapes[0]->setPosition(m_position);
-    m_button_texts[0]->setPosition( m_position + sf::Vector2f(m_margins, m_margins));
+    m_button_shapes[m_current_sprite]->setPosition(m_position);
+    m_button_texts[m_current_sprite]->setPosition( m_position + sf::Vector2f(m_margins, m_margins));
 }
 
 void ButtonType1::draw(sf::RenderTarget *tscreen)
 {
-    tscreen->draw(*m_button_shapes[0]);
-    tscreen->draw(*m_button_texts[0]);
+    tscreen->draw(*m_button_shapes[m_current_sprite]);
+    tscreen->draw(*m_button_texts[m_current_sprite]);
 }
