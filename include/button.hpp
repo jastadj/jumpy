@@ -23,8 +23,8 @@ public:
 
     BUTTON_STATE getState() { return m_state;}
 
-    void processMousePressEvent(sf::Event *tevent)=0;
-
+    virtual void processMousePressEvent(sf::Event *tevent);
+    virtual void update();
 };
 
 ////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ public:
 
     // draw and update
     bool mouseOver();
-    void processMousePressEvent(sf::Event *tevent);
+    //void processMousePressEvent(sf::Event *tevent);
     void update();
     void draw(sf::RenderTarget *tscreen);
 };
@@ -76,7 +76,7 @@ public:
 
     // draw and update
     bool mouseOver();
-    void processMousePressEvent(sf::Event *tevent);
+    //void processMousePressEvent(sf::Event *tevent);
     void update();
     void draw(sf::RenderTarget *tscreen);
 };

@@ -85,6 +85,9 @@ LevelEditor::LevelEditor()
     m_coverscreen = new sf::RectangleShape(sf::Vector2f(m_screenwidth, m_screenheight));
     m_coverscreen->setFillColor(sf::Color(0,0,200,230));
 
+    // debug
+    testbutton = new ButtonType1("Test");
+    testbutton->setPosition(50,50);
 
 }
 
@@ -291,6 +294,10 @@ void LevelEditor::drawUI(sf::RenderWindow *tscreen)
         myfile.setFillColor(sf::Color::White);
 
         tscreen->draw(myfile);
+
+        // debug
+        testbutton->update();
+        testbutton->draw(tscreen);
     }
     else if(m_mode == ED_LOAD)
     {
@@ -553,6 +560,16 @@ void LevelEditor::processEvent(sf::Event *event, sf::RenderWindow *tscreen)
 
                         m_mode = ED_NONE;
                     }
+                }
+            }
+            // debug
+            else if(m_mode == ED_SAVE)
+            {
+                testbutton->processMousePressEvent(event);
+
+                if(testbutton->getState() == BUTTON_PRESSED)
+                {
+                    std::cout << "button pressed\n\n";
                 }
             }
             // ELSE IF SELECTING DECORATION FOR PAINTING

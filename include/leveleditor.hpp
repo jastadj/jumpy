@@ -9,6 +9,8 @@ class SpriteSheet;
 class Level;
 class Player;
 class Button;
+// debug
+class ButtonType1;
 
 enum EDITMODE{ ED_NONE,
                ED_SAVE,
@@ -63,6 +65,9 @@ private:
     sf::RectangleShape *m_coverscreen;
 
     void drawSelectLevelFile(sf::RenderWindow *tscreen, std::vector<std::string> strings, std::string msg);
+
+    // debug
+    ButtonType1 *testbutton;
 
 public:
     LevelEditor();

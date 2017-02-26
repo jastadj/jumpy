@@ -14,7 +14,43 @@ Button::~Button()
 
 }
 
+void Button::processMousePressEvent(sf::Event *tevent)
+{
+    //if(!mouseOver()) return;
+    if( m_state != BUTTON_MOUSEOVER) return;
 
+    m_state = BUTTON_PRESSED;
+}
+
+void Button::update()
+{
+    // if mouse is over button
+    if(mouseOver())
+    {
+        // if button is none, set to mouse over
+        if(m_state == BUTTON_NONE) m_state = BUTTON_MOUSEOVER;
+    }
+    // else if mouse is not over button
+    else
+    {
+        // and button is pressed
+        if(m_state == BUTTON_PRESSED)
+        {
+            // but mouse button is no longer pressed, set to released
+            if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                m_state = BUTTON_RELEASED;
+            }
+        }
+        // if state was mouse over, but no longer actually is
+        else if(m_state == BUTTON_MOUSEOVER) m_state = BUTTON_NONE;
+
+    }
+
+    // if button has been released, set to none
+    if(m_state == BUTTON_RELEASED) m_state = BUTTON_NONE;
+    else if(m_state == BUTTON_PRESSED && !sf::Mouse::isButtonPressed(sf::Mouse::Left)) m_state = BUTTON_RELEASED;
+}
 ////////////////////////////////////////////////////////////
 // BUTTON GRAPHIC CLASS
 ButtonGraphic::ButtonGraphic()
@@ -72,6 +108,7 @@ bool ButtonGraphic::mouseOver()
     return false;
 }
 
+/*
 void ButtonGraphic::processMousePressEvent(sf::Event *tevent)
 {
     //if(!mouseOver()) return;
@@ -79,9 +116,11 @@ void ButtonGraphic::processMousePressEvent(sf::Event *tevent)
 
     m_state = BUTTON_PRESSED;
 }
+*/
 
 void ButtonGraphic::update()
 {
+    /*
     // if mouse is over button
     if(mouseOver())
     {
@@ -108,6 +147,9 @@ void ButtonGraphic::update()
     // if button has been released, set to none
     if(m_state == BUTTON_RELEASED) m_state = BUTTON_NONE;
     else if(m_state == BUTTON_PRESSED && !sf::Mouse::isButtonPressed(sf::Mouse::Left)) m_state = BUTTON_RELEASED;
+    */
+
+    Button::update();
 
     // update state
     switch(m_state)
@@ -206,20 +248,28 @@ void ButtonType1::generateButton()
 
 bool ButtonType1::mouseOver()
 {
+    if(m_button_shapes[0]->getGlobalBounds().contains( m_jumpy->getMousePos())) return true;
 
+    return false;
 }
 
+/*
 void ButtonType1::processMousePressEvent(sf::Event *tevent)
 {
 
 }
+*/
 
 void ButtonType1::update()
 {
+    Button::update();
 
+    m_button_shapes[0]->setPosition(m_position);
+    m_button_texts[0]->setPosition( m_position + sf::Vector2f(m_margins, m_margins));
 }
 
 void ButtonType1::draw(sf::RenderTarget *tscreen)
 {
-
+    tscreen->draw(*m_button_shapes[0]);
+    tscreen->draw(*m_button_texts[0]);
 }
