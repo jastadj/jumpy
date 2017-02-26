@@ -215,6 +215,10 @@ void Player::update()
 
     //std::cout << "vert vel:" << m_velocity.y << std::endl;
 
+    // floor position values (or else may cause tearing)
+    m_position.x = floor(m_position.x);
+    m_position.y = floor(m_position.y);
+
     // get bounding box
     srect = m_bounding_boxes[0];
     // update bounding box position current working position
