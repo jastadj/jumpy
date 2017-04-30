@@ -60,8 +60,6 @@ class ButtonType1: public Button
 {
 private:
 
-    std::string m_button_string;
-
     std::vector<sf::RectangleShape*> m_button_shapes;
     std::vector<sf::Text*> m_button_texts;
 
@@ -73,6 +71,10 @@ public:
     ButtonType1(std::string nstring = std::string("no text"));
     ~ButtonType1();
     GUITYPE getType() { return GUI_BUTTON_TYPE1;}
+
+    // set button stuff
+    void setText(std::string ntext);
+    void setMouseOverColor(sf::Color tcolor);
 
     // draw and update
     bool mouseOver();

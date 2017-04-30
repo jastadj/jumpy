@@ -221,7 +221,11 @@ ButtonType1::ButtonType1(std::string nstring)
 
 ButtonType1::~ButtonType1()
 {
-
+    for(int i = 0; i < (int)m_button_shapes.size(); i++)
+    {
+        if(m_button_shapes[i]) delete m_button_shapes[i];
+        if(m_button_texts[i]) delete m_button_texts[i];
+    }
 }
 
 void ButtonType1::generateButton()
@@ -253,6 +257,36 @@ bool ButtonType1::mouseOver()
     return false;
 }
 
+void ButtonType1::setText(std::string ntext)
+{
+    for(int i = 0; i < int(m_button_shapes.size()); i++)
+    {
+        if(m_button_texts[i] != NULL)
+        {
+            m_button_texts[i]->setString(ntext);
+        }
+    }
+
+    generateButton();
+}
+
+void ButtonType1::setMouseOverColor(sf::Color tcolor)
+{
+    if(m_button_texts[2] == NULL)
+    {
+        m_button_texts[2] = new sf::Text();
+        *m_button_texts[2] = *m_button_texts[0];
+    }
+
+    if(m_button_shapes[2] == NULL)
+    {
+        m_button_shapes[2] = new sf::RectangleShape();
+        *m_button_shapes[2] = *m_button_shapes[0];
+    }
+
+    m_button_texts[2]->setColor(tcolor);
+}
+
 /*
 void ButtonType1::processMousePressEvent(sf::Event *tevent)
 {
@@ -263,6 +297,12 @@ void ButtonType1::processMousePressEvent(sf::Event *tevent)
 void ButtonType1::update()
 {
     Button::update();
+
+    if(m_state == BUTTON_MOUSEOVER && m_button_shapes[2])
+    {
+        m_current_sprite = 2;
+    }
+    else m_current_sprite = 0;
 
     m_button_shapes[m_current_sprite]->setPosition(m_position);
     m_button_texts[m_current_sprite]->setPosition( m_position + sf::Vector2f(m_margins, m_margins));

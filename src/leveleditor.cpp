@@ -88,6 +88,8 @@ LevelEditor::LevelEditor()
     // debug
     testbutton = new ButtonType1("Test");
     testbutton->setPosition(50,50);
+    testbutton->setText("another test");
+    testbutton->setMouseOverColor(sf::Color::Red);
 
 }
 
